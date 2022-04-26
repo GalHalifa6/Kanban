@@ -10,37 +10,37 @@ class BoardServiceTest
 
     DateTime dateTime = new DateTime;
 
-    public bool addTask(string title, string description)
+    public bool addTaskTest(string title, string description)
     {
 
     }
 
-    public bool removeTask(string title)
+    public bool removeTaskTest(string title)
     {
 
     }
 
-    public bool editTask(string oldTitle, string newTitle)
+    public bool editTaskTest(string oldTitle, string newTitle)
     {
 
     }
 
-    public bool editTaskDescription(string title, string newDescription)
+    public bool editTaskDescriptionTest(string title, string newDescription)
     {
 
     }
 
-    public bool editTaskDueDate(string title, DateTime newDueDate)
+    public bool editTaskDueDateTest(string title, DateTime newDueDate)
     {
 
     }
 
-    public bool remobeBoard(string name)
+    public bool remobeBoardTest(string name)
     {
 
     }
 
-    public bool advanceTaskPhase(string title)
+    public bool advanceTaskPhaseTest(string title)
     {
 
     }

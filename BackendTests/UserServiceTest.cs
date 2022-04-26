@@ -11,15 +11,15 @@ class UserServiceTest
     public bool RegisterTest(string email, string password){
     }
    
-    public bool Login(string email, string password){
+    public bool LoginTest(string email, string password){
 
     }
 
-    public bool LogOut(string email){ 
+    public bool LogOutTest(string email){ 
     }
 
 
-    public string runTest()
+    public string runTestTest()
     {
         
     }
