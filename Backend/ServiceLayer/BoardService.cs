@@ -31,6 +31,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             throw new NotImplementedException();
         }
 
+        public string advanceTask(string title) {
+            throw new NotImplementedException();    
+        }
+
         public string limitColumn(string boardName, int columnNumber, int newLimit) {
             throw new NotImplementedException();
         }
@@ -44,6 +48,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         }
 
         public string editTaskDueDate(string title, DateTime newDate) {
+            throw new NotImplementedException();
+        }
+
+        public string getInProgressTasks()
+        {
             throw new NotImplementedException();
         }
 

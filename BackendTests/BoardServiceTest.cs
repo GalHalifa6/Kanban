@@ -8,8 +8,6 @@ class BoardServiceTest
 
     }
 
-    DateTime dateTime = new DateTime;
-
     public bool addTaskTest(string title, string description)
     {
 
