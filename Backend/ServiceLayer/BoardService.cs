@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IntroSE.Kanban.Backend.BusinessLayer;
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
 {
-    internal class BoardService
+    public class BoardService
     {
-        BusinessLayer.BoardController bc {get};
+        BoardController bc { get; }
 
         public BoardService()
         {

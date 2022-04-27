@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using IntroSE.Kanban.Backend.BusinessLayer;
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
 {
         public class UserService
     {
-        BusinessLayer.UserController uc;
+        UserController uc;
         string email; // email of the user currently logged in. null if no user is logged in
 
         public UserService()

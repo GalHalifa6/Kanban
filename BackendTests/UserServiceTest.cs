@@ -14,7 +14,7 @@ class UserServiceTest
     ///This function test Requirement 3
     ///</summary>
     public bool RegisterTestDoubleRegistration(string email, string password){
-       UserService userService = new UserService();
+        UserService userService = new UserService();
         bool result = true;
 
        string str = userService.register("gahalifa@gmail.com", "12345678Aa");
