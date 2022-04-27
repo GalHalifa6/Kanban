@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
 {
-    internal class UserService
+        public class UserService
     {
         BusinessLayer.UserController uc;
         string email; // email of the user currently logged in. null if no user is logged in
@@ -16,7 +16,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         }
 
-        public string regiser(string email, string password) {
+        public string register(string email, string password) {
             throw new NotImplementedException();
         }
 
