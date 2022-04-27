@@ -1,5 +1,7 @@
 using System;
 using IntroSE.Kanban.Backend.ServiceLayer;
+using IntroSE.Kanban.Backend.BusinessLayer;
+using System.Text.Json;
 
 
 class UserServiceTest
@@ -11,105 +13,91 @@ class UserServiceTest
 
 
     ///<summary>
-    ///This function test Requirement 3
+    ///This function test Requirement 1,2,3,7
     ///</summary>
-    public bool RegisterTestDoubleRegistration(string email, string password){
+
+    ///This function test Requirement 1,7
+    public void RegisterTest(string email, string password){
         UserService userService = new UserService();
-        bool result = true;
+        string jsonResponse1 = userService.register("example@gmail.com", "123456Aa");
+        Response res = JsonSerializer.Deserialize<Response>(jsonResponse1);
+        Console.WriteLine(res);
 
-       string str = userService.register("gahalifa@gmail.com", "12345678Aa");
-       if (str != "ok")
-        {
-           result = false; 
-        }
-       
-      
-       str = userService.register("galhalifa@gmail.com", "123456Aa");
-       if (str == "ok")
-       {
-            result = false;
-       }
-       return result;
+        ///This function test Requirement 3
+        string jsonResponse2 = userService.register("example@gmail.com", "12345678Aa");
+        Response res2 = JsonSerializer.Deserialize<Response>(jsonResponse2);
+        Console.WriteLine("The following test should failed:");
+        Console.WriteLine(res2);
 
-       }
-        
-    
+        ///This function test Requirement 2
+        string jsonResponse3 = userService.register("example@gmailcom", "12345678Aa");
+        Response res3 = JsonSerializer.Deserialize<Response>(jsonResponse3);
+        Console.WriteLine("The following test should failed:");
+        Console.WriteLine(res3);
+
+        string jsonResponse4 = userService.register("examplegmail.com", "12345678Aa");
+        Response res4 = JsonSerializer.Deserialize<Response>(jsonResponse4);
+        Console.WriteLine("The following test should failed:");
+        Console.WriteLine(res4);
+
+        string jsonResponse5 = userService.register("example@gmail.com", "12345678A");
+        Response res5 = JsonSerializer.Deserialize<Response>(jsonResponse5);
+        Console.WriteLine("The following test should failed:");
+        Console.WriteLine(res5);
+
+        string jsonResponse6 = userService.register("example@gmail.com", "12a345678");
+        Response res6 = JsonSerializer.Deserialize<Response>(jsonResponse6);
+        Console.WriteLine("The following test should failed:");
+        Console.WriteLine(res6);
+
+        string jsonResponse7 = userService.register("example@gmail.com", "");
+        Response res7 = JsonSerializer.Deserialize<Response>(jsonResponse7);
+        Console.WriteLine("The following test should failed:");
+        Console.WriteLine(res7);
+
+        string jsonResponse8 = userService.register("", "12345678Aa");
+        Response res8 = JsonSerializer.Deserialize<Response>(jsonResponse8);
+        Console.WriteLine("The following test should failed:");
+        Console.WriteLine(res8);
+    }
+
 
     ///<summary>
-    ///This function test Requirement 2
+    ///This function test Requirement 8
     ///</summary>
-    public bool RegisterTestInValidPassword(string email, string password){
-    UserService userService = new UserService();
-    bool result = true;
-    string str = userService.register("galhalifa@gmail.com", "123456A");
-    if (str == "ok")
-    {
-            result = false;
-    }
-    str = userService.register("galhalifa@gmail.com", "456Aa");
-        if (str == "ok")
-        {
-            result = false;
-        }
+    public void LoginTest(string email, string password){
+        UserService userService = new UserService();
+        userService.register("example@gmail.com", "123456Aa");
+        string jsonResponse1 = userService.login("example@gmail.com", "123456Aa");
+        Response res = JsonSerializer.Deserialize<Response>(jsonResponse1);
+        Console.WriteLine(res);
 
-    str=userService.register("galhalifa@gmail.com","");
-        if (str == "ok")
-        {
-            result = false;
-        }
+        string jsonResponse2 = userService.login("example2@gmail.com", "123456Aa");
+        Response res2 = JsonSerializer.Deserialize<Response>(jsonResponse2);
+        Console.WriteLine("The following test should failed:");
+        Console.WriteLine(res2);
 
-
-    str = userService.register("galhalifa@gmail.com", "");
-    if (str == "ok")
-    {
-        result = false;
-    }
-
-    return result;
-
-
-}
-     
-     ///<summary>
-     ///This function test Requirement 1
-     ///</summary>
-     public bool RegisterTestInValidEmail(string email, string password){
-     UserService userService = new UserService();
-     bool result = true;
-
-     string str = userService.register("", "12345678Aa");
-     if (str != "ok")
-     {
-        result = false;
-     }
-
-     str = userService.register("itayg8676@gmailcom", "12345678Aa");
-     if (str == "ok")
-     {
-       result = false;
-     }
-
-     return result;
-
-    }
-     
-
-   
-    public bool LoginTest(string email, string password){
-        bool result =true;
-        return result;
-
-    }
-
-    public bool LogOutTest(string email){
-        bool result = true;
-        return result;
+        string jsonResponse3 = userService.login("example2@gmail.com", "1234Aa");
+        Response res3 = JsonSerializer.Deserialize<Response>(jsonResponse3);
+        Console.WriteLine("The following test should failed:");
+        Console.WriteLine(res3);
     }
 
 
-    public string runTestTest()
-    {
-        string result="";
-        return result;
+    ///<summary>
+    ///This function test Requirement 8
+    ///</summary>
+    public void LogOutTest(string email){
+        UserService userService = new UserService();
+        userService.register("example@gmail.com", "123456Aa");
+        userService.login("example@gmail.com", "123456Aa");
+        string jsonResponse1 = userService.logout();
+        Response res = JsonSerializer.Deserialize<Response>(jsonResponse1);
+        Console.WriteLine(res);
+
+
     }
+
+
+
 }
