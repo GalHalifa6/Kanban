@@ -9,7 +9,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     internal class Column
     {
         private string name { get; set; }
-        private int maxTasks { get; set; }
+        public int maxTasks { get; set; }
         private List<Task> tasks { get; set; }
 
         public Column(string name)

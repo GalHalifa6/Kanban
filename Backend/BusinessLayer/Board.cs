@@ -8,17 +8,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     internal class Board
     {
-        private string name { get; set; }
-        private Column backlog { get; set; }
-        private Column inProgress { get; set; }
-        private Column done { get; set; }
+        public string name { get; private set; }
+        public Column backlog { get; private set; }
+        public Column inProgress { get; private set; }
+        public Column done { get; private set; }
 
         public Board(string name)
         {
-            throw new NotImplementedException();
+            this.name = name;
+            backlog = new Column("Backlog");
+            inProgress = new Column("In Progress");
+            done = new Column("Done");
         }
 
-        public void addTask(string boardName, string title, string description)
+        /*public void addTask(string boardName, string title, string description)
         {
             throw new NotImplementedException();
         }
@@ -50,6 +53,47 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public List<Task> getInProgressTasks()
         {
             throw new NotImplementedException();
+        }*/
+
+        public Column GetColumn(int columnNumber)
+        {
+            if (columnNumber > 2 || columnNumber < 0)
+                return null;
+            if (columnNumber == 0)
+            {
+                return backlog;
+            }
+            else if (columnNumber == 1)
+            {
+                return inProgress;
+            }
+            else  // (columnNumber == 2)
+            {
+                return done;
+            }
+        }
+
+        internal Response<bool> LimitColumnTasks(int columnNumber, int newLimit)
+        {            
+            if (newLimit < -1)
+                return new Response<bool>("Invalid limitation of tasks");
+            if (newLimit == -1)
+            {
+                newLimit = int.MaxValue;
+            }
+            Column col = GetColumn(columnNumber);
+            if (col == null)
+                return new Response<bool>("Invalid column");
+            col.maxTasks = newLimit;
+            return new Response<bool>();
+        }
+
+        internal Response<int> GetColumnLimit(string boardName, int columnNumber)
+        {
+            Column col = GetColumn(columnNumber);
+            if (col == null)
+                return new Response<int>("Invalid column");
+            return new Response<int>(col.maxTasks, true);
         }
     }
 }
