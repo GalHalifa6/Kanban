@@ -40,5 +40,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             throw new NotImplementedException();
         }
+
+        internal Task GetTask(int taskId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

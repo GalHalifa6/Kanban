@@ -24,7 +24,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return response.ErrorMessage;
             return ret;
         }
-
+        private string GenerateBadResponseString(string errMsg)
+        {
+            return "{ErrorMessage: " + errMsg + ", ReturnValue: null}";
+        }
         private string GenerateGoodResponseString(string value)
         {
             return "{ErrorMessage: null, ReturnValue: " + value +"}";
@@ -32,27 +35,30 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         public string AddBoard(string email, string name)
         {
-            return InvokeMethod(bc.AddBoard, "{}", email, name);
+            return InvokeMethod(new Func<string, string, Response<bool>>(bc.AddBoard), "{}", email, name);
         }
 
         public string RemoveBoard(string email, string name) {
-            return InvokeMethod(bc.RemoveBoard, "{}", email, name);
+            return InvokeMethod(new Func<string, string, Response<bool>>(bc.RemoveBoard), "{}", email, name);
         }
 
-        /*public string addTask(string title, string description) {
+        /*public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
+        {
             throw new NotImplementedException();
-        }
+        }*/
 
-        public string removeTask(string title) {
-            throw new NotImplementedException();
-        }
+        /* public string removeTask(string title) {
+             throw new NotImplementedException();
+         }
+        */
 
-        public string advanceTask(string title) {
-            throw new NotImplementedException();    
+       /* public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
+        {
+            
         }*/
 
         public string LimitColumn(string email, string boardName, int columnNumber, int newLimit) {
-            return InvokeMethod(bc.LimitColumnTasks, "{}", email, boardName, columnNumber, newLimit);
+            return InvokeMethod(new Func<string, string, int, int, Response<bool>>(bc.LimitColumnTasks), "{}", email, boardName, columnNumber, newLimit);
         }
 
         public string GetColumnLimit(string email, string boardName, int columnNumber)

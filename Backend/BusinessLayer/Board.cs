@@ -85,7 +85,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (col == null)
                 return new Response<bool>("Invalid column");
             col.maxTasks = newLimit;
-            return new Response<bool>();
+            return new Response<bool>(true);
         }
 
         internal Response<int> GetColumnLimit(string boardName, int columnNumber)
@@ -93,7 +93,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Column col = GetColumn(columnNumber);
             if (col == null)
                 return new Response<int>("Invalid column");
-            return new Response<int>(col.maxTasks, true);
+            return new Response<int>(col.maxTasks);
         }
     }
 }

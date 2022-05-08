@@ -1,4 +1,4 @@
-/*using System;
+using System;
 using System.Globalization;
 using IntroSE.Kanban.Backend.ServiceLayer;
 using IntroSE.Kanban.Backend.BusinessLayer;
@@ -6,7 +6,7 @@ using System.Text.Json;
 
 class BoardServiceTest
 {
-    
+
     public BoardServiceTest()
     {
 
@@ -14,13 +14,13 @@ class BoardServiceTest
     ///<summary>
     ///This function test Requirement 12
     ///</summary>
-    public void addTaskTest()
+    /*public void addTaskTest()
     {
         BoardService board = new BoardService();
         string jsonResponse = board.addTask("Task1", "Testing task1");
         Response res = JsonSerializer.Deserialize<Response>(jsonResponse);
         Console.WriteLine(res);
-        
+
     }
 
     ///<summary>
@@ -64,7 +64,7 @@ class BoardServiceTest
     {
         BoardService board = new BoardService();
         board.addTask("Task1", "Testing task1");
-        string jsonResponse = board.editTaskDescription("Task1","Testing new");
+        string jsonResponse = board.editTaskDescription("Task1", "Testing new");
         Response res = JsonSerializer.Deserialize<Response>(jsonResponse);
         Console.WriteLine(res);
 
@@ -101,7 +101,7 @@ class BoardServiceTest
         string jsonResponse = board.addBoard("Board1");
         Response res = JsonSerializer.Deserialize<Response>(jsonResponse);
         Console.WriteLine(res);
-      
+
         string jsonResponse1 = board.addBoard("Board1");
         Response res1 = JsonSerializer.Deserialize<Response>(jsonResponse);
         Console.WriteLine("The following test should failed:");
@@ -149,7 +149,7 @@ class BoardServiceTest
         Console.WriteLine(res3);
 
 
-
-
     }
-}*/
+*/
+    
+}
