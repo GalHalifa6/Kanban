@@ -14,23 +14,27 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private DateTime dueDate { get; set; }
         private Boolean isDone { get; set; }
 
-        public Task(string name, string description)
+        public Task(string name, string description, DateTime dueDate)
         {
-            throw new NotImplementedException();
+            this.title = name;
+            this.description = description;
+            creationTime = DateTime.Now;
+            this.dueDate = dueDate;
+            isDone = false;
         }
 
-        public void editTaskTitle(string boardName, string oldTitle, string newTitle)
+        public void editTaskTitle(string newTitle)
         {
-            throw new NotImplementedException();
+            title = newTitle;
         }
-        public void editTaskDescription(string boardName, string title, string newDescription)
+        public void editTaskDescription(string newDescription)
         {
-            throw new NotImplementedException();
+            description = newDescription;
         }
 
-        public void editTaskDueDate(string boardName, string title, DateTime newDueDate)
+        public void editTaskDueDate(DateTime newDueDate)
         {
-            throw new NotImplementedException();
+            dueDate = newDueDate;
         }
     }
 }
