@@ -7,6 +7,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class BoardController
     {
         Dictionary<string, List<Board>> boards;
+        log4net.ILog logger = Utility.Logger.GetLogger();
 
         public BoardController()
         {
@@ -29,10 +30,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public Response<bool> AddBoard(string email, string name)
         {
             if (!boards.ContainsKey(email))
+            {
                 boards[email] = new List<Board>();
+            }
             if (GetBoard(email, name) != null)
+            {
+                logger.Warn("Failed to create board " + name + ", because a board with that name already exists.");
                 return new Response<bool>("Board with this name already exists");
+            }
             boards[email].Add(new Board(name));
+            logger.Info("board " + name + " created for user " + email);
             return new Response<bool>(true);
         }
 
@@ -42,8 +49,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (board != null)
             {
                 boards[email].Remove(board);
+                logger.Info("board " + boardName + " removed from user " + email);
                 return new Response<bool>(true);
             }
+            logger.Warn("Failed to remove board " + boardName + ", because a board with that name doesn't exists.");
             return new Response<bool>("The board \"" + boardName + "\" does not exist");
         }
 
@@ -52,6 +61,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Board board = GetBoard(email, boardName);
             if (board == null)
             {
+                logger.Warn("Failed to limit tasks in board " + boardName + ", because a board with that name doesn't exists.");
                 return new Response<bool>("The board \"" + boardName + "\" does not exist");
             }
             return board.LimitColumnTasks(columnNumber, newLimit);

@@ -13,6 +13,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public Column inProgress { get; private set; }
         public Column done { get; private set; }
 
+        private log4net.ILog logger = Utility.Logger.GetLogger();
+
         public Board(string name)
         {
             this.name = name;
@@ -74,17 +76,24 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
         internal Response<bool> LimitColumnTasks(int columnNumber, int newLimit)
-        {            
+        {
             if (newLimit < -1)
+            {
+                logger.Warn("Failed to limit column tasks due to invalid limit");
                 return new Response<bool>("Invalid limitation of tasks");
+            }
             if (newLimit == -1)
             {
                 newLimit = int.MaxValue;
             }
             Column col = GetColumn(columnNumber);
             if (col == null)
+            {
+                logger.Warn("Failed to limit column tasks due to invalid column ordinal");
                 return new Response<bool>("Invalid column");
+            }
             col.maxTasks = newLimit;
+            logger.Info("Max tasks limited to " + newLimit);
             return new Response<bool>(true);
         }
 
