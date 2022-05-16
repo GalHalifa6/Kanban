@@ -6,33 +6,127 @@ using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
-    internal class UserController
+    public class UserController
+
     {
         private Dictionary<string, User> users { get; set; }
 
         public UserController()
         {
-            throw new NotImplementedException();
+            UserController userController = new UserController();
         }
 
-        public void createUser(string email, string password)
+        public Response<bool> createUser(string email, string password)
         {
-            throw new NotImplementedException();
+            if (!users.ContainsKey(email))
+            {
+                User user = new User(email, password);
+                users.Add(email, user);
+                Response<bool> response = new Response<bool>(true);
+                return response;
+            }
+            else
+            {
+                Response<bool> response = new Response<bool>("This email is already taken", true);
+                return response;
+            }
         }
 
-        public void deleteUser(string email, string password)
+        public Response<bool> DeleteUser(string email, string password)
         {
-            throw new NotImplementedException();
+            if (GetUser(email) != null)
+            {
+                if (GetUser(email).Password == password)
+                {
+                    if (GetUser(email).isLoggedIn == true)
+                    {
+                        users.Remove(email);
+                        return new Response<bool>(true);
+                        
+                    }
+                }
+            }
+            return new Response<bool>("The user can not be deleted", true);
+            
         }
 
-        public User getUser(string email)
+
+        public User GetUser(string email)
         {
-            throw new NotImplementedException();
+            if (exists(email))
+            {
+                return users[email];
+            }
+            else
+            {
+                return null;
+            }
+
         }
-        public Boolean exists(string email)
+        public bool exists(string email)
         {
-            throw new NotImplementedException();
+            if (users.ContainsKey(email))
+                return true;
+            else
+                return false;
         }
+
+        public Response<bool> login(string email, string password)
+        {
+            if (GetUser(email) != null)
+            {
+                if (GetUser(email).Password == password)
+                {
+                    GetUser(email).logIn();
+                    return new Response<bool>(true);                  
+                }
+                else
+                {
+                    return new Response<bool>("The user logged in unsuccessfully", true);                  
+                }
+            }
+            else
+                return new Response<bool>("The user logged in unsuccessfully", true);
+        }
+
+        public Response<bool> LogOut(string email)
+        {
+            if (GetUser(email) != null)
+            {
+                if (GetUser(email).isLoggedIn == true)
+                {
+                    GetUser(email).logOut();
+                    return new Response<bool>(true);                  
+                }
+                return new Response<bool>("The user logged out unsuccesssfully", true);
+            }
+
+            return new Response<bool>("The user logged out unsuccesssfully", true);
+        }
+
+        public Response<bool> changePassword(string email, string oldPassword, string newPassword)
+        {
+            if (GetUser(email) != null)
+            {
+                if (GetUser(email).isLoggedIn == true)
+                {
+                    if (users[email].Password == oldPassword)
+                    {
+                        GetUser(email).setPassword(newPassword);
+                        return new Response<bool>(true);
+                    }
+
+
+
+                }
+            }
+            return new Response<bool>("Password changed unsuccessfully", true);
+        }
+
+
+
+
 
     }
 }
+

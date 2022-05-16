@@ -36,7 +36,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (GetBoard(email, name) != null)
             {
                 logger.Warn("Failed to create board " + name + ", because a board with that name already exists.");
-                return new Response<bool>("Board with this name already exists");
+                return new Response<bool>("Board with this name already exists", true);
             }
             boards[email].Add(new Board(name));
             logger.Info("board " + name + " created for user " + email);
@@ -53,7 +53,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response<bool>(true);
             }
             logger.Warn("Failed to remove board " + boardName + ", because a board with that name doesn't exists.");
-            return new Response<bool>("The board \"" + boardName + "\" does not exist");
+            return new Response<bool>("The board \"" + boardName + "\" does not exist", true);
         }
 
         public Response<bool> LimitColumnTasks(string email, string boardName, int columnNumber, int newLimit)
@@ -62,7 +62,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (board == null)
             {
                 logger.Warn("Failed to limit tasks in board " + boardName + ", because a board with that name doesn't exists.");
-                return new Response<bool>("The board \"" + boardName + "\" does not exist");
+                return new Response<bool>("The board \"" + boardName + "\" does not exist", true);
             }
             return board.LimitColumnTasks(columnNumber, newLimit);
         }
@@ -72,7 +72,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Board board = GetBoard(email, boardName);
             if (board == null)
             {
-                return new Response<int>("The board \"" + boardName + "\" does not exist");
+                return new Response<int>("The board \"" + boardName + "\" does not exist",true);
             }
             return board.GetColumnLimit(boardName, columnNumber);
         }
@@ -81,10 +81,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
-                return new Response<string>("The board \"" + boardName + "\" does not exist");
+                return new Response<string>("The board \"" + boardName + "\" does not exist", true);
             Column column = board.GetColumn(columnOrdinal);
             if (column == null)
-                return new Response<string>("Invalid column");
+                return new Response<string>("Invalid column",true);
             return new Response<string>(column.ToString());
         }
     }

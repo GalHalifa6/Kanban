@@ -80,7 +80,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (newLimit < -1)
             {
                 logger.Warn("Failed to limit column tasks due to invalid limit");
-                return new Response<bool>("Invalid limitation of tasks");
+                return new Response<bool>("Invalid limitation of tasks", true);
             }
             if (newLimit == -1)
             {
@@ -90,7 +90,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (col == null)
             {
                 logger.Warn("Failed to limit column tasks due to invalid column ordinal");
-                return new Response<bool>("Invalid column");
+                return new Response<bool>("Invalid column", true);
             }
             col.maxTasks = newLimit;
             logger.Info("Max tasks limited to " + newLimit);
@@ -101,7 +101,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             Column col = GetColumn(columnNumber);
             if (col == null)
-                return new Response<int>("Invalid column");
+                return new Response<int>("Invalid column", true);
             return new Response<int>(col.maxTasks);
         }
     }
