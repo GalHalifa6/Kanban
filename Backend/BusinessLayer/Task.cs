@@ -8,14 +8,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     internal class Task
     {
-        private string title { get; set; }
-        private string description { get; set; }
-        private DateTime creationTime { get; set; }
-        private DateTime dueDate { get; set; }
-        private Boolean isDone { get; set; }
+        public string title { get; private set; }
+        public string description { get; private set; }
+        public DateTime creationTime { get; private set; }
+        public DateTime dueDate { get; private set; }
+        public Boolean isDone { get; private set; }
+        public int ID { get; private set; }
 
-        public Task(string name, string description, DateTime dueDate)
+        public Task(int ID, string name, string description, DateTime dueDate)
         {
+            this.ID = ID;
             this.title = name;
             this.description = description;
             creationTime = DateTime.Now;
@@ -35,6 +37,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void editTaskDueDate(DateTime newDueDate)
         {
             dueDate = newDueDate;
+        }
+
+        public string toString()
+        {
+            string output = "";
+            output = output + string.Format("{0}: {1}", "Id", ID) + "\n";
+            output = output + string.Format("{0}: {1}", "CreationTime", creationTime) + "\n";
+            output = output + string.Format("{0}: {1}", "Title", title) + "\n";
+            output = output + string.Format("{0}: {1}", "Description", description) + "\n";
+            output = output + string.Format("{0}: {1}", "DueDate", dueDate);
+            return output;
         }
     }
 }
