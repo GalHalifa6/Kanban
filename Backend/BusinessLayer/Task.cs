@@ -8,29 +8,46 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     internal class Task
     {
-        private string title { get; set; }
-        private string description { get; set; }
-        private DateTime creationTime { get; set; }
-        private DateTime dueDate { get; set; }
-        private Boolean isDone { get; set; }
+        public string title { get; private set; }
+        public string description { get; private set; }
+        public DateTime creationTime { get; private set; }
+        public DateTime dueDate { get; private set; }
+        public Boolean isDone { get; private set; }
+        public int ID { get; private set; }
 
-        public Task(string name, string description)
+        public Task(int ID, string name, string description, DateTime dueDate)
         {
-            throw new NotImplementedException();
+            this.ID = ID;
+            this.title = name;
+            this.description = description;
+            creationTime = DateTime.Now;
+            this.dueDate = dueDate;
+            isDone = false;
         }
 
-        public void editTaskTitle(string boardName, string oldTitle, string newTitle)
+        public void editTaskTitle(string newTitle)
         {
-            throw new NotImplementedException();
+            title = newTitle;
         }
-        public void editTaskDescription(string boardName, string title, string newDescription)
+        public void editTaskDescription(string newDescription)
         {
-            throw new NotImplementedException();
+            description = newDescription;
         }
 
-        public void editTaskDueDate(string boardName, string title, DateTime newDueDate)
+        public void editTaskDueDate(DateTime newDueDate)
         {
-            throw new NotImplementedException();
+            dueDate = newDueDate;
+        }
+
+        public string toString()
+        {
+            string output = "";
+            output = output + string.Format("{0}: {1}", "Id", ID) + "\n";
+            output = output + string.Format("{0}: {1}", "CreationTime", creationTime) + "\n";
+            output = output + string.Format("{0}: {1}", "Title", title) + "\n";
+            output = output + string.Format("{0}: {1}", "Description", description) + "\n";
+            output = output + string.Format("{0}: {1}", "DueDate", dueDate);
+            return output;
         }
     }
 }
