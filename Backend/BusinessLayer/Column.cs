@@ -106,8 +106,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             string output = "";
             if (tasks.Count > 0)
             {
-                for (int i = 0; i < tasks.Count; i++)
-                {
+                for (int i = 0; i < tasks.Count; i++) {
                     if (i != tasks.Count - 1)
                     {
                         output = output + tasks[i].toString() + "\n";
