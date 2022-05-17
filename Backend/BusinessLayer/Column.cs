@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
-    internal class Column
+    public class Column
     {
         public string name { get; private set; }
         public int maxTasks { get; private set; }
@@ -23,7 +23,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (tasks.Contains(task))
             {
-                return new Response<bool>("This task already exists.");
+                return new Response<bool>("This task already exists.", true);
             }
             tasks.Add(task);
             return new Response<bool>(true);
@@ -33,7 +33,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (maxTasks != -1 & tasks.Count == maxTasks)
             {
-                return new Response<bool>("The maximum capacity of tasks in this column is full.");
+                return new Response<bool>("The maximum capacity of tasks in this column is full.", true);
             }
             Task newTask = new Task(ID, title, description, dueDate);
             tasks.Add(newTask);
@@ -44,7 +44,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (!tasks.Contains(task))
             {
-                return new Response<bool>("The task doesn't exist.");
+                return new Response<bool>("The task doesn't exist.", true);
             }
             tasks.Remove(task);
             return new Response<bool>(true);
@@ -53,7 +53,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (!tasks.Contains(task))
             {
-                return new Response<bool>("The task doesn't exist in this column");
+                return new Response<bool>("The task doesn't exist in this column", true);
             }
             task.editTaskTitle(newTitle);
             return new Response<bool>(true);
@@ -63,7 +63,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (!tasks.Contains(task))
             {
-                return new Response<bool>("That task doesn't exist in this column.");
+                return new Response<bool>("That task doesn't exist in this column.", true);
             }
             task.editTaskDescription(newDescription);
             return new Response<bool>(true);
@@ -71,9 +71,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         internal Response<bool> editTaskDueDate(Task task, DateTime newDueDate)
         {
-            if(!tasks.Contains(task))
+            if (!tasks.Contains(task))
             {
-                return new Response<bool>("That task doesn't exist in this column.");
+                return new Response<bool>("That task doesn't exist in this column.", true);
             }
             task.editTaskDueDate(newDueDate);
             return new Response<bool>(true);
@@ -83,7 +83,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (maxTasks < 1)
             {
-                return new Response<bool>("Number of max tasks needs to be more than 1.");
+                return new Response<bool>("Number of max tasks needs to be more than 1.", true);
             }
             this.maxTasks = maxTasks;
             return new Response<bool>(true);

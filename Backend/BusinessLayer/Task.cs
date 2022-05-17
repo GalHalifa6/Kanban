@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
-    internal class Task
+    public class Task
     {
         public string title { get; private set; }
         public string description { get; private set; }
