@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
-    internal class Board
+    public class Board
     {
         public string name { get; private set; }
         public Column backlog { get; private set; }
         public Column inProgress { get; private set; }
         public Column done { get; private set; }
+
 
         private log4net.ILog logger = Utility.Logger.GetLogger();
 
@@ -23,39 +24,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             done = new Column("Done");
         }
 
-        /*public void addTask(string boardName, string title, string description)
+        public string getInProgressTasks()
         {
-            throw new NotImplementedException();
+            return inProgress.getTasksList();
         }
-
-        public Boolean removeTask(string boardName, string title)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void editTaskTitle(string boardName, string oldTitle, string newTitle)
-        {
-            throw new NotImplementedException();
-        }
-        public void editTaskDescription(string boardName, string title, string newDescription)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void editTaskDueDate(string boardName, string title, DateTime newDueDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void advanceTaskPhase(string title)
-        {
-            throw new NotImplementedException();
-        }
-
-        public List<Task> getInProgressTasks()
-        {
-            throw new NotImplementedException();
-        }*/
 
         public Column GetColumn(int columnNumber)
         {
@@ -80,19 +52,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (newLimit < -1)
             {
                 logger.Warn("Failed to limit column tasks due to invalid limit");
-                return new Response<bool>("Invalid limitation of tasks");
+                return new Response<bool>("Invalid limitation of tasks", true);
             }
             if (newLimit == -1)
             {
                 newLimit = int.MaxValue;
             }
+
             Column col = GetColumn(columnNumber);
             if (col == null)
             {
                 logger.Warn("Failed to limit column tasks due to invalid column ordinal");
-                return new Response<bool>("Invalid column");
+                return new Response<bool>("Invalid column", true);
             }
-            col.maxTasks = newLimit;
+            col.setMax(newLimit);
             logger.Info("Max tasks limited to " + newLimit);
             return new Response<bool>(true);
         }
@@ -101,8 +74,87 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             Column col = GetColumn(columnNumber);
             if (col == null)
-                return new Response<int>("Invalid column");
+                return new Response<int>("Invalid column", true);
             return new Response<int>(col.maxTasks);
+        }
+
+        internal Response<string> AddTask(int taskID ,string title, string description, DateTime dueDate)
+        {
+            
+            backlog.addTask(taskID,title, description, dueDate);
+            logger.Info("Task was successfully added");
+            return new Response<string>("The task was added successfully");
+        }
+
+        
+
+        /*internal Response<string> RemoveTask(string title)
+        {
+            if (!(backlog.removeTask(title) || inProgress.removeTask(title) || done.removeTask(title)))
+            {
+                logger.Warn("An attempt to remove a non-existing task was made");
+                return new Response<string>("The board " + name + " doesn't have a task named " + title, true);
+            }
+            logger.Info("Task was removed successfully");
+            return new Response<string>("Task was removed successfully");
+        }*/
+
+        internal Response<string> AdvanceTask(int columnOrdinal, int taskId)
+        {
+            Column c = GetColumn(columnOrdinal);
+            if (c == null)
+            {
+                logger.Warn("Cannot advance task since an invalid column ordinal was entered");
+                return new Response<string>("Task could not advance because of a wrong column ordinal", true);
+            }
+            Task t = c.getTask(taskId);
+            if (t == null)
+            {
+                logger.Warn("Cannot advance task because it doesn't exist");
+                return new Response<string>("Task could not advance because of a wrong task id", true);
+            }
+            if (c == backlog)
+            {
+                backlog.removeTask(t);
+                inProgress.addTask(t);
+                logger.Info("Task " + t.title + " advanced");
+                return new Response<string>("Task " + t.title + " advanced and is now in progress");
+            }
+            if (c == inProgress)
+            {
+                inProgress.removeTask(t);
+                done.addTask(t);
+                logger.Info("Task " + t.title + " advanced");
+                return new Response<string>("Task " + t.title + " advanced and is now done");
+            }
+            else // (c == done)
+            {
+                logger.Warn("Failed to advance task because the task is already done");
+                return new Response<string>("Failed to advance task because the task is already done", true);
+            }
+        }
+
+        internal Task GetTask(string taskId)
+        {
+            try
+            {
+                int id = int.Parse(taskId);
+                Task t = backlog.getTask(id);
+                if (t != null)
+                    return t;
+                t = inProgress.getTask(id);
+                if (t != null)
+                    return t;
+                t = done.getTask(id);
+                if (t != null)
+                    return t;
+                return null;
+            }
+            catch (FormatException)
+            {
+                return null;
+            }
+            
         }
     }
 }

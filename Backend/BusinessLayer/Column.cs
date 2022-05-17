@@ -6,44 +6,119 @@ using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
-    internal class Column
+    public class Column
     {
-        private string name { get; set; }
-        public int maxTasks { get; set; }
+        public string name { get; private set; }
+        public int maxTasks { get; private set; }
         private List<Task> tasks { get; set; }
 
         public Column(string name)
         {
-            throw new NotImplementedException();
+            this.name = name;
+            tasks = new List<Task>();
+            maxTasks = -1; //The value is -1 if there isn't a limit on the max tasks possible. Any number higher than 0 is the limit number.
         }
 
-        public void addTask(string boardName, string title, string description)
+        internal Response<bool> addTask(Task task)
         {
-            throw new NotImplementedException();
+            if (tasks.Contains(task))
+            {
+                return new Response<bool>("This task already exists.", true);
+            }
+            tasks.Add(task);
+            return new Response<bool>(true);
         }
 
-        public Boolean removeTask(string boardName, string title)
+        internal Response<bool> addTask(int ID, string title, string description, DateTime dueDate)
         {
-            throw new NotImplementedException();
+            if (maxTasks != -1 & tasks.Count == maxTasks)
+            {
+                return new Response<bool>("The maximum capacity of tasks in this column is full.", true);
+            }
+            Task newTask = new Task(ID, title, description, dueDate);
+            tasks.Add(newTask);
+            return new Response<bool>(true);
         }
 
-        public void editTaskTitle(string boardName, string oldTitle, string newTitle)
+        internal Response<bool> removeTask(Task task)
         {
-            throw new NotImplementedException();
+            if (!tasks.Contains(task))
+            {
+                return new Response<bool>("The task doesn't exist.", true);
+            }
+            tasks.Remove(task);
+            return new Response<bool>(true);
         }
-        public void editTaskDescription(string boardName, string title, string newDescription)
+        internal Response<bool> editTaskTitle(Task task, string newTitle)
         {
-            throw new NotImplementedException();
+            if (!tasks.Contains(task))
+            {
+                return new Response<bool>("The task doesn't exist in this column", true);
+            }
+            task.editTaskTitle(newTitle);
+            return new Response<bool>(true);
         }
 
-        public void editTaskDueDate(string boardName, string title, DateTime newDueDate)
+        internal Response<bool> editTaskDescription(Task task, string newDescription)
         {
-            throw new NotImplementedException();
+            if (!tasks.Contains(task))
+            {
+                return new Response<bool>("That task doesn't exist in this column.", true);
+            }
+            task.editTaskDescription(newDescription);
+            return new Response<bool>(true);
         }
 
-        internal Task GetTask(int taskId)
+        internal Response<bool> editTaskDueDate(Task task, DateTime newDueDate)
         {
-            throw new NotImplementedException();
+            if (!tasks.Contains(task))
+            {
+                return new Response<bool>("That task doesn't exist in this column.", true);
+            }
+            task.editTaskDueDate(newDueDate);
+            return new Response<bool>(true);
+        }
+
+        internal Response<bool> setMax(int maxTasks)
+        {
+            if (maxTasks < 1)
+            {
+                return new Response<bool>("Number of max tasks needs to be more than 1.", true);
+            }
+            this.maxTasks = maxTasks;
+            return new Response<bool>(true);
+        }
+
+        public Task getTask(int taskID)
+        {
+            for (int i = 0; i < tasks.Count; i++)
+            {
+                if (tasks[i].ID == taskID)
+                {
+                    return tasks[i];
+                }
+            }
+            return null;
+        }
+
+        public string getTasksList()
+        {
+            string output = "";
+            if (tasks.Count > 0)
+            {
+                for (int i = 0; i < tasks.Count; i++)
+                {
+                    if (i != tasks.Count - 1)
+                    {
+                        output = output + tasks[i].toString() + "\n";
+                    }
+                    else
+                    {
+                        output = output + tasks[i].toString();
+                    }
+                }
+            }
+            return output;
         }
     }
 }
