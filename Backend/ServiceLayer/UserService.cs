@@ -30,7 +30,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 return response.ErrorMessage;
             }
-            return "{}";
+            return GenerateGoodResponseString(response.Result.ToString());
         }
 
         public string Login(string email, string password)
@@ -45,7 +45,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 return response.ErrorMessage;
             }
-            return "{}";
+            return GenerateGoodResponseString(response.Result.ToString());
         }
 
         public string Logout(string email)
@@ -58,7 +58,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 return response.ErrorMessage;
             }
-            return "{}";
+            return GenerateGoodResponseString(response.Result.ToString());
 
         }
 
@@ -75,7 +75,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 return response.ErrorMessage;
             }
-            return "{}";
+            return GenerateGoodResponseString(response.Result.ToString());
         }
 
         public string ChangePassword(string email, string oldPassword, string newPassword)
@@ -93,7 +93,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 return response.ErrorMessage;
             }
-            return "{}";
+            return GenerateGoodResponseString(response.Result.ToString());
         }
 
         private bool IsValidEmail(string email)
@@ -155,6 +155,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return false;
             }
         }
+
+        private string GenerateBadResponseString(string errMsg)
+        {
+            return "{ErrorMessage: " + errMsg + ", ReturnValue: null}";
+        }
+        private string GenerateGoodResponseString(string value)
+        {
+            return "{ErrorMessage: null, ReturnValue: " + value + "}";
+        }
+
 
 
 
