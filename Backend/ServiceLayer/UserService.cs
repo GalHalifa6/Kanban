@@ -10,8 +10,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
     public class UserService
     {
         UserController uc;
-        
-
+      
         public UserService()
         {
             uc = new UserController();
@@ -23,8 +22,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return "false";
             if (IsValidPassword(password) == false)
                 return "false";
-
-
             Response<bool> response = uc.createUser(email, password);
             if (response.ErrorOccured)
             {
@@ -39,7 +36,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return "false";
             if (IsValidPassword(password) == false)
                 return "false";
-
             Response<bool> response = uc.login(email, password);
             if (response.ErrorOccured)
             {
@@ -51,15 +47,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         public string Logout(string email)
         {
             if (IsValidEmail(email) == false)
+            {
                 return "false";
-
+            }
             Response<bool> response = uc.LogOut(email);
             if (response.ErrorOccured)
             {
                 return response.ErrorMessage;
             }
             return GenerateGoodResponseString(response.Result.ToString());
-
         }
 
 
@@ -69,7 +65,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return "false";
             if (IsValidPassword(password) == false)
                 return "false";
-
             Response<bool> response = uc.DeleteUser(email, password);
             if (response.ErrorOccured)
             {
@@ -77,6 +72,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             return GenerateGoodResponseString(response.Result.ToString());
         }
+      
 
         public string ChangePassword(string email, string oldPassword, string newPassword)
         {
@@ -86,8 +82,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return "false";
             if (IsValidEmail(email) == false)
                 return "false";
-
-
             Response<bool> response = uc.changePassword(email, oldPassword, newPassword);
             if (response.ErrorOccured)
             {
@@ -131,15 +125,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                     return false;
                 }
             }
-
             if (password.Length < 6 || password.Length > 20)
             {
                 return false;
             }
-
             int upperCase = 0, lowerCase = 0, numbers = 0;
             byte[] bytes = Encoding.ASCII.GetBytes(password);
-
             for (int i = 0; i < password.Length; i++)
             {
                 if (97 <= bytes[i] && bytes[i] <= 122) { lowerCase++; }
@@ -147,7 +138,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 else if (48 <= bytes[i] && bytes[i] <= 57) { numbers++; }
                 else { return false; }
             }
-
             if (upperCase >= 1 && lowerCase >= 1 && numbers >= 1)
             { return true; }
             else
@@ -164,11 +154,5 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             return "{ErrorMessage: null, ReturnValue: " + value + "}";
         }
-
-
-
-
-
-
     }
 }

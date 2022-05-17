@@ -15,7 +15,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public UserController()
         {
             UserController userController = new UserController();
-            
         }
 
         public Response<bool> createUser(string email, string password)
@@ -34,6 +33,27 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response<bool>("This email is already taken", true);
             }
         }
+     
+        public User GetUser(string email)
+        {
+            if (exists(email))
+            {
+                return users[email];
+            }
+            else
+            {
+                return null;
+            }
+
+        }
+  
+        public bool exists(string email)
+        {
+            if (users.ContainsKey(email))
+                return true;
+            else
+                return false;
+        }
 
         public Response<bool> DeleteUser(string email, string password)
         {
@@ -46,18 +66,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                         users.Remove(email);
                         logger.Info("User: " + email + ", deleted successfully");
                         return new Response<bool>(true);
-                        
                     }
                     logger.Warn("Failed to delete user " + email + ", because the user is not connected");
                     return new Response<bool>("the user "+ email + " is not connected, The user can not be deleted", true);
-
                 }
                 logger.Warn("Failed to delete user " + email + ", because There is no match between email and password");
                 return new Response<bool>("There is no match between email and password", true);
             }
             logger.Warn("Failed to delete user " + email + ", because a user with that name is not exists");
             return new Response<bool>("The user "+ email + " does not exist", true);
-            
         }
 
 
@@ -71,14 +88,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 return null;
             }
-
-        }
-        public bool exists(string email)
-        {
-            if (users.ContainsKey(email))
-                return true;
-            else
-                return false;
         }
 
         public Response<bool> login(string email, string password)
@@ -100,7 +109,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             else
                 logger.Warn("Failed to delete user " + email + ", because a user with that name is not exists");
                 return new Response<bool>("The user "+ email + " does not exist", true);
-                
         }
 
         public Response<bool> LogOut(string email)
@@ -134,9 +142,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     }
                     logger.Warn("Faild to change password of the user " + email + ", because there is no match between the email and password");
                     return new Response<bool>("There is no match between the password and the user name", true);
-
-
-
                 }
                 logger.Warn("The user's password can not be changed, because the user " + email + " is not connected");
                 return new Response<bool>("This user is not connected, password can't be changed", true);
@@ -144,11 +149,5 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Warn("Failed to change the user's password at " + email + ", because a user with that email is not exists");
             return new Response<bool>("The user " + email + " does not exist", true);
         }
-
-
-
-
-
     }
 }
-

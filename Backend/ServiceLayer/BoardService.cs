@@ -21,8 +21,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             Response<bool> response = (Response<bool>) method.DynamicInvoke(args);
             if (response.ErrorOccured)
-                return response.ErrorMessage;
-            return ret;
+                return GenerateBadResponseString(response.ErrorMessage);
+            return GenerateGoodResponseString(ret);
         }
         private string GenerateBadResponseString(string errMsg)
         {
@@ -35,6 +35,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         public string AddBoard(string email, string name)
         {
+            if (name == "")
+            {
+                return GenerateBadResponseString("Cannot have empty board name");
+            }
             return InvokeMethod(new Func<string, string, Response<bool>>(bc.AddBoard), "{}", email, name);
         }
 
@@ -42,20 +46,23 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return InvokeMethod(new Func<string, string, Response<bool>>(bc.RemoveBoard), "{}", email, name);
         }
 
-        /*public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
+        public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
+        {
+            return InvokeMethod(new Func<string, string, string, string, DateTime, Response<string>>(bc.AddTask), email,
+                email, boardName, title, description, dueDate);
+        }
+
+        public string removeTask(string email, string boardName, int columnOrdinal, int taskId)
         {
             throw new NotImplementedException();
-        }*/
+        }
 
-        /* public string removeTask(string title) {
-             throw new NotImplementedException();
-         }
-        */
 
-       /* public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
+        public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
-            
-        }*/
+            return InvokeMethod(new Func<string, string, int ,int, Response<string>>(bc.AdvanceTask), "{}", email,
+                boardName, columnOrdinal, taskId);
+        }
 
         public string LimitColumn(string email, string boardName, int columnNumber, int newLimit) {
             return InvokeMethod(new Func<string, string, int, int, Response<bool>>(bc.LimitColumnTasks), "{}", email, boardName, columnNumber, newLimit);
@@ -65,23 +72,34 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             Response<int> response = bc.GetColumnLimit(email, boardName, columnNumber);
             if (response.ErrorOccured) 
-                return response.ErrorMessage;
+                return GenerateBadResponseString(response.ErrorMessage);
             return GenerateGoodResponseString(response.Result.ToString());
         }
 
-        public string GetColumn(string email, string boardName, int columnNumber)
+        public string GetColumnName(string email, string boardName, int columnNumber)
         {
-            Response<string> response = bc.GetColumn(email, boardName, columnNumber);
+            Response<string> response = bc.GetColumnName(email, boardName, columnNumber);
             if (response.ErrorOccured)
-                return response.ErrorMessage;
+                return GenerateBadResponseString(response.ErrorMessage);
             return GenerateGoodResponseString(response.Result.ToString());
         }
 
-        /*
-                public string getInProgressTasks()
-                {
-                    throw new NotImplementedException();
-                }*/
+        public string GetColumn(string email, string boardName, int columnOrdinal)
+        {
+            Response<string> response = bc.GetColumn(email, boardName, columnOrdinal);
+            if (response.ErrorOccured)
+                return GenerateBadResponseString(response.ErrorMessage);
+            return GenerateGoodResponseString(response.Result.ToString());
+        }
+
+        public string InProgressTasks(string email)
+        {
+            Response<string> response = bc.InProgressTasks(email);
+            if (response.ErrorOccured)
+                return GenerateBadResponseString(response.ErrorMessage);
+            return GenerateGoodResponseString(response.Result.ToString());
+        }
+
 
 
     }
