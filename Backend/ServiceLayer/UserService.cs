@@ -14,7 +14,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         public UserService()
         {
-            UserService userService = new UserService();
+            uc = new UserController();
         }
 
         public string Register(string email, string password)
