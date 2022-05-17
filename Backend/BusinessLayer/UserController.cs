@@ -17,6 +17,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             UserController userController = new UserController();
         }
 
+        public bool IsLoggedIn(string email)
+        {
+            if (!users.ContainsKey(email))
+            {
+                return false;
+            }
+            User user = users[email];
+            if (user.isLoggedIn)
+            {
+                return true;
+            }
+            return false;
+
+        }
         public Response<bool> createUser(string email, string password)
         {
             if (!users.ContainsKey(email))
@@ -25,7 +39,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 users.Add(email, user);
                 logger.Info("User: " + email + ", registered successfully");
                 return new Response<bool>(true);
-                
             }
             else
             {
@@ -75,19 +88,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             logger.Warn("Failed to delete user " + email + ", because a user with that name is not exists");
             return new Response<bool>("The user "+ email + " does not exist", true);
-        }
-
-
-        public User GetUser(string email)
-        {
-            if (exists(email))
-            {
-                return users[email];
-            }
-            else
-            {
-                return null;
-            }
         }
 
         public Response<bool> login(string email, string password)

@@ -40,7 +40,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 return GenerateBadResponseString("The user trying to access does not exist.");
             }
-            if (!uc.isLoggedIn(email)) //The user isn't logged in
+            if (!uc.IsLoggedIn(email)) //The user isn't logged in
             {
                 return GenerateBadResponseString("The user trying to access is not logged in.");
             }
@@ -64,7 +64,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 return GenerateBadResponseString("The user trying to access does not exist.");
             }
-            if (!uc.isLoggedIn(email)) //The user isn't logged in
+            if (!uc.IsLoggedIn(email)) //The user isn't logged in
             {
                 return GenerateBadResponseString("The user trying to access is not logged in.");
             }
@@ -88,7 +88,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 return GenerateBadResponseString("The user trying to access does not exist.");
             }
-            if (!uc.isLoggedIn(email)) //The user isn't logged in
+            if (!uc.IsLoggedIn(email)) //The user isn't logged in
             {
                 return GenerateBadResponseString("The user trying to access is not logged in.");
             }
