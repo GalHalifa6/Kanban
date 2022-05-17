@@ -18,73 +18,92 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             bc = new BoardController();
         }
 
-        internal Response<bool> editTaskTitle(string email, string boardName, string taskId, string newTitle)
+        private string InvokeMethod(Delegate method, string ret, params object[] args)
         {
-            if (!uc.exists(email)) //The user doesn't exist
-            {
-                return new Response<bool>("The user trying to access does not exist.", true);
-            }
-            if (!uc.isLoggedIn(email)) //The user isn't logged in
-            {
-                return new Response<bool>("The user trying to access is not logged in.", true);
-            }
-            if (bc.GetBoard(email, boardName) == null) //The board doesn't exist
-            {
-                return new Response<bool>("The specified board does not exist.", true);
-            }
-            if (bc.GetTask(email, boardName, taskId) == null) //Task doesn't exist in the given board
-            {
-                return new Response<bool>("The specified task does not exist.", true);
-            }
-            BusinessLayer.Task task = bc.GetTask(email, boardName, taskId);
-            task.editTaskTitle(newTitle);
-            return new Response<bool>(true);
+            Response<bool> response = (Response<bool>)method.DynamicInvoke(args);
+            if (response.ErrorOccured)
+                return GenerateBadResponseString(response.ErrorMessage);
+            return GenerateGoodResponseString(ret);
+        }
+        private string GenerateBadResponseString(string errMsg)
+        {
+            return "{ErrorMessage: " + errMsg + ", ReturnValue: null}";
+        }
+        private string GenerateGoodResponseString(string value)
+        {
+            return "{ErrorMessage: null, ReturnValue: " + value + "}";
         }
 
-        internal Response<bool> editTaskDescription(string email, string boardName, string taskId, string newDesc)
+        public string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string newTitle)
         {
             if (!uc.exists(email)) //The user doesn't exist
             {
-                return new Response<bool>("The user trying to access does not exist.", true);
+                return GenerateBadResponseString("The user trying to access does not exist.");
             }
             if (!uc.isLoggedIn(email)) //The user isn't logged in
             {
-                return new Response<bool>("The user trying to access is not logged in.", true);
+                return GenerateBadResponseString("The user trying to access is not logged in.");
             }
             if (bc.GetBoard(email, boardName) == null) //The board doesn't exist
             {
-                return new Response<bool>("The specified board does not exist.", true);
+                return GenerateBadResponseString("The specified board does not exist.");
             }
-            if (bc.GetTask(email, boardName, taskId) == null) //Task doesn't exist in the given board
+            if (bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null) //Task doesn't exist in the given board & column.
             {
-                return new Response<bool>("The specified task does not exist.", true);
+                return GenerateBadResponseString("The specified task does not exist.");
             }
-            BusinessLayer.Task task = bc.GetTask(email, boardName, taskId);
-            task.editTaskDescription(newDesc);
-            return new Response<bool>(true);
+            Board board = bc.GetBoard(email, boardName);
+            Column column = board.GetColumn(columnOrdinal);
+            BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
+            return InvokeMethod(new Func<BusinessLayer.Task, string, Response<bool>>(column.UpdateTaskTitle), "{}", task, newTitle);
         }
 
-        internal Response<bool> editTaskDueDate(string email, string boardName, string taskId, DateTime newDueDate)
+        public string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string newDesc)
         {
             if (!uc.exists(email)) //The user doesn't exist
             {
-                return new Response<bool>("The user trying to access does not exist.", true);
+                return GenerateBadResponseString("The user trying to access does not exist.");
             }
             if (!uc.isLoggedIn(email)) //The user isn't logged in
             {
-                return new Response<bool>("The user trying to access is not logged in.", true);
+                return GenerateBadResponseString("The user trying to access is not logged in.");
             }
             if (bc.GetBoard(email, boardName) == null) //The board doesn't exist
             {
-                return new Response<bool>("The specified board does not exist.", true);
+                return GenerateBadResponseString("The specified board does not exist.");
             }
-            if (bc.GetTask(email, boardName, taskId) == null) //Task doesn't exist in the given board
+            if (bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null) //Task doesn't exist in the given board
             {
-                return new Response<bool>("The specified task does not exist.", true);
+                return GenerateBadResponseString("The specified task does not exist.");
             }
-            BusinessLayer.Task task = bc.GetTask(email, boardName, taskId);
-            task.editTaskDueDate(newDueDate);
-            return new Response<bool>(true);
+            Board board = bc.GetBoard(email, boardName);
+            Column column = board.GetColumn(columnOrdinal);
+            BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
+            return InvokeMethod(new Func<BusinessLayer.Task, string, Response<bool>>(column.UpdateTaskDescription), "{}", task, newDesc);
+        }
+
+        public string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime newDueDate)
+        {
+            if (!uc.exists(email)) //The user doesn't exist
+            {
+                return GenerateBadResponseString("The user trying to access does not exist.");
+            }
+            if (!uc.isLoggedIn(email)) //The user isn't logged in
+            {
+                return GenerateBadResponseString("The user trying to access is not logged in.");
+            }
+            if (bc.GetBoard(email, boardName) == null) //The board doesn't exist
+            {
+                return GenerateBadResponseString("The specified board does not exist.");
+            }
+            if (bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null) //Task doesn't exist in the given board
+            {
+                return GenerateBadResponseString("The specified task does not exist.");
+            }
+            Board board = bc.GetBoard(email, boardName);
+            Column column = board.GetColumn(columnOrdinal);
+            BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
+            return InvokeMethod(new Func<BusinessLayer.Task, DateTime, Response<bool>>(column.UpdateTaskDueDate), "{}", task, newDueDate);
         }
     }
 }

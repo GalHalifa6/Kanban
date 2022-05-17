@@ -21,7 +21,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             maxTasks = int.MaxValue; //If there's no limit on number of tasks, the value is the maximum value of int
         }
 
-        internal Response<bool> addTask(Task task)
+        internal Response<bool> AddTask(Task task)
         {
             if (tasks.Contains(task))
             {
@@ -46,7 +46,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response<bool>(true);
         }
 
-        internal Response<bool> addTask(int ID, string title, string description, DateTime dueDate)
+        internal Response<bool> AddTask(int ID, string title, string description, DateTime dueDate)
         {
             if (tasks.Count == maxTasks)
             {
@@ -67,7 +67,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response<bool>(true);
         }
 
-        internal Response<bool> removeTask(string taskName)
+        internal Response<bool> RemoveTask(Task task)
+        {
+            if (!tasks.Contains(task))
+            {
+                logger.Warn("Cannot remove task because it doesn't exist.");
+                return new Response<bool>("The task doesn't exist.", true);
+            }
+            logger.Info("Task: " + task.title + " is removed.");
+            tasks.Remove(task);
+            return new Response<bool>(true);
+        }
+
+        internal Response<bool> RemoveTask(string taskName)
         {
             Boolean found = false;
             for (int i = 0; i < tasks.Count & !found; i++)
@@ -86,48 +98,48 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Info("Task: " + taskName + " is removed.");
             return new Response<bool>(true);
         }
-        internal Response<bool> editTaskTitle(Task task, string newTitle)
+        internal Response<bool> UpdateTaskTitle(Task task, string newTitle)
         {
             if (!tasks.Contains(task))
             {
                 logger.Warn("Cannot edit task because it doesn't exist.");
                 return new Response<bool>("The task doesn't exist in this column", true);
             }
-            task.editTaskTitle(newTitle);
+            task.UpdateTaskTitle(newTitle);
             logger.Info("Task title changed to:" + newTitle);
             return new Response<bool>(true);
         }
 
-        internal Response<bool> editTaskDescription(Task task, string newDescription)
+        internal Response<bool> UpdateTaskDescription(Task task, string newDescription)
         {
             if (!tasks.Contains(task))
             {
                 logger.Warn("Cannot edit task because it doesn't exist.");
                 return new Response<bool>("That task doesn't exist in this column.", true);
             }
-            task.editTaskDescription(newDescription);
+            task.UpdateTaskDescription(newDescription);
             logger.Info("Task description changed to:" + newDescription);
             return new Response<bool>(true);
         }
 
-        internal Response<bool> editTaskDueDate(Task task, DateTime newDueDate)
+        internal Response<bool> UpdateTaskDueDate(Task task, DateTime newDueDate)
         {
             if (!tasks.Contains(task))
             {
                 logger.Warn("Cannot edit task because it doesn't exist.");
                 return new Response<bool>("That task doesn't exist in this column.", true);
             }
-            task.editTaskDueDate(newDueDate);
+            task.UpdateTaskDueDate(newDueDate);
             logger.Info("Task due date changed to:" + newDueDate);
             return new Response<bool>(true);
         }
 
-        public void setMax(int maxTasks)
+        public void SetMax(int maxTasks)
         {
             this.maxTasks = maxTasks;
         }
 
-        public Task getTask(int taskID)
+        public Task GetTask(int taskID)
         {
             for (int i = 0; i < tasks.Count; i++)
             {
@@ -139,7 +151,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return null;
         }
 
-        public string getTasksList()
+        public string GetTasksList()
         {
             string output = "";
             if (tasks.Count > 0)

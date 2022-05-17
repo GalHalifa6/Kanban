@@ -25,16 +25,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             isDone = false;
         }
 
-        public void editTaskTitle(string newTitle)
+        public void UpdateTaskTitle(string newTitle)
         {
             title = newTitle;
         }
-        public void editTaskDescription(string newDescription)
+        public void UpdateTaskDescription(string newDescription)
         {
             description = newDescription;
         }
 
-        public void editTaskDueDate(DateTime newDueDate)
+        public void UpdateTaskDueDate(DateTime newDueDate)
         {
             dueDate = newDueDate;
         }
