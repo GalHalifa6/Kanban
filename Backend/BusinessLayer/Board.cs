@@ -26,7 +26,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public string getInProgressTasks()
         {
-            return inProgress.getTasksList();
+            return inProgress.GetTasksList();
         }
 
         public Column GetColumn(int columnNumber)
@@ -65,7 +65,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("Failed to limit column tasks due to invalid column ordinal");
                 return new Response<bool>("Invalid column", true);
             }
-            col.setMax(newLimit);
+            col.SetMax(newLimit);
             logger.Info("Max tasks limited to " + newLimit);
             return new Response<bool>(true);
         }
@@ -81,7 +81,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         internal Response<string> AddTask(int taskID ,string title, string description, DateTime dueDate)
         {
             
-            backlog.addTask(taskID,title, description, dueDate);
+            backlog.AddTask(taskID,title, description, dueDate);
             logger.Info("Task was successfully added");
             return new Response<string>("The task was added successfully");
         }
@@ -107,7 +107,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("Cannot advance task since an invalid column ordinal was entered");
                 return new Response<string>("Task could not advance because of a wrong column ordinal", true);
             }
-            Task t = c.getTask(taskId);
+            Task t = c.GetTask(taskId);
             if (t == null)
             {
                 logger.Warn("Cannot advance task because it doesn't exist");
@@ -115,15 +115,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             if (c == backlog)
             {
-                backlog.removeTask(t);
-                inProgress.addTask(t);
+                backlog.RemoveTask(t);
+                inProgress.AddTask(t);
                 logger.Info("Task " + t.title + " advanced");
                 return new Response<string>("Task " + t.title + " advanced and is now in progress");
             }
             if (c == inProgress)
             {
-                inProgress.removeTask(t);
-                done.addTask(t);
+                inProgress.RemoveTask(t);
+                done.AddTask(t);
                 logger.Info("Task " + t.title + " advanced");
                 return new Response<string>("Task " + t.title + " advanced and is now done");
             }
@@ -134,18 +134,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
-        internal Task GetTask(string taskId)
+        internal Task GetTask(int taskId)
         {
             try
             {
-                int id = int.Parse(taskId);
-                Task t = backlog.getTask(id);
+                Task t = backlog.GetTask(taskId);
                 if (t != null)
                     return t;
-                t = inProgress.getTask(id);
+                t = inProgress.GetTask(taskId);
                 if (t != null)
                     return t;
-                t = done.getTask(id);
+                t = done.GetTask(taskId);
                 if (t != null)
                     return t;
                 return null;
@@ -155,6 +154,23 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return null;
             }
             
+        }
+
+        internal Task GetTask(int columnOrdinal, int taskId)
+        {
+            try
+            {
+                Column column = GetColumn(columnOrdinal);
+                Task t = column.GetTask(taskId);
+                if (t != null)
+                    return t;
+                return null;
+            }
+            catch (FormatException)
+            {
+                return null;
+            }
+
         }
     }
 }

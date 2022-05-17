@@ -141,9 +141,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response<string>(res);
         }
 
-        public Task GetTask(string email, string boardName, string taskId)
+        public Task GetTask(string email, string boardName, int taskId)
         {
             return GetBoard(email, boardName).GetTask(taskId);
+        }
+
+        public Task GetTaskInColumn(string email, string boardName, int columnOrdinal, int taskId)
+        {
+            return GetBoard(email, boardName).GetTask(columnOrdinal, taskId);
         }
 
     }
