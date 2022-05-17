@@ -33,6 +33,5 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             this.Password = password;
         }
-
     }
 }
