@@ -47,12 +47,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
-        internal Response<bool> LimitColumnTasks(int columnNumber, int newLimit)
+        internal Response LimitColumnTasks(int columnNumber, int newLimit)
         {
             if (newLimit < -1)
             {
                 logger.Warn("Failed to limit column tasks due to invalid limit");
-                return new Response<bool>("Invalid limitation of tasks", true);
+                return new Response("Invalid limitation of tasks", true);
             }
             if (newLimit == -1)
             {
@@ -63,27 +63,26 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (col == null)
             {
                 logger.Warn("Failed to limit column tasks due to invalid column ordinal");
-                return new Response<bool>("Invalid column", true);
+                return new Response("Invalid column", true);
             }
             col.SetMax(newLimit);
             logger.Info("Max tasks limited to " + newLimit);
-            return new Response<bool>(true);
+            return new Response(true);
         }
 
-        internal Response<int> GetColumnLimit(string boardName, int columnNumber)
+        internal Response GetColumnLimit(string boardName, int columnNumber)
         {
             Column col = GetColumn(columnNumber);
             if (col == null)
-                return new Response<int>("Invalid column", true);
-            return new Response<int>(col.maxTasks);
+                return new Response("Invalid column", true);
+            return new Response(col.maxTasks);
         }
 
-        internal Response<string> AddTask(int taskID ,string title, string description, DateTime dueDate)
+        internal Response AddTask(int taskID ,string title, string description, DateTime dueDate)
         {
-            
             backlog.AddTask(taskID,title, description, dueDate);
             logger.Info("Task was successfully added");
-            return new Response<string>("The task was added successfully");
+            return new Response("The task was added successfully");
         }
 
         
@@ -99,38 +98,38 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response<string>("Task was removed successfully");
         }*/
 
-        internal Response<string> AdvanceTask(int columnOrdinal, int taskId)
+        internal Response AdvanceTask(int columnOrdinal, int taskId)
         {
             Column c = GetColumn(columnOrdinal);
             if (c == null)
             {
                 logger.Warn("Cannot advance task since an invalid column ordinal was entered");
-                return new Response<string>("Task could not advance because of a wrong column ordinal", true);
+                return new Response("Task could not advance because of a wrong column ordinal", true);
             }
             Task t = c.GetTask(taskId);
             if (t == null)
             {
                 logger.Warn("Cannot advance task because it doesn't exist");
-                return new Response<string>("Task could not advance because of a wrong task id", true);
+                return new Response("Task could not advance because of a wrong task id", true);
             }
             if (c == backlog)
             {
                 backlog.RemoveTask(t);
                 inProgress.AddTask(t);
                 logger.Info("Task " + t.title + " advanced");
-                return new Response<string>("Task " + t.title + " advanced and is now in progress");
+                return new Response("Task " + t.title + " advanced and is now in progress");
             }
             if (c == inProgress)
             {
                 inProgress.RemoveTask(t);
                 done.AddTask(t);
                 logger.Info("Task " + t.title + " advanced");
-                return new Response<string>("Task " + t.title + " advanced and is now done");
+                return new Response("Task " + t.title + " advanced and is now done");
             }
             else // (c == done)
             {
                 logger.Warn("Failed to advance task because the task is already done");
-                return new Response<string>("Failed to advance task because the task is already done", true);
+                return new Response("Failed to advance task because the task is already done", true);
             }
         }
 
@@ -153,7 +152,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 return null;
             }
-            
         }
 
         internal Task GetTask(int columnOrdinal, int taskId)

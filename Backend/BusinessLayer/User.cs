@@ -16,7 +16,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public User(string email, string password)
         {
-            User user = new User(email, password);
+            Email = email;  
+            Password = password;    
+            Boards = new List<Board>();
+            isLoggedIn = false;
         }
 
         public void logIn()

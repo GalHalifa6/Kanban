@@ -7,9 +7,6 @@ using System.Text.Json;
 namespace IntroSE.Kanban.Backend
 {
 
-
-
-    class BoardServiceTest
     {
 
         public BoardServiceTest()
@@ -215,6 +212,5 @@ namespace IntroSE.Kanban.Backend
 
         }
         */
-
-    }
+}
 }

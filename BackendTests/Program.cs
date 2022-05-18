@@ -5,8 +5,8 @@ class Program
     static void Main(String[] args)
     {
         //UserServiceTest userServiceTest = new UserServiceTest();
-        //BoardServiceTest boardServiceTest = new BoardServiceTest();
-       
+        BoardServiceTest boardServiceTest = new BoardServiceTest();
+        boardServiceTest.runTests();
         
     }
 }

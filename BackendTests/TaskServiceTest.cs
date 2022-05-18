@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntroSE.Kanban.Backend.ServiceLayer
+namespace IntroSE.Kanban.BackendTests
 {
-    internal class LogService
+    internal class TaskServiceTest
     {
     }
 }
