@@ -12,10 +12,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         private UserController uc { get; }
         private BoardController bc { get; }
 
-        public TaskService()
+        public TaskService(UserController uc, BoardController bc)
         {
-            uc = new UserController();
-            bc = new BoardController();
+            this.uc = uc;
+            this.bc = bc;   
         }
 
         private string InvokeMethod(Delegate method, string ret, params object[] args)

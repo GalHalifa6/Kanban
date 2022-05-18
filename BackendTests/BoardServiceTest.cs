@@ -11,22 +11,57 @@ class BoardServiceTest
     {
 
     }
+
+    internal void runTests()
+    {
+        addTaskTest();
+       
+    }
+
     ///<summary>
     ///This function test Requirement 12
     ///</summary>
-    /*public void addTaskTest()
+    public void addTaskTest()
     {
-        BoardService board = new BoardService();
-        string jsonResponse = board.addTask("Task1", "Testing task1");
-        Response res = JsonSerializer.Deserialize<Response>(jsonResponse);
+        Console.WriteLine("Adding task to a user. Should succeed");
+        UserService userService = new UserService();
+        userService.Register("gal@gmail.com", "123456Ab");
+        userService.Login("gal@gmail.com", "123456Ab");
+        BoardService boardService = new BoardService();
+        boardService.AddBoard("gal@gmail.com" ,"Board1");
+        string res = boardService.AddTask("gal@gmail.com","Board1", "Task1", "Testing task1", new DateTime());
+        //Response res = JsonSerializer.Deserialize<Response>(jsonResponse);
         Console.WriteLine(res);
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("Adding task to an non exist user. Should fail");
+        userService.Login("itay@gmail.com", "123456Aa");
+        BoardService boardService2 = new BoardService();
+        boardService2.AddBoard("itay@gmail.com", "Board2");
+        res = boardService2.AddTask("itay@gmail.com", "Board2", "Task2", "Testing task1", new DateTime());
+        Console.WriteLine (res);
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("Adding task to a user that not connected . Should fail");
+        userService.Register("itay@gmail.com", "123456Aa");
+        BoardService boardService3 = new BoardService();
+        boardService3.AddBoard("itay@gmail.com", "Board3");
+        res = boardService3.AddTask("gal@gmail.com", "Board3", "Task3", "Testing task1", new DateTime());
+        Console.WriteLine(res);
+        Console.WriteLine("-----------------------");
+        GradingService gradingService = new GradingService();
+        gradingService.Register("itay@gmail.com", "123456Aa");
+        gradingService.AddBoard("itay@gmail.com", "Board4");
+        res = gradingService.AddTask("itay@gmail.com", "Board4", "Task4", "Testing task1", new DateTime());
+        Console.WriteLine(res);
+
+
+
 
     }
 
     ///<summary>
     ///This function test Requirement 9
     ///</summary>
-    public void removeTaskTest()
+  /*  public void removeTaskTest()
     {
         BoardService board = new BoardService();
         board.addTask("Task1", "Testing task1");
@@ -92,12 +127,16 @@ class BoardServiceTest
         Console.WriteLine(res1);
     }
 
+ */
+  
+    
+    
     ///<summary>
     ///This function test Requirement 9
     ///</summary>
     public void addBoardTest()
     {
-        BoardService board = new BoardService();
+        /*BoardService board = new BoardService();
         string jsonResponse = board.addBoard("Board1");
         Response res = JsonSerializer.Deserialize<Response>(jsonResponse);
         Console.WriteLine(res);
@@ -105,8 +144,15 @@ class BoardServiceTest
         string jsonResponse1 = board.addBoard("Board1");
         Response res1 = JsonSerializer.Deserialize<Response>(jsonResponse);
         Console.WriteLine("The following test should failed:");
-        Console.WriteLine(res1);
+        
+        Console.WriteLine(res1);*/
     }
+
+
+
+
+
+    /*
 
     ///<summary>
     ///This function test Requirement 9
@@ -149,7 +195,7 @@ class BoardServiceTest
         Console.WriteLine(res3);
 
 
-    }
-*/
-    
+    }*/
+
+
 }

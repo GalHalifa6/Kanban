@@ -9,7 +9,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 {
     public class UserService
     {
-        UserController uc;
+        public UserController uc { get; }
       
         public UserService()
         {
@@ -19,52 +19,52 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         public string Register(string email, string password)
         {
             if (IsValidEmail(email) == false)
-                return "false";
+                return GenerateBadResponseString("Invalid email");
             if (IsValidPassword(password) == false)
-                return "false";
+                return GenerateBadResponseString("Invalid password");
             Response<bool> response = uc.createUser(email, password);
             if (response.ErrorOccured)
             {
-                return response.ErrorMessage;
+                return GenerateBadResponseString(response.ErrorMessage);
             }
-            return GenerateGoodResponseString(response.Result.ToString());
+            return GenerateGoodResponseString("{}");
         }
 
         public string Login(string email, string password)
         {
             if (IsValidEmail(email) == false)
-                return "false";
+                return GenerateBadResponseString("Invalid email");
             if (IsValidPassword(password) == false)
-                return "false";
+                return GenerateBadResponseString("Invalid password"); 
             Response<bool> response = uc.login(email, password);
             if (response.ErrorOccured)
             {
-                return response.ErrorMessage;
+                return GenerateBadResponseString(response.ErrorMessage);
             }
-            return GenerateGoodResponseString(response.Result.ToString());
+            return GenerateGoodResponseString(email);
         }
 
         public string Logout(string email)
         {
             if (IsValidEmail(email) == false)
             {
-                return "false";
+                return GenerateBadResponseString("Invalid email");
             }
             Response<bool> response = uc.LogOut(email);
             if (response.ErrorOccured)
             {
-                return response.ErrorMessage;
+                return GenerateBadResponseString(response.ErrorMessage);
             }
-            return GenerateGoodResponseString(response.Result.ToString());
+            return GenerateGoodResponseString("{}");
         }
 
 
         public string DeleteUser(string email, string password)
         {
             if (IsValidEmail(email) == false)
-                return "false";
+                return GenerateBadResponseString("Invalid email");
             if (IsValidPassword(password) == false)
-                return "false";
+                return GenerateBadResponseString("Invalid password");
             Response<bool> response = uc.DeleteUser(email, password);
             if (response.ErrorOccured)
             {
@@ -77,11 +77,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         public string ChangePassword(string email, string oldPassword, string newPassword)
         {
             if (IsValidPassword(oldPassword) == false)
-                return "false";
+                return GenerateBadResponseString("Old password is invalid password");
             if (IsValidPassword(newPassword) == false)
-                return "false";
+                return GenerateBadResponseString("New password is invalid password");
             if (IsValidEmail(email) == false)
-                return "false";
+                return GenerateBadResponseString("Invalid email");
             Response<bool> response = uc.changePassword(email, oldPassword, newPassword);
             if (response.ErrorOccured)
             {
@@ -118,7 +118,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         private bool IsValidPassword(string password)
         {
-            for (int m = 0; m <= password.Length; m++)
+            for (int m = 0; m < password.Length; m++)
             {
                 if (password[m].Equals(" "))
                 {
@@ -146,7 +146,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
         }
 
-        private string GenerateBadResponseString(string errMsg)
+        public string GenerateBadResponseString(string errMsg)
         {
             return "{ErrorMessage: " + errMsg + ", ReturnValue: null}";
         }
@@ -154,5 +154,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             return "{ErrorMessage: null, ReturnValue: " + value + "}";
         }
+
+        public bool IsLoggedIn(string email)
+        {
+            return uc.IsLoggedIn(email);
     }
+    }
+   
 }

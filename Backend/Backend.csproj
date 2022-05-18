@@ -4,7 +4,7 @@
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>IntroSE.Kanban.Backend</RootNamespace>
     <AssemblyName>IntroSE.Kanban.Backend</AssemblyName>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <ItemGroup>
