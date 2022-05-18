@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.BusinessLayer;
 
@@ -19,60 +20,49 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         public string Register(string email, string password)
         {
             if (IsValidEmail(email) == false)
-                return GenerateBadResponseString("Invalid email");
+                return JsonSerializer.Serialize(new Response("Invalid email", true));
             if (IsValidPassword(password) == false)
-                return GenerateBadResponseString("Invalid password");
-            Response<bool> response = uc.createUser(email, password);
-            if (response.ErrorOccured)
-            {
-                return GenerateBadResponseString(response.ErrorMessage);
-            }
-            return GenerateGoodResponseString("{}");
+                return JsonSerializer.Serialize(new Response("Invalid password", true));
+            Response response = uc.createUser(email, password);
+            return JsonSerializer.Serialize(response);
         }
 
         public string Login(string email, string password)
         {
             if (IsValidEmail(email) == false)
-                return GenerateBadResponseString("Invalid email");
+                return JsonSerializer.Serialize(new Response("Invalid email", true));
             if (IsValidPassword(password) == false)
-                return GenerateBadResponseString("Invalid password"); 
-            Response<bool> response = uc.login(email, password);
-            if (response.ErrorOccured)
-            {
-                return GenerateBadResponseString(response.ErrorMessage);
-            }
-            return GenerateGoodResponseString(email);
+                return JsonSerializer.Serialize(new Response("Invalid password", true));
+            Response response = uc.login(email, password);
+            return JsonSerializer.Serialize(response);
+
         }
 
         public string Logout(string email)
         {
             if (IsValidEmail(email) == false)
             {
-                return GenerateBadResponseString("Invalid email");
+                return JsonSerializer.Serialize(new Response("Invalid email", true));
             }
-            Response<bool> response = uc.LogOut(email);
-            if (response.ErrorOccured)
+            Response response = uc.LogOut(email);
+            if (response.ErrorOccured())
             {
-                return GenerateBadResponseString(response.ErrorMessage);
+                return JsonSerializer.Serialize(response);
             }
-            return GenerateGoodResponseString("{}");
+            return "{}";
         }
 
 
         public string DeleteUser(string email, string password)
         {
             if (IsValidEmail(email) == false)
-                return GenerateBadResponseString("Invalid email");
+                return JsonSerializer.Serialize(new Response("Invalid email", true));
             if (IsValidPassword(password) == false)
-                return GenerateBadResponseString("Invalid password");
-            Response<bool> response = uc.DeleteUser(email, password);
-            if (response.ErrorOccured)
-            {
-                return response.ErrorMessage;
-            }
-            return GenerateGoodResponseString(response.Result.ToString());
+                return JsonSerializer.Serialize(new Response("Invalid password", true));
+            Response response = uc.DeleteUser(email, password);
+            return JsonSerializer.Serialize(response);
         }
-      
+
 
         public string ChangePassword(string email, string oldPassword, string newPassword)
         {
@@ -82,12 +72,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return GenerateBadResponseString("New password is invalid password");
             if (IsValidEmail(email) == false)
                 return GenerateBadResponseString("Invalid email");
-            Response<bool> response = uc.changePassword(email, oldPassword, newPassword);
-            if (response.ErrorOccured)
-            {
-                return response.ErrorMessage;
-            }
-            return GenerateGoodResponseString(response.Result.ToString());
+            Response response = uc.changePassword(email, oldPassword, newPassword);
+            return JsonSerializer.Serialize(response);
+
         }
 
         private bool IsValidEmail(string email)
