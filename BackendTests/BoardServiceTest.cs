@@ -189,7 +189,7 @@ namespace IntroSE.Kanban.Backend
         ///<summary>
         ///This function test Requirement 13
         ///</summary>
-        public void advanceTaskPhaseTest(string title)
+        public void advanceTaskPhaseTest(string Title)
         {
             BoardService board = new BoardService();
             board.addTask("Task1", "Testing task1");
