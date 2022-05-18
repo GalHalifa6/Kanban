@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
-        public class User
+    public class User
     {
         public bool isLoggedIn { get; set; }
         private string Email { get; set; }
@@ -33,6 +33,5 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             this.Password = password;
         }
-        
     }
 }

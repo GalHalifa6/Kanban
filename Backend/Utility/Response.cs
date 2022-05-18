@@ -14,16 +14,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public readonly string ErrorMessage;
         public bool ErrorOccured { get => ErrorMessage != null; }
         public readonly T Result;
+
         internal Response(T val)
         {
-            Result = val;
+                Result = val;
         }
         internal Response(string msg, bool err)
         {
             if(err)
                 ErrorMessage = msg;
-        }
-
-       
+        }     
     }
 }
