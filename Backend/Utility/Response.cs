@@ -9,20 +9,24 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     ///<summary>Class <c>Response</c> represents the result of a call to a void function. 
     ///If an exception was thrown, <c>ErrorOccured = true</c> and <c>ErrorMessage != null</c>. 
     ///Otherwise, <c>ErrorOccured = false</c> and <c>ErrorMessage = null</c>.</summary>
-    public class Response<T>
+    public class Response
     {
-        public readonly string ErrorMessage;
-        public bool ErrorOccured { get => ErrorMessage != null; }
-        public readonly T Result;
+        public string ErrorMessage { get; } 
+        public object ReturnValue { get; }  
 
-        internal Response(T val)
+        public Response(object val)
         {
-                Result = val;
+            ReturnValue = val;
         }
-        internal Response(string msg, bool err)
+        public Response(string msg, bool err)
         {
             if(err)
                 ErrorMessage = msg;
         }     
+
+        public bool ErrorOccured()
+        {
+            return ErrorMessage != null;
+        }
     }
 }
