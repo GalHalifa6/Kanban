@@ -24,7 +24,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             if (IsValidPassword(password) == false)
                 return JsonSerializer.Serialize(new Response("Invalid password", true));
             Response response = uc.createUser(email, password);
-            return JsonSerializer.Serialize(response);
+            return "{}";
         }
 
         public string Login(string email, string password)
@@ -34,7 +34,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             if (IsValidPassword(password) == false)
                 return JsonSerializer.Serialize(new Response("Invalid password", true));
             Response response = uc.login(email, password);
-            return JsonSerializer.Serialize(response);
+            return JsonSerializer.Serialize(new Response(email));
 
         }
 
