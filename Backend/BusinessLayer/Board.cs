@@ -19,12 +19,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public Board(string name)
         {
             this.name = name;
-            backlog = new Column("Backlog");
-            inProgress = new Column("In Progress");
-            done = new Column("Done");
+            backlog = new Column("backlog");
+            inProgress = new Column("in progress");
+            done = new Column("done");
         }
 
-        public string getInProgressTasks()
+        public List<Task> getInProgressTasks()
         {
             return inProgress.GetTasksList();
         }
@@ -87,12 +87,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         
 
-        /*internal Response<string> RemoveTask(string title)
+        /*internal Response<string> RemoveTask(string Title)
         {
-            if (!(backlog.removeTask(title) || inProgress.removeTask(title) || done.removeTask(title)))
+            if (!(backlog.removeTask(Title) || inProgress.removeTask(Title) || done.removeTask(Title)))
             {
                 logger.Warn("An attempt to remove a non-existing task was made");
-                return new Response<string>("The board " + name + " doesn't have a task named " + title, true);
+                return new Response<string>("The board " + name + " doesn't have a task named " + Title, true);
             }
             logger.Info("Task was removed successfully");
             return new Response<string>("Task was removed successfully");
@@ -116,15 +116,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 backlog.RemoveTask(t);
                 inProgress.AddTask(t);
-                logger.Info("Task " + t.title + " advanced");
-                return new Response("Task " + t.title + " advanced and is now in progress");
+                logger.Info("Task " + t.Title + " advanced");
+                return new Response("Task " + t.Title + " advanced and is now in progress");
             }
             if (c == inProgress)
             {
                 inProgress.RemoveTask(t);
                 done.AddTask(t);
-                logger.Info("Task " + t.title + " advanced");
-                return new Response("Task " + t.title + " advanced and is now done");
+                logger.Info("Task " + t.Title + " advanced");
+                return new Response("Task " + t.Title + " advanced and is now done");
             }
             else // (c == done)
             {

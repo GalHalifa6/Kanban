@@ -19,17 +19,17 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
     /// <list type="bullet">
     ///     <item>
     ///         <term>ReturnValue</term>
-    ///         <description>
+    ///         <Description>
     ///             The return value of the function.
     ///             <para>
     ///                 The value may be either a <paramref name="primitive"/>, a <paramref name="Task"/>, or an array of of them. See below for the definition of <paramref name="Task"/>.
     ///             </para>
     ///             <para>If the function does not return a value or an exception has occorred, then the field is undefined.</para>
-    ///         </description>
+    ///         </Description>
     ///     </item>
     ///     <item>
     ///         <term>ErrorMessage</term>
-    ///         <description>If an exception has occorred, then this field will contain a string of the error message.</description>
+    ///         <Description>If an exception has occorred, then this field will contain a string of the error message.</Description>
     ///     </item>
     /// </list>
     /// </para>
@@ -95,7 +95,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email">The email address of the user, must be logged in</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column ID. The first column is identified by 0, the ID increases by 1 for each column</param>
+        /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
         /// <param name="limit">The new limit value. A value of -1 indicates no limit.</param>
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string LimitColumn(string email, string boardName, int columnOrdinal, int limit)
@@ -108,7 +108,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email">The email address of the user, must be logged in</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column ID. The first column is identified by 0, the ID increases by 1 for each column</param>
+        /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
         /// <returns>Response with column limit value, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string GetColumnLimit(string email, string boardName, int columnOrdinal)
         {
@@ -121,7 +121,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email">The email address of the user, must be logged in</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column ID. The first column is identified by 0, the ID increases by 1 for each column</param>
+        /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
         /// <returns>Response with column name value, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string GetColumnName(string email, string boardName, int columnOrdinal)
         {
@@ -149,8 +149,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email">Email of the user. Must be logged in</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column ID. The first column is identified by 0, the ID increases by 1 for each column</param>
-        /// <param name="taskId">The task to be updated identified task ID</param>
+        /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
+        /// <param name="taskId">The task to be updated identified task Id</param>
         /// <param name="dueDate">The new due date of the column</param>
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
@@ -160,13 +160,13 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
 
         /// <summary>
-        /// This method updates task title.
+        /// This method updates task Title.
         /// </summary>
         /// <param name="email">Email of user. Must be logged in</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column ID. The first column is identified by 0, the ID increases by 1 for each column</param>
-        /// <param name="taskId">The task to be updated identified task ID</param>
-        /// <param name="title">New title for the task</param>
+        /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
+        /// <param name="taskId">The task to be updated identified task Id</param>
+        /// <param name="title">New Title for the task</param>
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
         {
@@ -175,13 +175,13 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
 
         /// <summary>
-        /// This method updates the description of a task.
+        /// This method updates the Description of a task.
         /// </summary>
         /// <param name="email">Email of user. Must be logged in</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column ID. The first column is identified by 0, the ID increases by 1 for each column</param>
-        /// <param name="taskId">The task to be updated identified task ID</param>
-        /// <param name="description">New description for the task</param>
+        /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
+        /// <param name="taskId">The task to be updated identified task Id</param>
+        /// <param name="description">New Description for the task</param>
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string description)
         {
@@ -194,8 +194,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email">Email of user. Must be logged in</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column ID. The first column is identified by 0, the ID increases by 1 for each column</param>
-        /// <param name="taskId">The task to be updated identified task ID</param>
+        /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
+        /// <param name="taskId">The task to be updated identified task Id</param>
         /// <returns>The string "{}", unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
@@ -208,7 +208,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email">Email of the user. Must be logged in</param>
         /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column ID. The first column is identified by 0, the ID increases by 1 for each column</param>
+        /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
         /// <returns>Response with  a list of the column's tasks, unless an error occurs (see <see cref="GradingService"/>)</returns>
         public string GetColumn(string email, string boardName, int columnOrdinal)
         {

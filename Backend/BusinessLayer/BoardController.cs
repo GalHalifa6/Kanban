@@ -119,12 +119,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         }
 
-        /*public Response<string> RemoveTask(string email, string boardName, string title)
+        /*public Response<string> RemoveTask(string email, string boardName, string Title)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
                 return new Response<string>("The board \"" + boardName + "\" does not exist", true);
-            return board.RemoveTask(title);
+            return board.RemoveTask(Title);
         }*/
 
         public Response AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
