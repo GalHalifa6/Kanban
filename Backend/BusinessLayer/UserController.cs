@@ -14,7 +14,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public UserController()
         {
-            UserController userController = new UserController();
+            users = new Dictionary<string, User>();
+            //UserController userController = new UserController();
         }
 
         public bool IsLoggedIn(string email)
@@ -103,7 +104,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 else
                 {
                     logger.Warn("Faild to login the user " + email + ", because there is no match between the email and password");
-                    return new Response<bool>("The user " + email + " logged in unsuccessfully", true);                  
+                    return new Response<bool>("Incorrect password", true);                  
                 }
             }
             else

@@ -41,13 +41,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public string toString()
         {
-            string output = "";
-            output = output + string.Format("{0}: {1}", "Id", ID) + "\n";
-            output = output + string.Format("{0}: {1}", "CreationTime", creationTime) + "\n";
-            output = output + string.Format("{0}: {1}", "Title", title) + "\n";
-            output = output + string.Format("{0}: {1}", "Description", description) + "\n";
+            string output = "{";
+            output = output + string.Format("{0}: {1}", "Id", ID) + ",\n";
+            output = output + string.Format("{0}: {1}", "CreationTime", creationTime) + ",\n";
+            output = output + string.Format("{0}: {1}", "Title", title) + ",\n";
+            output = output + string.Format("{0}: {1}", "Description", description) + ",\n";
             output = output + string.Format("{0}: {1}", "DueDate", dueDate);
-            return output;
+            return output + "}";
         }
     }
 }

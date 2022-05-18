@@ -20,6 +20,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public Board GetBoard(string email, string boardName)
         {
+            if (!boards.ContainsKey(email))
+            {
+                boards.Add(email, new List<Board>());
+                return null;
+            }
             List<Board> userBoards = boards[email];
             for (int i = 0; i < userBoards.Count; i++)
             {
@@ -100,11 +105,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Column column = board.GetColumn(columnOrdinal);
             if (column == null)
                 return new Response<string>("Invalid column", true);
-            return new Response<string>(column.ToString());
+            return new Response<string>(column.GetTasksList());
         }
 
         public Response<string> AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
+
             Board board = GetBoard(email, boardName);
             if (board == null)
                 return new Response<string>("The board \"" + boardName + "\" does not exist", true);

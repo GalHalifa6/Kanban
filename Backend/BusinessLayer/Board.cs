@@ -80,7 +80,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         internal Response<string> AddTask(int taskID ,string title, string description, DateTime dueDate)
         {
-            
             backlog.AddTask(taskID,title, description, dueDate);
             logger.Info("Task was successfully added");
             return new Response<string>("The task was added successfully");

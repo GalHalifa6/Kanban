@@ -10,7 +10,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 {
     public class BoardService
     {
-        private BoardController bc { get; }
+        public BoardController bc { get; }
 
         public BoardService()
         {
@@ -48,8 +48,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
-            return InvokeMethod(new Func<string, string, string, string, DateTime, Response<string>>(bc.AddTask), email,
-                email, boardName, title, description, dueDate);
+            
+            Response<string> response = bc.AddTask(email, boardName, title, description, dueDate);
+            if (response.ErrorOccured)
+                return GenerateBadResponseString(response.ErrorMessage);
+            return GenerateGoodResponseString(email);
         }
 
         public string removeTask(string email, string boardName, int columnOrdinal, int taskId)
