@@ -78,7 +78,7 @@ namespace IntroSE.Kanban.Backend
 
 
 
-
+        /*
         ///<summary>
         ///This function test Requirement 9
         ///</summary>
@@ -87,7 +87,7 @@ namespace IntroSE.Kanban.Backend
 
 
         }
-
+        */
 
 
 
@@ -166,7 +166,7 @@ namespace IntroSE.Kanban.Backend
             Console.WriteLine(res);
 
             Console.WriteLine("-----------------------");
-            Console.WriteLine("editing a task with an empty name, should fail");//figure if empty description is valid
+            Console.WriteLine("editing a task with an empty name, should fail");
             gradingService.Register("itay@gmail.com", "123456Aa");
             gradingService.Login("itay@gmail.com", "123456Aa");
             gradingService.AddBoard("itay@gmail.com", "Board2");
@@ -177,7 +177,7 @@ namespace IntroSE.Kanban.Backend
         }
 
 
-
+        /*
         ///<summary>
         ///This function test Requirement 14,15
         ///</summary>
@@ -185,8 +185,7 @@ namespace IntroSE.Kanban.Backend
         {
 
         }
-
-
+        */
 
 
 
