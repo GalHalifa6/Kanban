@@ -1,4 +1,5 @@
 ﻿using System;
+namespace IntroSE.Kanban.Backend;
 
 class Program
 {
@@ -6,7 +7,7 @@ class Program
     {
         //UserServiceTest userServiceTest = new UserServiceTest();
         BoardServiceTest boardServiceTest = new BoardServiceTest();
-        boardServiceTest.runTests();
+        boardServiceTest.RunTests();
         
     }
 }
