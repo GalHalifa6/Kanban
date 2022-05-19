@@ -15,6 +15,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public string Description { get; private set; }
        
         public DateTime DueDate { get; private set; }
+
         private Boolean isDone;
         
 

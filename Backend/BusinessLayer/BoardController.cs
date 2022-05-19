@@ -59,6 +59,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response(true);
         }
 
+        /// <summary>
+        /// Called when a successful registeration occurs. Adds a new (key,value) pair to the user boards dictionary
+        /// </summary>
+        /// <param name="email">newly registered user</param>
+        internal void Register(string email)
+        {
+            boards.Add(email, new List<Board>());
+        }
 
         public Response RemoveBoard(string email, string boardName)
         {
@@ -148,13 +156,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public Response InProgressTasks(string email)
         {
             List<Board> boardList = boards[email];
-            if (boardList.Count == 0)
-                return new Response("This user has no boards");
-            string res = "";
+/*            if (boardList.Count == 0)
+                return new Response("This user has no boards");*/
+            List<Task> tasks = new List<Task>();
             foreach (Board b in boardList) {
-                res += b.getInProgressTasks();
+                tasks.AddRange(b.getInProgressTasks());
             }
-            return new Response(res);
+            return new Response(tasks);
         }
 
         public Task GetTask(string email, string boardName, int taskId)

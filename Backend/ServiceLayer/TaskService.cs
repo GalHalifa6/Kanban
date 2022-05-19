@@ -93,6 +93,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Json response with the result of the procedure</returns>
         public string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string newDesc)
         {
+            if (newDesc == null)
+                newDesc = "";
             if (newDesc.Length > 300)
             {
                 Response r = new Response("Description is too long. Max number of characters is 300", true);

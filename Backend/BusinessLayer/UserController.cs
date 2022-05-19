@@ -16,7 +16,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public UserController()
         {
             users = new Dictionary<string, User>();
-            //UserController userController = new UserController();
         }
 
         public bool IsLoggedIn(string email)
