@@ -11,14 +11,17 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         static void Main(String[] args)
         {
-            /*GradingService gs = new GradingService();
+/*            GradingService gs = new GradingService();
+            DateTime dt = new DateTime();
+            dt = dt.AddDays(20);
             Console.WriteLine(gs.Register("itay@gmail.com", "123456Ab"));
             Console.WriteLine(gs.Login("itay@gmail.com", "123456Ab"));
-            Console.WriteLine(gs.AddBoard("itay@gmail.com", "Board1"));
-            Console.WriteLine(gs.AddTask("itay@gmail.com", "Board1", "t1", "test task", new DateTime()));
-            Console.WriteLine(gs.UpdateTaskTitle("itay@gmail.com", "Board1", 0, 1, "updated test Title"));
-            Console.WriteLine(gs.AddTask("itay@gmail.com", "Board1", "t1", "test task", new DateTime()));
-            Console.WriteLine(gs.GetColumnLimit("itay@gmail.com", "Board1", 0));*/
+            Console.WriteLine(gs.AddBoard("itay@gmail.com", "B1"));
+            Console.WriteLine(gs.LimitColumn("itay@gmail.com", "B1", 0, 1));
+            Console.WriteLine(gs.AddTask("itay@gmail.com", "B1", "t1", "test", dt));
+            Console.WriteLine(gs.AddTask("itay@gmail.com", "B1", "t1", "test", dt));
+            Console.WriteLine(gs.GetColumnLimit("itay@gmail.com", "B1", 0));
+            Console.WriteLine(gs.GetColumnName("itay@gmail.com", "B1", 0));*/
         }
     }
 }

@@ -8,13 +8,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     {
         public Dictionary<string, List<Board>> boards;
         log4net.ILog logger = Utility.Logger.GetLogger();
-        private int nextTaskID { get; set; }
+        //private int nextTaskID { get; set; }
 
 
         public BoardController()
         {
             boards = new Dictionary<string, List<Board>>();
-            nextTaskID = 0;
+            //nextTaskID = 0;
 
         }
 
@@ -123,8 +123,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Board board = GetBoard(email, boardName);
             if (board == null)
                 return new Response("The board '" + boardName + "' does not exist", true);
-            nextTaskID++;
-            return board.AddTask(nextTaskID, title, description, dueDate);
+            Response r = board.AddTask(title, description, dueDate);
+            return r;
 
         }
 

@@ -13,6 +13,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public Column inProgress { get; private set; }
         public Column done { get; private set; }
 
+        private int nextTaskID;
+
 
         private log4net.ILog logger = Utility.Logger.GetLogger();
 
@@ -22,6 +24,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             backlog = new Column("backlog");
             inProgress = new Column("in progress");
             done = new Column("done");
+            nextTaskID = 0;
         }
 
         public List<Task> getInProgressTasks()
@@ -80,13 +83,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response(col.maxTasks);
         }
 
-        internal Response AddTask(int taskID ,string title, string description, DateTime dueDate)
+        internal Response AddTask(string title, string description, DateTime dueDate)
         {
-            Response r = backlog.AddTask(taskID, title, description, dueDate);
+            Response r = backlog.AddTask(nextTaskID, title, description, dueDate);
             if (r.ErrorOccured())
             {
                 return r;
             }
+            nextTaskID++;
             logger.Info("Task was successfully added");
             return new Response("The task was added successfully");
         }

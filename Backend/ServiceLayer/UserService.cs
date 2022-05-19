@@ -14,6 +14,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 {
     public class UserService
     {
+        private string currentEmail;
+        
         public UserController uc { get; }
       
         public UserService()
@@ -54,6 +56,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns></returns>
         public string Login(string email, string password)
         {
+            if(currentEmail != null)
+            {
+                Response r = new Response("Cannot log in while another user is logged in", true);
+                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+            }
             email = email.ToLower();
             if (IsValidEmail(email) == false)
             {
@@ -68,6 +76,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             Response response = uc.login(email, password);
             if (response.ErrorOccured())
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            currentEmail = email;
             return JsonConvert.SerializeObject(new Response(email), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
         }
@@ -90,6 +99,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
+            currentEmail = null;
             return "{}";
         }
 

@@ -10,6 +10,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class UserController
     {
         log4net.ILog logger = Utility.Logger.GetLogger();
+
         private Dictionary<string, User> users { get; set; }
 
         public UserController()
