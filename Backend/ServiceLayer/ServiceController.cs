@@ -28,6 +28,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string Register(string email, string password)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             string res = US.Register(email, password);
             if (res == "{}")
@@ -37,18 +39,24 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string Login(string email, string password)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             return US.Login(email, password);
         }
 
         internal string Logout(string email)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             return US.Logout(email);
         }
 
         internal string LimitColumn(string email, string boardName, int columnOrdinal, int limit)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
@@ -57,6 +65,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string GetColumnLimit(string email, string boardName, int columnOrdinal)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
@@ -65,6 +75,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string GetColumnName(string email, string boardName, int columnOrdinal)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
@@ -73,6 +85,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
@@ -81,6 +95,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
@@ -89,6 +105,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
@@ -97,6 +115,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string description)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
@@ -105,6 +125,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
@@ -113,6 +135,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string GetColumn(string email, string boardName, int columnOrdinal)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
@@ -121,6 +145,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string AddBoard(string email, string name)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
@@ -129,6 +155,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string RemoveBoard(string email, string name)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
@@ -137,6 +165,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string InProgressTasks(string email)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
