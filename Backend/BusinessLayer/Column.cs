@@ -79,12 +79,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response(true);
         }
 
-        internal Response RemoveTask(string taskName)
+        internal Response RemoveTask(int id)
         {
             Boolean found = false;
             for (int i = 0; i < tasks.Count & !found; i++)
             {
-                if (tasks[i].Title == taskName)
+                if (tasks[i].Id == id)
                 {
                     tasks.RemoveAt(i);
                     found = true;
@@ -95,7 +95,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("Cannot remove task because it doesn't exist.");
                 return new Response("The task doesn't exist.", true);
             }
-            logger.Info("Task: " + taskName + " is removed.");
+            logger.Info("Task: " + id + " is removed.");
             return new Response(true);
         }
         internal Response UpdateTaskTitle(Task task, string newTitle)
