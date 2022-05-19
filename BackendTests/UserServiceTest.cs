@@ -1,4 +1,4 @@
-/*using System;
+using System;
 using IntroSE.Kanban.Backend.ServiceLayer;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using System.Text.Json;
@@ -10,6 +10,14 @@ class UserServiceTest
     {
 
     }
+    public void RunTests()
+    {
+        //RegisterTest();
+        LoginTest();
+        LogOutTest();
+
+
+    }
 
 
     ///<summary>
@@ -17,90 +25,236 @@ class UserServiceTest
     ///</summary>
 
     ///This function test Requirement 1,7
-    public void RegisterTest(string email, string password)
+    public void RegisterTest()
     {
-        UserService userService = new UserService();
-        string jsonResponse1 = userService.register("example@gmail.com", "123456Aa");
-        Response<bool> res = JsonSerializer.Deserialize<Response<bool>>(jsonResponse1);
+        GradingService gradinService = new GradingService();
+        Console.WriteLine("\n---------- TESTS FOR EMAIL ----------\n");
+        Console.WriteLine("registerd user correctly. should succeed");
+        gradinService.Register("gal@gmail.com", "123456Aa");
+        string res = gradinService.Login("gal@gmail.com", "123456Aa");
         Console.WriteLine(res);
 
-        ///This function test Requirement 3
-        string jsonResponse2 = userService.register("example@gmail.com", "12345678Aa");
-        Response<bool> res2 = JsonSerializer.Deserialize<Response<bool>>(jsonResponse2);
-        Console.WriteLine("The following test should failed:");
-        Console.WriteLine(res2);
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("try to log in without registerd. should fail");
+        res = gradinService.Login("itay@gmail.com", "123456Aa");
+        Console.WriteLine(res);
 
-        ///This function test Requirement 2
-        string jsonResponse3 = userService.register("example@gmailcom", "12345678Aa");
-        Response<bool> res3 = JsonSerializer.Deserialize<Response<bool>>(jsonResponse3);
-        Console.WriteLine("The following test should failed:");
-        Console.WriteLine(res3);
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("itaygmail.com", "123456Aa");
+        res =  gradinService.Login("itaygmail.com", "123456Aa");
+        Console.WriteLine(res);
 
-        string jsonResponse4 = userService.register("examplegmail.com", "12345678Aa");
-        Response<bool> res4 = JsonSerializer.Deserialize<Response<bool>>(jsonResponse4);
-        Console.WriteLine("The following test should failed:");
-        Console.WriteLine(res4);
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("itay@@gmail.com", "123456Aa");
+        res = gradinService.Login("itay@@gmail.com", "123456Aa");
+        Console.WriteLine(res);
 
-        string jsonResponse5 = userService.register("example@gmail.com", "12345678A");
-        Response<bool> res5 = JsonSerializer.Deserialize<Response<bool>>(jsonResponse5);
-        Console.WriteLine("The following test should failed:");
-        Console.WriteLine(res5);
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("itay @gmail.com", "123456Aa");
+        res = gradinService.Login("itay @gmail.com", "123456Aa");
+        Console.WriteLine(res);
 
-        string jsonResponse6 = userService.register("example@gmail.com", "12a345678");
-        Response<bool> res6 = JsonSerializer.Deserialize<Response<bool>>(jsonResponse6);
-        Console.WriteLine("The following test should failed:");
-        Console.WriteLine(res6);
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register(" ", "123456Aa");
+        res = gradinService.Login(" ", "123456Aa");
+        Console.WriteLine(res);
 
-        string jsonResponse7 = userService.register("example@gmail.com", "");
-        Response<bool> res7 = JsonSerializer.Deserialize<Response<bool>>(jsonResponse7);
-        Console.WriteLine("The following test should failed:");
-        Console.WriteLine(res7);
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("galhalifa", "123456Aa");
+        res = gradinService.Login("galhalifa ", "123456Aa");
+        Console.WriteLine(res);
 
-        string jsonResponse8 = userService.register("", "12345678Aa");
-        Response<bool> res8 = JsonSerializer.Deserialize<Response<bool>>(jsonResponse8);
-        Console.WriteLine("The following test should failed:");
-        Console.WriteLine(res8);
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register(".gal@gmail.com", "123456Aa");
+        res = gradinService.Login(".gal@gmail.com ", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("%tomer@gmail.com", "123456Aa");
+        res = gradinService.Login("%tomer@gmail.com ", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("itay@post.bgu.ac.il", "123456Aa");
+        res = gradinService.Login("itay@post.bgu.ac.il", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("itay@gmail.", "123456Aa");
+        res = gradinService.Login("itay@gmail.", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("itay@gmail.com ", "123456Aa");
+        res = gradinService.Login("itay@gmail.com ", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register(" itay@gmail.", "123456Aa");
+        res = gradinService.Login(" itay@gmail.com", "123456Aa");
+        Console.WriteLine(res);
+
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("itay@gmail.comitay@gmail.com", "123456Aa");
+        res = gradinService.Login("itay@gmail.comitay@gmail.com", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("itay@gmail.com2", "123456Aa");
+        res = gradinService.Login("itay@gmail.com2", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("email@123.123.123.123", "123456Aa");
+        res = gradinService.Login("email@123.123.123.123", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("email@123.123.123.123", "123456Aa");
+        res = gradinService.Login("email@123.123.123.123", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("____@gmail.com", "123456Aa");
+        res = gradinService.Login("____@gmail.com", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("miki-dan@example.com", "123456Aa");
+        res = gradinService.Login("miki-dan@example.com", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("-----------------------");
+        Console.WriteLine("registerd with incorrect email. should fail");
+        gradinService.Register("email@subdomain.example.com", "123456Aa");
+        res = gradinService.Login("email@subdomain.example.com", "123456Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("\n---------- TESTS FOR PASSWORDS ----------\n");
+        Console.WriteLine("registerd with incorrect password. should succeed");
+        gradinService.Register("omer@gmail.com", "123456Gg");
+        res = gradinService.Login("omer@gmail.com", "123456Gg");
+        Console.WriteLine(res);
+
+        Console.WriteLine("\n---------- TESTS FOR PASSWORDS ----------\n");
+        Console.WriteLine("registerd with incorrect password. should succeed");
+        gradinService.Register("omer@gmail.com", "123456Gg");
+        res = gradinService.Login("omer@gmail.com", "123456Gg");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", " 123456Gg");
+        res = gradinService.Login("check@gmail.com", " 123456Gg");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "123456Gg ");
+        res = gradinService.Login("check@gmail.com", "123456Gg ");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "123456Gg ");
+        res = gradinService.Login("check@gmail.com", "123456Gg ");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "123456G");
+        res = gradinService.Login("check@gmail.com", "123456G");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "123456g");
+        res = gradinService.Login("check@gmail.com", "123456g");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "123gG");
+        res = gradinService.Login("check@gmail.com", "123gG");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "12345gG.");
+        res = gradinService.Login("check@gmail.com", "12345gG.");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "");
+        res = gradinService.Login("check@gmail.com", "");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "       ");
+        res = gradinService.Login("check@gmail.com", "       ");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "AaAaAaAa");
+        res = gradinService.Login("check@gmail.com", "AaAaAaAa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "%1234Aa");
+        res = gradinService.Login("check@gmail.com", "%1234Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "%1234Aa");
+        res = gradinService.Login("check@gmail.com", "%1234Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "1234 Aa");
+        res = gradinService.Login("check@gmail.com", "1234 Aa");
+        Console.WriteLine(res);
+
+
     }
 
 
     ///<summary>
     ///This function test Requirement 8
     ///</summary>
-    public void LoginTest(string email, string password)
+    public void LoginTest()
     {
-        UserService userService = new UserService();
-        userService.register("example@gmail.com", "123456Aa");
-        string jsonResponse1 = userService.login("example@gmail.com", "123456Aa");
-        Response<bool> res = JsonSerializer.Deserialize<Response<bool>>(jsonResponse1);
+        GradingService gradinService = new GradingService();
+        Console.WriteLine("login user correctly. should succeed");
+        gradinService.Register("gal@gmail.com", "123456Aa");
+        string res = gradinService.Login("gal@gmail.com", "123456Aa");
         Console.WriteLine(res);
-
-        string jsonResponse2 = userService.login("example2@gmail.com", "123456Aa");
-        Response<bool> res2 = JsonSerializer.Deserialize<Response<bool>>(jsonResponse2);
-        Console.WriteLine("The following test should failed:");
-        Console.WriteLine(res2);
-
-        string jsonResponse3 = userService.login("example2@gmail.com", "1234Aa");
-        Response<bool> res3 = JsonSerializer.Deserialize<Response<bool>>(jsonResponse3);
-        Console.WriteLine("The following test should failed:");
-        Console.WriteLine(res3);
     }
 
 
     ///<summary>
     ///This function test Requirement 8
     ///</summary>
-    public void LogOutTest(string email)
+    public void LogOutTest()
     {
-        UserService userService = new UserService();
-        userService.register("example@gmail.com", "123456Aa");
-        userService.login("example@gmail.com", "123456Aa");
-        string jsonResponse1 = userService.logout();
-        Response<bool> res = JsonSerializer.Deserialize<Response<bool>>(jsonResponse1);
+        GradingService gradinService = new GradingService();
+        Console.WriteLine("logout user correctly. should succeed");
+        gradinService.Register("gal@gmail.com", "123456Aa");
+        gradinService.Login("gal@gmail.com", "123456Aa");
+        string res = gradinService.Logout("gal@gmail.com");
         Console.WriteLine(res);
-
-
     }
 
 
 
-}*/
+}

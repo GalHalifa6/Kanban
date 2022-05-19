@@ -85,6 +85,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
             if (indexAt == -1 || indexDot == -1)
                 return false;
+            if(indexDot == email.Length - 1)
+                return false;
 
             //The email contains '@' and '.'
             if (indexAt == 0) { state = false; }
@@ -92,6 +94,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             if (indexDot - indexAt == 1) { state = false; }
             if (email.Length - indexDot == 0) { state = false; }
 
+            int counterAt = 0;
             //check if the email contains ' ' empty string
             for (int i = 0; i < email.Length; i++)
             {
@@ -99,8 +102,19 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 {
                     state = false;
                 }
+                if(email[i] == '@')
+                {
+                    counterAt++;
+                }
             }
-            return state;
+            if (counterAt != 1)
+            {
+                return false;
+            }
+            else
+            {
+                return state;
+            }           
         }
 
         private bool IsValidPassword(string password)
