@@ -39,7 +39,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Json response with the result of the procedure</returns>
         public string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string newTitle)
         {
-            if(string.IsNullOrEmpty(newTitle) || string.IsNullOrWhiteSpace(newTitle))
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
+            email = email.ToLower();
+            if (string.IsNullOrEmpty(newTitle) || string.IsNullOrWhiteSpace(newTitle))
             {
                 Response r = new Response("Cannot have an empy title.", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
@@ -104,6 +107,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Json response with the result of the procedure</returns>
         public string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string newDesc)
         {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
+            email = email.ToLower();
             if (newDesc == null)
                 newDesc = "";
             if (newDesc.Length > 300)
@@ -168,7 +174,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             /*if (newDueDate < DateTime.Now)
                 return JsonConvert.SerializeObject(new Response("Due date cannot be in the past.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-*/          if (!uc.exists(email)) //The user doesn't exist
+*/          if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
+            email = email.ToLower();
+            if (!uc.exists(email)) //The user doesn't exist
             {
                 Response r = new Response("The user trying to access does not exist.", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
@@ -210,6 +219,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
             return InvokeMethod(new Func<BusinessLayer.Task, DateTime, Response>(column.UpdateTaskDueDate), "{}", task, newDueDate);
+        }
+
+        private string GenerateBadResponseString(string s)
+        {
+            Response r = new Response(s, true);
+            return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
     }
 }
