@@ -11,14 +11,14 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         static void Main(String[] args)
         {
-            GradingService gs = new GradingService();
+            /*GradingService gs = new GradingService();
             Console.WriteLine(gs.Register("itay@gmail.com", "123456Ab"));
             Console.WriteLine(gs.Login("itay@gmail.com", "123456Ab"));
             Console.WriteLine(gs.AddBoard("itay@gmail.com", "Board1"));
-            Console.WriteLine(gs.AddTask("itay@gmail.com", "Board", "t1", "test task", new DateTime()));
+            Console.WriteLine(gs.AddTask("itay@gmail.com", "Board1", "t1", "test task", new DateTime()));
             Console.WriteLine(gs.UpdateTaskTitle("itay@gmail.com", "Board1", 0, 1, "updated test Title"));
             Console.WriteLine(gs.AddTask("itay@gmail.com", "Board1", "t1", "test task", new DateTime()));
-            Console.WriteLine(gs.GetColumn("itay@gmail.com", "Board1", 0));
+            Console.WriteLine(gs.GetColumnLimit("itay@gmail.com", "Board1", 0));*/
         }
     }
 }

@@ -75,12 +75,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Column col = GetColumn(columnNumber);
             if (col == null)
                 return new Response("Invalid column", true);
+            if (col.maxTasks == int.MaxValue)
+                return new Response(-1);
             return new Response(col.maxTasks);
         }
 
         internal Response AddTask(int taskID ,string title, string description, DateTime dueDate)
         {
-            backlog.AddTask(taskID,title, description, dueDate);
+            Response r = backlog.AddTask(taskID, title, description, dueDate);
+            if (r.ErrorOccured())
+            {
+                return r;
+            }
             logger.Info("Task was successfully added");
             return new Response("The task was added successfully");
         }
@@ -115,14 +121,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (c == backlog)
             {
                 backlog.RemoveTask(t);
-                inProgress.AddTask(t);
+                Response r = inProgress.AddTask(t);
+                if (r.ErrorOccured())
+                    return r;
                 logger.Info("Task " + t.Title + " advanced");
                 return new Response("Task " + t.Title + " advanced and is now in progress");
             }
             if (c == inProgress)
             {
                 inProgress.RemoveTask(t);
-                done.AddTask(t);
+                Response r = done.AddTask(t);
+                if (r.ErrorOccured())
+                    return r;
                 logger.Info("Task " + t.Title + " advanced");
                 return new Response("Task " + t.Title + " advanced and is now done");
             }

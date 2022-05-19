@@ -259,6 +259,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         public bool IsLoggedIn(string email)
         {
+            email = email.ToLower();
             return uc.IsLoggedIn(email);
     }
     }

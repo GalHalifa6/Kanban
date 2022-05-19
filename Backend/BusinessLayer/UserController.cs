@@ -20,6 +20,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public bool IsLoggedIn(string email)
         {
+            email = email.ToLower();
             if (!users.ContainsKey(email))
             {
                 return false;
@@ -63,6 +64,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
   
         public bool exists(string email)
         {
+            email = email.ToLower();
             if (users.ContainsKey(email))
                 return true;
             else
