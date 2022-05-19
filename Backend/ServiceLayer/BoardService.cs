@@ -82,7 +82,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             /*if(dueDate < DateTime.Now)
                 return JsonConvert.SerializeObject(new Response("Due date cannot be in the past.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-*/          if (title.Length > 50 || string.IsNullOrWhiteSpace(title) || string.IsNullOrEmpty(title))
+*/          if (string.IsNullOrWhiteSpace(title) || title.Length > 50 || string.IsNullOrEmpty(title))
                 return JsonConvert.SerializeObject(new Response("Invalid title. A valid  title must have up to 50 characters and cannot be empty.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             if (description == null)
                 description = "";

@@ -57,6 +57,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("Failed to limit column tasks due to invalid limit");
                 return new Response("Invalid limitation of tasks", true);
             }
+            if (newLimit % 1 != 0)
+            {
+                logger.Warn("Failed to limit column tasks due to invalid limit");
+                return new Response("Invalid limitation of tasks", true);
+            }
             if (newLimit == -1)
             {
                 newLimit = int.MaxValue;
@@ -173,6 +178,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             try
             {
                 Column column = GetColumn(columnOrdinal);
+                if (column == null)
+                    return null;
                 Task t = column.GetTask(taskId);
                 if (t != null)
                     return t;

@@ -16,7 +16,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
        
         public DateTime DueDate { get; private set; }
 
-        private Boolean isDone;
+        //private Boolean isDone;
         
 
         public Task(int ID, string name, string description, DateTime dueDate)
@@ -26,7 +26,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.Description = description;
             CreationTime = DateTime.Now;
             this.DueDate = dueDate;
-            isDone = false;
+            //isDone = false;
         }
 
         public void UpdateTaskTitle(string newTitle)
