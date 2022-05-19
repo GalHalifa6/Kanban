@@ -12,7 +12,9 @@ class UserServiceTest
     }
     public void RunTests()
     {
-        RegisterTest();
+        //RegisterTest();
+        LoginTest();
+        LogOutTest();
 
 
     }
@@ -152,6 +154,76 @@ class UserServiceTest
         res = gradinService.Login("omer@gmail.com", "123456Gg");
         Console.WriteLine(res);
 
+        Console.WriteLine("\n---------- TESTS FOR PASSWORDS ----------\n");
+        Console.WriteLine("registerd with incorrect password. should succeed");
+        gradinService.Register("omer@gmail.com", "123456Gg");
+        res = gradinService.Login("omer@gmail.com", "123456Gg");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", " 123456Gg");
+        res = gradinService.Login("check@gmail.com", " 123456Gg");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "123456Gg ");
+        res = gradinService.Login("check@gmail.com", "123456Gg ");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "123456Gg ");
+        res = gradinService.Login("check@gmail.com", "123456Gg ");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "123456G");
+        res = gradinService.Login("check@gmail.com", "123456G");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "123456g");
+        res = gradinService.Login("check@gmail.com", "123456g");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "123gG");
+        res = gradinService.Login("check@gmail.com", "123gG");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "12345gG.");
+        res = gradinService.Login("check@gmail.com", "12345gG.");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "");
+        res = gradinService.Login("check@gmail.com", "");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "       ");
+        res = gradinService.Login("check@gmail.com", "       ");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "AaAaAaAa");
+        res = gradinService.Login("check@gmail.com", "AaAaAaAa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "%1234Aa");
+        res = gradinService.Login("check@gmail.com", "%1234Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "%1234Aa");
+        res = gradinService.Login("check@gmail.com", "%1234Aa");
+        Console.WriteLine(res);
+
+        Console.WriteLine("registerd with incorrect password. should fail");
+        gradinService.Register("check@gmail.com", "1234 Aa");
+        res = gradinService.Login("check@gmail.com", "1234 Aa");
+        Console.WriteLine(res);
 
 
     }
@@ -162,7 +234,11 @@ class UserServiceTest
     ///</summary>
     public void LoginTest()
     {
-
+        GradingService gradinService = new GradingService();
+        Console.WriteLine("login user correctly. should succeed");
+        gradinService.Register("gal@gmail.com", "123456Aa");
+        string res = gradinService.Login("gal@gmail.com", "123456Aa");
+        Console.WriteLine(res);
     }
 
 
@@ -171,7 +247,12 @@ class UserServiceTest
     ///</summary>
     public void LogOutTest()
     {
-
+        GradingService gradinService = new GradingService();
+        Console.WriteLine("logout user correctly. should succeed");
+        gradinService.Register("gal@gmail.com", "123456Aa");
+        gradinService.Login("gal@gmail.com", "123456Aa");
+        string res = gradinService.Logout("gal@gmail.com");
+        Console.WriteLine(res);
     }
 
 
