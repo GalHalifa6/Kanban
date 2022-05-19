@@ -71,6 +71,13 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             Board board = bc.GetBoard(email, boardName);
             Column column = board.GetColumn(columnOrdinal);
+            if(column.name == "done")
+            {
+                Response r = new Response("Cannot edit tasks that are done.", true);
+                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+            }
+
             BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
             return InvokeMethod(new Func<BusinessLayer.Task, string, Response>(column.UpdateTaskTitle), "{}", task, newTitle);
         }
@@ -113,6 +120,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             Board board = bc.GetBoard(email, boardName);
             Column column = board.GetColumn(columnOrdinal);
+            if (column.name == "done")
+            {
+                Response r = new Response("Cannot edit tasks that are done.", true);
+                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+            }
             BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
             return InvokeMethod(new Func<BusinessLayer.Task, string, Response>(column.UpdateTaskDescription), "{}", task, newDesc);
         }
@@ -128,6 +141,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Json response with the result of the procedure</returns>
         public string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime newDueDate)
         {
+            if (newDueDate < DateTime.Now)
+                return JsonConvert.SerializeObject(new Response("Due date cannot be in the past.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             if (!uc.exists(email)) //The user doesn't exist
             {
                 Response r = new Response("The user trying to access does not exist.", true);
@@ -150,6 +165,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             Board board = bc.GetBoard(email, boardName);
             Column column = board.GetColumn(columnOrdinal);
+            if (column.name == "done")
+            {
+                Response r = new Response("Cannot edit tasks that are done.", true);
+                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+            }
             BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
             return InvokeMethod(new Func<BusinessLayer.Task, DateTime, Response>(column.UpdateTaskDueDate), "{}", task, newDueDate);
         }
