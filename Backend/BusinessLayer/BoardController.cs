@@ -18,6 +18,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         }
 
+        /// <summary>
+        /// Get a specific board
+        /// </summary>
+        /// <param name="email"> user whose board will be returned</param>
+        /// <param name="boardName">board to be returned</param>
+        /// <returns>the board that was looked for, null if no such board exists</returns>
         public Board GetBoard(string email, string boardName)
         {
             if (!boards.ContainsKey(email))
@@ -36,6 +42,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return null;
         }
 
+
         public Response AddBoard(string email, string name)
         {
             if (!boards.ContainsKey(email))
@@ -52,6 +59,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response(true);
         }
 
+
         public Response RemoveBoard(string email, string boardName)
         {
             Board board = GetBoard(email, boardName);
@@ -62,7 +70,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response(true);
             }
             logger.Warn("Failed to remove board " + boardName + ", because a board with that name doesn't exists.");
-            return new Response("The board \"" + boardName + "\" does not exist", true);
+            return new Response("The board '" + boardName + "' does not exist", true);
         }
 
         public Response LimitColumnTasks(string email, string boardName, int columnNumber, int newLimit)
@@ -71,7 +79,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (board == null)
             {
                 logger.Warn("Failed to limit tasks in board " + boardName + ", because a board with that name doesn't exists.");
-                return new Response("The board \"" + boardName + "\" does not exist", true);
+                return new Response("The board '" + boardName + "' does not exist", true);
             }
             return board.LimitColumnTasks(columnNumber, newLimit);
         }
@@ -81,7 +89,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Board board = GetBoard(email, boardName);
             if (board == null)
             {
-                return new Response("The board \"" + boardName + "\" does not exist", true);
+                return new Response("The board '" + boardName + "' does not exist", true);
             }
             return board.GetColumnLimit(boardName, columnNumber);
         }
@@ -90,7 +98,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
-                return new Response("The board \"" + boardName + "\" does not exist", true);
+                return new Response("The board '" + boardName + "' does not exist", true);
             Column column = board.GetColumn(columnOrdinal);
             if (column == null)
                 return new Response("Invalid column", true);
@@ -101,19 +109,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
-                return new Response("The board \"" + boardName + "\" does not exist", true);
+                return new Response("The board '" + boardName + "' does not exist", true);
             Column column = board.GetColumn(columnOrdinal);
             if (column == null)
                 return new Response("Invalid column", true);
             return new Response(column.GetTasksList());
         }
 
+        
         public Response AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
 
             Board board = GetBoard(email, boardName);
             if (board == null)
-                return new Response("The board \"" + boardName + "\" does not exist", true);
+                return new Response("The board '" + boardName + "' does not exist", true);
             nextTaskID++;
             return board.AddTask(nextTaskID, title, description, dueDate);
 
@@ -127,11 +136,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return board.RemoveTask(Title);
         }*/
 
+
         public Response AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
-                return new Response("The board \"" + boardName + "\" does not exist", true);
+                return new Response("The board '" + boardName + "' does not exist", true);
             return board.AdvanceTask(columnOrdinal, taskId);
         }
 

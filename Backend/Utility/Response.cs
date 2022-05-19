@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     ///Otherwise, <c>ErrorOccured = false</c> and <c>ErrorMessage = null</c>.</summary>
     public class Response
     {
-        public string ErrorMessage { get; } 
+        public string ErrorMessage { get; }
+
+        [JsonProperty("ReturnValue", NullValueHandling = NullValueHandling.Ignore)]
         public object ReturnValue { get; }  
 
         public Response(object val)
