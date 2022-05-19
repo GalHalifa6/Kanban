@@ -12,7 +12,7 @@ class UserServiceTest
     }
     public void RunTests()
     {
-        //RegisterTest();
+        RegisterTest();
         LoginTest();
         LogOutTest();
 

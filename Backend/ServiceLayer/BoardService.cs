@@ -71,7 +71,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with user-email, unless an error occurs.</returns>
         public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
-            
+            if (title.Length > 50 || string.IsNullOrWhiteSpace(title) || string.IsNullOrEmpty(title))
+                return JsonConvert.SerializeObject(new Response("Invalid title. A valid  title must have up to 50 characters and cannot be empty.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            if(description.Length > 300)
+                return JsonConvert.SerializeObject(new Response("Description too long"), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             Response response = bc.AddTask(email, boardName, title, description, dueDate);
             return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
