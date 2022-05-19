@@ -172,9 +172,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Json response with the result of the procedure</returns>
         public string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime newDueDate)
         {
-            /*if (newDueDate < DateTime.Now)
+            if (newDueDate < DateTime.Now)
                 return JsonConvert.SerializeObject(new Response("Due date cannot be in the past.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-*/          if (email == null)
+            if (email == null)
                 return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
             if (!uc.exists(email)) //The user doesn't exist
