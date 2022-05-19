@@ -44,7 +44,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             Response response = uc.createUser(email, password);
             if (response.ErrorOccured())
-                JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             return "{}";
         }
 
@@ -78,7 +78,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             currentEmail = email;
             return JsonConvert.SerializeObject(new Response(email), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
         }
 
         /// <summary>
@@ -97,7 +96,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             Response response = uc.LogOut(email);
             if (response.ErrorOccured())
             {
-                JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             currentEmail = null;
             return "{}";

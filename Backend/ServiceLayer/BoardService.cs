@@ -34,6 +34,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         }
 
         /// <summary>
+        /// Called when a successful registeration occurs. Adds a new (key,value) pair to the user boards dictionary
+        /// </summary>
+        /// <param name="email">newly registered user</param>
+        internal void Register(string email)
+        {
+            bc.Register(email);
+        }
+
+        /// <summary>
         /// Add a new board to a user
         /// </summary>
         /// <param name="email">email of the user to add the board to</param>
@@ -41,7 +50,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response indicating the outcome of the procedure</returns>
         public string AddBoard(string email, string name)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
             {
                 Response response = new Response("Cannot have an empty board name", true);
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
@@ -73,9 +82,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             /*if(dueDate < DateTime.Now)
                 return JsonConvert.SerializeObject(new Response("Due date cannot be in the past.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-*/            if (title.Length > 50 || string.IsNullOrWhiteSpace(title) || string.IsNullOrEmpty(title))
+*/          if (title.Length > 50 || string.IsNullOrWhiteSpace(title) || string.IsNullOrEmpty(title))
                 return JsonConvert.SerializeObject(new Response("Invalid title. A valid  title must have up to 50 characters and cannot be empty.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            if(description.Length > 300)
+            if (description == null)
+                description = "";
+            if (description.Length > 300)
                 return JsonConvert.SerializeObject(new Response("Description too long"), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             Response response = bc.AddTask(email, boardName, title, description, dueDate);
             return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
@@ -86,6 +97,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
              throw new NotImplementedException();
          }
  */
+
         /// <summary>
         /// This method advances a task to the next column in a user's board
         /// </summary>
