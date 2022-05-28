@@ -170,5 +170,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return output;*/
             return tasks;
         }
+
+        internal List<Task> GetAllAssignedTasks(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void UnassignTasks(string email)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
