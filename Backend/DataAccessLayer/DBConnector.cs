@@ -63,7 +63,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             cmd.ExecuteNonQuery();
             query = "CREATE TABLE IF NOT EXISTS TasksColumnsBoards(" +
                 "boardID INTEGER," +
-                "columnOrdinal INTEGER," +
+                "columnOrdinal ," +
                 "taskID INTEGER," +
                 "PRIMARY KEY (boardID, taskID)," +
                 "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE," +
@@ -77,7 +77,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "boardID INTEGER," +
                 "columnOrdinal INTEGER," +
                 "maxTasks INTEGER," +
-                "PRIMARY KEY (boardID, columnName)," +
+                "PRIMARY KEY (boardID, columnOrdinal)," +
                 "FOREIGN KEY (boardID) REFERENCES Boards(id)" +
                 ")";
             cmd.CommandText = query;
@@ -87,7 +87,6 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         public SQLiteDataReader ExecuteQuery(string nq)
         {
-            
             try
             {
                 conn.Open();
@@ -98,6 +97,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
             catch (Exception e)
             {
+                //TODO DELETE THIS PRINT
                 Console.WriteLine(e.Message);
                 return null;
             }
@@ -119,6 +119,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
             catch (Exception e)
             {
+                //TODO DELETE THIS PRINT
                 Console.WriteLine(e.Message);
                 return false;
             }

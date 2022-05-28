@@ -1,5 +1,7 @@
+using IntroSE.Kanban.Backend.DataAccessLayer;
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
@@ -16,6 +18,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             boards = new Dictionary<string, HashSet<Board>>();
             nextBoardID = 0;
+            //LoadData();
 
         }
 
@@ -197,6 +200,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             
         }*/
+
+        public void LoadData()
+        {
+            SQLiteDataReader res = new BoardControllerDTO().LoadData();
+        }
 
 
 

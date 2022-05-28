@@ -35,13 +35,13 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         public Response AddBoard(string email, int id, string name)
         {
-            string query = $"INSERT INTO Boards(id, name, nextTaskID, owner) VALUES({id},{name},{0} ,{email})";
+            string query = $"INSERT INTO Boards(id, name, nextTaskID, owner) VALUES({id},'{name}',{0},'{email}')";
             return GeneralNonQuery(query, "Board was added successfully", "A board with this id already exists");
         }
 
         internal Response ChangeOwner(string newOwner)
         {
-            string query = $"UPDATE Boards SET owner = {newOwner} WHERE id = {id}";
+            string query = $"UPDATE Boards SET owner = '{newOwner}' WHERE id = {id}";
             owner = newOwner;
             return GeneralNonQuery(query, "Owner was changed successfully", "Something went wrong");
         }

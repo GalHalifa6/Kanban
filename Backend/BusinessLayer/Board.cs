@@ -86,11 +86,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("Failed to limit column tasks due to invalid column ordinal");
                 return new Response("Invalid column", true);
             }
-            Response r = col.SetMax(newLimit);
+/*            Response r = col.SetMax(newLimit);
             if (r.ErrorOccured())
-                return r;
+                return r;*/
             logger.Info("Max tasks limited to " + newLimit);
-            return r;
+            return new Response(true);
         }
 
         internal Response AddBoard()
