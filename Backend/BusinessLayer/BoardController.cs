@@ -28,7 +28,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email"> user whose board will be returned</param>
         /// <param name="boardID">board to be returned</param>
         /// <returns>the board that was looked for, null if no such board exists</returns>
-        public Board GetBoard(string email, string boardID)
+        public Board GetBoard(string email, string boardName)
         {
             if (!boards.ContainsKey(email))
             {
@@ -38,7 +38,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             HashSet<Board> userBoards = boards[email];
             foreach (Board b in userBoards)
             {
-                if (b.name == boardID)
+                if (b.name == boardName)
                 {
                     return b;
                 }
@@ -83,7 +83,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Board board = GetBoard(email, boardName);
             if (board != null)
             {
-                Response r = board.RemoveBoard();
+                Response r = board.RemoveBoard(email);
                 if (r.ErrorOccured())
                     return r; // so that if the db deletion failed, nothing would change
                 boards[email].Remove(board);
