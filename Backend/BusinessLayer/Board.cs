@@ -98,8 +98,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return dto.AddBoard(owner, id, name);
         }
 
-        internal Response RemoveBoard()
+        internal Response RemoveBoard(string email)
         {
+            if (email != owner)
+            {
+                logger.Info("Non owner attempted to delete board");
+                return new Response("Only board owner can delete a board");
+            }
             return dto.RemoveBoard();
         }
 

@@ -178,5 +178,40 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             Response r = new Response(s, true);
             return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
+
+        internal string GetUserBoards(string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal string JoinBoard(string email, int boardID)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal string LeaveBoard(string email, int boardID)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal string AssignTask(string email, string boardName, int columnOrdinal, int taskID, string emailAssignee)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal string LoadData()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal string DeleteData()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
