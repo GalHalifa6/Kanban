@@ -43,7 +43,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             DueDate = newDueDate;
         }
 
-        internal Response Reassign(string assigner, string assignee)
+        internal Response AssignTask(string assigner, string assignee)
         {
             throw new NotImplementedException();
         }

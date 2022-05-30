@@ -41,9 +41,19 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         internal Response ChangeOwner(string newOwner)
         {
-            string query = $"UPDATE Boards SET owner = '{newOwner}' WHERE id = {id}";
-            owner = newOwner;
-            return GeneralNonQuery(query, "Owner was changed successfully", "Something went wrong");
+            string boardsUpdate = $"UPDATE Boards SET owner = '{newOwner}' WHERE id = {id}";
+            Response r1 = GeneralNonQuery(boardsUpdate, "Owner was changed successfully", "Something went wrong");
+            UsersBoardsDTO ub = new UsersBoardsDTO();
+            Response r2 = ub.AddUserToBoard(owner, id);
+            Response r3 = ub.RemoveUserFromBoard(newOwner, id);
+            if (!r1.ErrorOccured() && !r2.ErrorOccured() && !r3.ErrorOccured())
+            {
+                owner = newOwner;
+            }
+            return r1;
+
+
+
         }
 
         internal Response RemoveBoard()
@@ -55,12 +65,12 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         internal Response AddUser(string email)
         {
-            return new UsersInBoardsDTO().AddUserToBoard(email, id);
+            return new UsersBoardsDTO().AddUserToBoard(email, id);
         }
 
         internal Response RemoveUser(string email)
         {
-            return new UsersInBoardsDTO().RemoveUserFromBoard(email, id);
+            return new UsersBoardsDTO().RemoveUserFromBoard(email, id);
         }
     }
 }

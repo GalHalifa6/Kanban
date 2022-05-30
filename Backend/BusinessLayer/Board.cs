@@ -86,11 +86,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("Failed to limit column tasks due to invalid column ordinal");
                 return new Response("Invalid column", true);
             }
-/*            Response r = col.SetMax(newLimit);
-            if (r.ErrorOccured())
-                return r;*/
-            logger.Info("Max tasks limited to " + newLimit);
-            return new Response(true);
+            Response r = col.SetMax(newLimit);
+            if (!r.ErrorOccured())
+                logger.Info("Max tasks limited to " + newLimit);
+            return r;
         }
 
         internal Response AddBoard()
@@ -98,6 +97,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return dto.AddBoard(owner, id, name);
         }
 
+        /// <summary>
+        /// delete a board and all of it's contents
+        /// </summary>
+        /// <param name="email">deleter's email</param>
+        /// <returns></returns>
         internal Response RemoveBoard(string email)
         {
             if (email != owner)
@@ -205,7 +209,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (usernames.Contains(email) || owner == email)
             {
-                logger.Warn("Attempt to add user to a board that the user is already in");
+                logger.Warn(email + " attempted to join a board that he's already in");
                 return new Response(email + " is already in " + name, true);
             }
             Response r = dto.AddUser(email);
@@ -238,6 +242,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response(email + " is not in " + name, true);
         }
 
+
+
         private void UnassignTasks(string email)
         {
             backlog.UnassignTasks(email);
@@ -265,27 +271,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             owner = newOwner;
             logger.Info("Owner changed successfully");
             return r;
-        }
-
-        internal Task GetTask(int taskId)
-        {
-            try
-            {
-                Task t = backlog.GetTask(taskId);
-                if (t != null)
-                    return t;
-                t = inProgress.GetTask(taskId);
-                if (t != null)
-                    return t;
-                t = done.GetTask(taskId);
-                if (t != null)
-                    return t;
-                return null;
-            }
-            catch (FormatException)
-            {
-                return null;
-            }
         }
 
         internal Task GetTask(int columnOrdinal, int taskId)
@@ -318,15 +303,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return inProgress.GetAllAssignedTasks(email);   
         }
 
-        public Response Reassign(string assigner, string assignee, int taskID)
+
+        public Response AssignTask(string assigner, int columnOrdinal, int taskID, string assignee)
         {   
-            Task t = GetTask(taskID);
+            Task t = GetTask(columnOrdinal, taskID);
             if (t == null)
             {
                 logger.Warn(assigner + " attempted to reassign a task that doesn't exist");
                 return new Response("Task does not exist");
             }
-            return t.Reassign(assigner, assignee);
+            return t.AssignTask(assigner, assignee);
         }
     }
 }
