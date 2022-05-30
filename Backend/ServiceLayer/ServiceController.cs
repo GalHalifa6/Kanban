@@ -26,6 +26,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             TS = new TaskService(US.uc, BS.bc);
         }
 
+        private string InitialValidation(ref string email)
+        {
+            if (email == null)
+                return GenerateBadResponseString("Email cannot be null");
+            email = email.ToLower();
+            if (!US.IsLoggedIn(email))
+                return GenerateBadResponseString("You must be logged in to perform this action");
+            return null;
+
+        }
         internal string Register(string email, string password)
         {
             if (email == null)
@@ -55,121 +65,97 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string LimitColumn(string email, string boardName, int columnOrdinal, int limit)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return BS.LimitColumn(email, boardName, columnOrdinal, limit);  
         }
 
         internal string GetColumnLimit(string email, string boardName, int columnOrdinal)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return BS.GetColumnLimit(email, boardName, columnOrdinal);
         }
 
         internal string GetColumnName(string email, string boardName, int columnOrdinal)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return BS.GetColumnName(email, boardName, columnOrdinal);
         }
 
         internal string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return BS.AddTask(email, boardName, title, description, dueDate);
         }
 
         internal string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+             string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return TS.UpdateTaskDueDate(email, boardName, columnOrdinal, taskId, dueDate);
         }
 
         internal string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return TS.UpdateTaskTitle(email, boardName, columnOrdinal, taskId, title);
         }
 
         internal string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string description)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return TS.UpdateTaskDescription(email, boardName, columnOrdinal, taskId, description);
         }
 
         internal string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return BS.AdvanceTask(email, boardName, columnOrdinal, taskId);
         }
 
         internal string GetColumn(string email, string boardName, int columnOrdinal)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+             string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return BS.GetColumn(email, boardName, columnOrdinal);
         }
 
         internal string AddBoard(string email, string name)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return BS.AddBoard(email, name);
         }
 
         internal string RemoveBoard(string email, string name)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return BS.RemoveBoard(email, name);
         }
 
         internal string InProgressTasks(string email)
         {
-            if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
-            if (!US.IsLoggedIn(email))
-                return GenerateBadResponseString("You must be logged in to perform this action");
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
             return BS.InProgressTasks(email);
         }
 
@@ -186,17 +172,26 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string JoinBoard(string email, int boardID)
         {
-            throw new NotImplementedException();
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
+            return BS.JoinBoard(email, boardID);
         }
 
         internal string LeaveBoard(string email, int boardID)
         {
-            throw new NotImplementedException();
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
+            return BS.LeaveBoard(email, boardID);
         }
 
         internal string AssignTask(string email, string boardName, int columnOrdinal, int taskID, string emailAssignee)
         {
-            throw new NotImplementedException();
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
+            return BS.AssignTask(email, boardName, columnOrdinal, taskID, emailAssignee);
         }
 
         internal string LoadData()
@@ -211,7 +206,14 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
-            throw new NotImplementedException();
+            string res = InitialValidation(ref currentOwnerEmail);
+            if (res != null)
+                return res;
+            if (newOwnerEmail == null)
+                return GenerateBadResponseString("new owner email cannot be null");
+            newOwnerEmail = newOwnerEmail.ToLower();
+            return BS.TransferOwnership(currentOwnerEmail, newOwnerEmail, boardName);
+
         }
     }
 }

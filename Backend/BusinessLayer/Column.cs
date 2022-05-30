@@ -134,7 +134,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response(true);
         }
 
-        public void SetMax(int maxTasks)
+
+        /// <summary>
+        /// תומר אני צריך שתשנה טיפה את המימוש של הפונקציה הזאת, ככה שהיא גם תפעיל את הדאטה לייר 
+        /// ואז תחזיר ריספנוס שאומר אם הכל היה תקיו או לא
+        /// </summary>
+        /// <param name="maxTasks"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        public Response SetMax(int maxTasks)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetMax2(int maxTasks)
         {
             this.maxTasks = maxTasks;
         }

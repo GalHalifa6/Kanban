@@ -47,6 +47,22 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
 
+        public Board GetBoard(int boardID)
+        {
+            foreach (HashSet<Board> set in boards.Values)
+            {
+                foreach (Board b in set)
+                {
+                    if (b.id == boardID)
+                    {
+                        return b;
+                    }
+                }
+            }
+            return null;
+        }
+
+
         public Response AddBoard(string email, string name)
         {
             if (!boards.ContainsKey(email))
@@ -93,6 +109,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Warn("Failed to remove board " + boardName + ", because a board with that name doesn't exists.");
             return new Response("The board '" + boardName + "' does not exist", true);
         }
+
+
 
         public Response LimitColumnTasks(string email, string boardName, int columnNumber, int newLimit)
         {
@@ -191,23 +209,60 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return b.GetTask(columnOrdinal, taskId);
         }
 
-        /*public Response AddUserToBoard(string email, int boardID)
+        internal Response AssignTask(string assigner, string boardName, int columnOrdinal, int taskID, string assignee)
         {
-            
-        }*/
-
-        /*public Response RemoveUserFromBoard(string email, int boardID)
-        {
-            
-        }*/
+            Board b = GetBoard(assigner, boardName);
+            if (b == null)
+            {
+                logger.Warn(assigner + " attempted to access a board that doesn't exist");
+                return new Response("The board '" + boardName + "' does not exist", true);
+            }
+            return b.AssignTask(assigner, columnOrdinal, taskID, assignee);
+        }
 
         public void LoadData()
         {
             SQLiteDataReader res = new BoardControllerDTO().LoadData();
         }
 
+        internal Response JoinBoard(string email, int boardID)
+        {
+            Board b = GetBoard(boardID);
+            if (b == null)
+            {
+                logger.Warn(email + " attempted to join a board that doesn't exist");
+                return new Response("A board with id: " + boardID + " does not exist", true);
+            }
+            Response r = b.AddUser(email);
+            if (!r.ErrorOccured())
+                boards[email].Add(b);
+            return r;
+        }
 
+        internal Response LeaveBoard(string email, int boardID)
+        {
+            Board b = GetBoard(boardID);
+            if (b == null)
+            {
+                logger.Warn(email + " attempted to leave a board that doesn't exist");
+                return new Response("The board '" + boardID + "' does not exist", true);
+            }
+            Response r = b.RemoveUser(email);
+            if (!r.ErrorOccured())
+                boards[email].Remove(b);
+            return r;
+        }
 
+        internal Response TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
+        {
+            Board b = GetBoard(currentOwnerEmail, boardName);
+            if (b == null)
+            {
+                logger.Warn(currentOwnerEmail + " attempted to leave a board that doesn't exist");
+                return new Response("The board '" + boardName + "' does not exist", true);
+            }
+            return b.ChangeOwner(currentOwnerEmail, newOwnerEmail);
+        }
     }
 }
 

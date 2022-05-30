@@ -41,7 +41,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         private void CreateTables()
         {
             SQLiteCommand cmd = conn.CreateCommand();
-            string query = "CREATE TABLE IF NOT EXISTS UserBoards(" +
+            string query = "CREATE TABLE IF NOT EXISTS UsersBoards(" +
                 "userEmail VARCHAR(200)," +
                 "boardID INTEGER," +
                 "PRIMARY KEY (userEmail,boardID)," +
@@ -69,7 +69,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE," +
                 // Don't forget commas when removing these comment lines
                 "FOREIGN KEY (columnOrdinal) REFERENCES Columns(columnOrdinal) ON DELETE CASCADE" +
-                //"FOREIGN KEY taskID REFERENCES Tasks(id) ON DELETE CASCADE" +
+                //"FOREIGN KEY (taskID) REFERENCES Tasks(id) ON DELETE CASCADE" +
                 ")";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
