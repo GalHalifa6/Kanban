@@ -124,6 +124,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return InvokeMethod(new Func<string, string, int, int, Response>(bc.LimitColumnTasks), "{}", email, boardName, columnNumber, newLimit);
         }
 
+        internal Response LoadData()
+        {
+            return bc.LoadData();
+        }
+
 
         /// <summary>
         /// This method assigns a task to a user

@@ -9,24 +9,48 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
     // this kind of dto actaully plays the role of both dao and dto.
     // it holds both the access to the db and the info about the object, and each dto is owned by a bo
-    internal class BoardDTO
+    public class BoardDTO
     {
         public int id { get; private set; }
         public string name { get; private set; }
         public int nextTaskID { get; private set; }
         public string owner { get; private set; }
-
+        public ColumnDTO backlog { get; private set; }
+        public ColumnDTO inProgress { get; private set; }
+        public ColumnDTO done { get; private set; }
+        public HashSet<string> users { get; private set; }
         public BoardDTO(int id, string name, string owner, int nextTaskID)
         {
             this.id = id;
             this.name = name;
             this.owner = owner;
             this.nextTaskID = nextTaskID;
+
+            backlog = new ColumnDTO();
+            inProgress = new ColumnDTO();
+            done = new ColumnDTO();
+
+            users = new HashSet<string>();
+        }
+
+
+        public BoardDTO(int id, string name, string owner, int nextTaskID, ColumnDTO backlog, ColumnDTO inProgress, ColumnDTO done, HashSet<string> users)
+        {
+            this.id = id;
+            this.name = name;
+            this.owner = owner;
+            this.nextTaskID = nextTaskID;
+
+            this.backlog = backlog;
+            this.inProgress = inProgress;
+            this.done = done;
+
+            this.users = users;
         }
 
         private Response GeneralNonQuery(string query, string goodMsg, string badMsg)
         {
-            if (!DBConnector.instance.ExecuteNonQuery(query))
+            if (!DBConnector.GetInstance().ExecuteNonQuery(query))
             {
                 return new Response(badMsg, true);
             }
@@ -51,9 +75,6 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 owner = newOwner;
             }
             return r1;
-
-
-
         }
 
         internal Response RemoveBoard()
@@ -71,6 +92,13 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         internal Response RemoveUser(string email)
         {
             return new UsersBoardsDTO().RemoveUserFromBoard(email, id);
+        }
+
+        internal Response AdvanceTask(ColumnDTO currentColDTO, ColumnDTO nextColDTO, TaskDTO taskDTO)
+        {
+            nextColDTO.AddTask(taskDTO);
+            currentColDTO.RemoveTask(taskDTO);
+            return new TasksColumnsBoardsDTO().AdvanceTask(id, currentColDTO.ordinal, nextColDTO.ordinal, taskDTO.id);
         }
     }
 }

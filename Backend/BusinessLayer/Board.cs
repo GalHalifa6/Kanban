@@ -40,6 +40,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             dto = new BoardDTO(id, name, creatorName, nextTaskID);
         }
 
+        public Board(BoardDTO boardDTO)
+        {
+            this.dto = boardDTO;
+            this.name = boardDTO.name;
+            this.owner = boardDTO.owner;
+            this.backlog = new Column(boardDTO.backlog);
+            this.inProgress = new Column(boardDTO.inProgress);
+            this.done = new Column(boardDTO.done);
+            this.usernames = boardDTO.users;
+            this.nextTaskID = boardDTO.nextTaskID;
+            this.id = boardDTO.id;
+        }
+
         public List<Task> getInProgressTasks()
         {
             return inProgress.GetTasksList();
@@ -182,19 +195,25 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             if (c == backlog)
             {
-                backlog.RemoveTask(t);
                 Response r = inProgress.AddTask(t);
                 if (r.ErrorOccured())
                     return r;
+                r = dto.AdvanceTask(c.dto, inProgress.dto, t.dto);
+                if (r.ErrorOccured())
+                    return r;
+                backlog.RemoveTask(t);
                 logger.Info("Task " + t.Title + " advanced");
                 return new Response("Task " + t.Title + " advanced and is now in progress");
             }
             if (c == inProgress)
             {
-                inProgress.RemoveTask(t);
                 Response r = done.AddTask(t);
                 if (r.ErrorOccured())
                     return r;
+                r = dto.AdvanceTask(c.dto, done.dto, t.dto);
+                if (r.ErrorOccured())
+                    return r;
+                inProgress.RemoveTask(t);
                 logger.Info("Task " + t.Title + " advanced");
                 return new Response("Task " + t.Title + " advanced and is now done");
             }
@@ -246,8 +265,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         private void UnassignTasks(string email)
         {
-            backlog.UnassignTasks(email);
-            inProgress.UnassignTasks(email);
+            //backlog.UnassignTasks(email);
+            //inProgress.UnassignTasks(email);
         }
 
         public Response ChangeOwner(string currentOwner, string newOwner)

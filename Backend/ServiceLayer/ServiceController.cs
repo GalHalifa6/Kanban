@@ -20,7 +20,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         public ServiceController()
         {
-
             US = new UserService();
             BS = new BoardService();
             TS = new TaskService(US.uc, BS.bc);
@@ -196,7 +195,19 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string LoadData()
         {
-            throw new NotImplementedException();
+            Response r1 = TS.LoadData();
+            Response r2 = BS.LoadData();
+            Response r3 = US.LoadData();
+            if (!(r1.ErrorOccured() || r2.ErrorOccured() || r3.ErrorOccured()))
+                return "{}";
+            string err = "";
+            if (r1.ErrorOccured())
+                err += $"Tasks issues: {r1.ErrorMessage}";
+            if (r2.ErrorOccured())
+                err += $"Boards issues: {r2.ErrorMessage}";
+            if (r3.ErrorOccured())
+                err += $"Users issues: {r3.ErrorMessage}";
+            return GenerateBadResponseString(err);
         }
 
         internal string DeleteData()

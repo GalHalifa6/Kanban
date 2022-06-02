@@ -158,6 +158,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         }
 
+        internal Response LoadData()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// validataion function for passwords, uses helper functions for smaller validations
         /// </summary>

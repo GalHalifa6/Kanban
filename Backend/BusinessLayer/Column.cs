@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IntroSE.Kanban.Backend.DataAccessLayer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public int maxTasks { get; private set; }
         private List<Task> tasks { get; set; }
 
+        public ColumnDTO dto { get; private set; }
+
         private log4net.ILog logger = Utility.Logger.GetLogger();
 
         public Column(string name)
@@ -19,6 +22,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.name = name;
             tasks = new List<Task>();
             maxTasks = int.MaxValue; //If there's no limit on number of tasks, the value is the maximum value of int
+            // ADD DTO
+        }
+
+        public Column(ColumnDTO column)
+        {
         }
 
         internal Response AddTask(Task task)

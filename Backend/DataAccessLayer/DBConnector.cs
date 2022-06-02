@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
-    internal class DBConnector
+    public class DBConnector
     {
         private SQLiteConnection conn;
-        public static DBConnector instance { get; private set; }
+        public static DBConnector instance = new DBConnector(); 
         //relative path 
         string path = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "kanban.db"));
 
@@ -31,6 +31,44 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
+        /// <summary>
+        /// used for testing purposes
+        /// </summary>
+        public void ResetDB()
+        {
+            try
+            {
+                conn.Open();
+                SQLiteCommand cmd = conn.CreateCommand();
+                string query = "DROP TABLE IF EXISTS Users";
+                cmd.CommandText = query;
+                cmd.ExecuteNonQuery();
+                query = "DROP TABLE IF EXISTS UsersBoards";
+                cmd.CommandText = query;
+                cmd.ExecuteNonQuery();
+                query = "DROP TABLE IF EXISTS Boards";
+                cmd.CommandText = query;
+                cmd.ExecuteNonQuery();
+                query = "DROP TABLE IF EXISTS TasksColumnsBoards";
+                cmd.CommandText = query;
+                cmd.ExecuteNonQuery();
+                query = "DROP TABLE IF EXISTS Columns";
+                cmd.CommandText = query;
+                cmd.ExecuteNonQuery();
+                query = "DROP TABLE IF EXISTS Tasks";
+                cmd.CommandText = query;
+                cmd.ExecuteNonQuery();
+
+            }
+            catch (Exception ex)
+            { Console.WriteLine(ex.Message); }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
+
         public static DBConnector GetInstance()
         {
             if (instance == null)
@@ -46,7 +84,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "boardID INTEGER," +
                 "PRIMARY KEY (userEmail,boardID)," +
                 //"FOREIGN KEY (userEmail) REFERENCES Users(id)," +
-                "FOREIGN KEY (boardID) REFERENCES Boards(id)" +
+                "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
                 ")";
 
             cmd.CommandText = query;
@@ -78,7 +116,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "columnOrdinal INTEGER," +
                 "maxTasks INTEGER," +
                 "PRIMARY KEY (boardID, columnOrdinal)," +
-                "FOREIGN KEY (boardID) REFERENCES Boards(id)" +
+                "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
                 ")";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();

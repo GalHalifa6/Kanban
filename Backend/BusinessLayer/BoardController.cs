@@ -9,17 +9,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class BoardController
     {
         public Dictionary<string, HashSet<Board>> boards;
+        //HashSet<Board> boards;
         log4net.ILog logger = Utility.Logger.GetLogger();
         public int nextBoardID { get; private set; }
-        //private int nextTaskID { get; set; }
-
 
         public BoardController()
         {
+            //DBConnector.GetInstance(); // to initialize db
             boards = new Dictionary<string, HashSet<Board>>();
             nextBoardID = 0;
-            //LoadData();
-
         }
 
         /// <summary>
@@ -30,11 +28,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns>the board that was looked for, null if no such board exists</returns>
         public Board GetBoard(string email, string boardName)
         {
-            if (!boards.ContainsKey(email))
-            {
-                boards.Add(email, new HashSet<Board>());
-                return null;
-            }
             HashSet<Board> userBoards = boards[email];
             foreach (Board b in userBoards)
             {
@@ -65,15 +58,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public Response AddBoard(string email, string name)
         {
-            if (!boards.ContainsKey(email))
-            {
-                boards[email] = new HashSet<Board>();
-            }
-            if (GetBoard(email, name) != null)
+/*            if (GetBoard(email, name) != null)
             {
                 logger.Warn("Failed to create board " + name + ", because a board with that name already exists.");
                 return new Response("Board with this name already exists", true);
-            }
+            }*/
             Board b = new Board(name, nextBoardID, email);
             Response r = b.AddBoard();
             if (r.ErrorOccured())
@@ -187,8 +176,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public Response InProgressTasks(string email)
         {
             HashSet<Board> boardList = boards[email];
-/*            if (boardList.Count == 0)
-                return new Response("This user has no boards");*/
             List<Task> tasks = new List<Task>();
             foreach (Board b in boardList) {
                 tasks.AddRange(b.getInProgressTasks());
@@ -220,9 +207,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return b.AssignTask(assigner, columnOrdinal, taskID, assignee);
         }
 
-        public void LoadData()
+        public Response LoadData()
         {
-            SQLiteDataReader res = new BoardControllerDTO().LoadData();
+            HashSet<BoardDTO> res = new BoardControllerDTO().LoadData();
+            return null;
         }
 
         internal Response JoinBoard(string email, int boardID)
