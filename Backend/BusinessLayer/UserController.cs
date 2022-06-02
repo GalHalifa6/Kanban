@@ -10,16 +10,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class UserController
     {
         log4net.ILog logger = Utility.Logger.GetLogger();
+
         private Dictionary<string, User> users { get; set; }
 
         public UserController()
         {
             users = new Dictionary<string, User>();
-            //UserController userController = new UserController();
         }
 
         public bool IsLoggedIn(string email)
         {
+            email = email.ToLower();
             if (!users.ContainsKey(email))
             {
                 return false;
@@ -63,6 +64,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
   
         public bool exists(string email)
         {
+            email = email.ToLower();
             if (users.ContainsKey(email))
                 return true;
             else
