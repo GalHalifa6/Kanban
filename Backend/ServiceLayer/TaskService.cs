@@ -161,6 +161,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return InvokeMethod(new Func<BusinessLayer.Task, string, Response>(column.UpdateTaskDescription), "{}", task, newDesc);
         }
 
+        internal Response LoadData()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// update an existing task's due date
         /// </summary>

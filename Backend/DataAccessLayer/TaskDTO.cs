@@ -1,6 +1,8 @@
 ﻿namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
-    internal class TaskDTO
+    public class TaskDTO
     {
+
+        public int id { get; set; }
     }
 }

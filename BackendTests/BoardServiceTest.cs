@@ -15,12 +15,20 @@ namespace IntroSE.Kanban.Backend
         }
         public void RunTests()
         {
-            addTaskTest();
-            removeBoardTest();
-            addBoardTest();
-            advanceTaskPhaseTest("task1");
+            /*            addTaskTest();
+                        removeBoardTest();
+                        addBoardTest();
+                        advanceTaskPhaseTest("task1");
+                        JoinBoardTest();
+                        LeaveBoardTest();
+                        ResetDB();*/
+            LeaveBoardTest();
 
+        }
 
+        private void ResetDB()
+        {
+            Backend.DataAccessLayer.DBConnector.GetInstance().ResetDB();
         }
 
 
@@ -86,10 +94,6 @@ namespace IntroSE.Kanban.Backend
 
         }
         */
-
-
-
-
 
 
         ///<summary>
@@ -179,31 +183,89 @@ namespace IntroSE.Kanban.Backend
             gradingService.AddBoard("gal@gmail.com", "Board1");
             gradingService.AddTask("gal@gmail.com", "Board1", Title, "testing task1", new DateTime());
             string res = gradingService.AdvanceTask("gal@gmail.com", "Board1", 0, 1);
-            Console.Write(res);
+            Console.WriteLine(res);
             res = gradingService.AdvanceTask("gal@gmail.com", "Board1", 1, 1);
-            Console.Write(res + "\n");
+            Console.WriteLine(res);
 
             Console.WriteLine("-----------------------");
-            Console.WriteLine("advace task three times. should fail");
+            Console.WriteLine("advance task three times. should fail");
             gradingService.Register("itay@gmail.com", "123456Aa");
             gradingService.Login("itay@gmail.com", "123456Aa");
             gradingService.AddBoard("itay@gmail.com", "Board1");
             gradingService.AddTask("itay@gmail.com", "Board1", Title, "testing task1", new DateTime());
             res = gradingService.AdvanceTask("itay@gmail.com", "Board1", 0, 2);
-            Console.Write(res);
+            Console.WriteLine(res);
             res = gradingService.AdvanceTask("itay@gmail.com", "Board1", 1, 2);
-            Console.Write(res);
+            Console.WriteLine(res);
             res = gradingService.AdvanceTask("itay@gmail.com", "Board1", 2, 2);
-            Console.Write(res);
+            Console.WriteLine(res);
 
             Console.WriteLine("-----------------------");
             Console.WriteLine("advace unexist task. should fail");
             gradingService.AddBoard("gal@gmail.com", "Board2");
             gradingService.AddTask("gal@gmail.com", "Board2", Title, "testing task9", new DateTime());
             res = gradingService.AdvanceTask("gal@gmail.com", "Board2", 0, 4);
-            Console.Write(res);
+            Console.WriteLine(res);
 
 
+        }
+
+        public void JoinBoardTest()
+        {
+            Console.WriteLine("------JoinBoardTest------");
+            GradingService gradingService = new GradingService();
+            gradingService.Register("itay_JoinBoardTest@gmail.com", "Aa123456");
+            gradingService.Login("itay_JoinBoardTest@gmail.com", "Aa123456");
+            gradingService.AddBoard("itay_JoinBoardTest@gmail.com", "B0");
+            gradingService.Logout("itay_JoinBoardTest@gmail.com");
+            gradingService.Register("gal_JoinBoardTest@gmail.com", "Aa123456");
+            gradingService.Login("gal_JoinBoardTest@gmail.com", "Aa123456");
+            string res = gradingService.JoinBoard("gal_JoinBoardTest@gmail.com", 0);
+            Console.WriteLine("The following response should be ok");
+            Console.WriteLine(res);
+            //string res = gradingService.GetUserBoards("gal@gmail.com"); 
+            //TODO check if GetUserBoards should return the boards that user owns, or the boards that the user is a part of
+            //Console.WriteLine("Board with id 0 should appear in the following print");
+            //Console.WriteLine(res);
+
+            Console.WriteLine("The following response should be an error - user is already in the board:");
+            string badRes = gradingService.JoinBoard("gal_JoinBoardTest@gmail.com", 0);
+            Console.WriteLine(badRes);
+
+            Console.WriteLine("The following response should be an error - board does not exist:");
+            badRes = gradingService.JoinBoard("gal_JoinBoardTest@gmail.com", 1);
+            Console.WriteLine(badRes);
+
+            Console.WriteLine("------------------");
+
+        }
+
+        public void LeaveBoardTest()
+        {
+            GradingService gradingService = new GradingService();
+            gradingService.Register("itay_JoinBoardTest@gmail.com", "Aa123456");
+            gradingService.Login("itay_JoinBoardTest@gmail.com", "Aa123456");
+            gradingService.AddBoard("itay_JoinBoardTest@gmail.com", "B0");
+            gradingService.Logout("itay_JoinBoardTest@gmail.com");
+            gradingService.Register("gal_JoinBoardTest@gmail.com", "Aa123456");
+            gradingService.Login("gal_JoinBoardTest@gmail.com", "Aa123456");
+            gradingService.JoinBoard("gal_JoinBoardTest@gmail.com", 0);
+            string res = gradingService.LeaveBoard("gal_JoinBoardTest@gmail.com", 0);
+            Console.WriteLine("The following response should be ok");
+            Console.WriteLine(res);
+            //TODO check if GetUserBoards should return the boards that user owns, or the boards that the user is a part of
+            //Console.WriteLine("Board with id 0 should NOT appear in the following print");
+            //Console.WriteLine(res);
+
+            Console.WriteLine("The following response should be an error - user is not in the board:");
+            string badRes = gradingService.LeaveBoard("gal_JoinBoardTest@gmail.com", 0);
+            Console.WriteLine(badRes);
+
+            Console.WriteLine("The following response should be an error - board does not exist:");
+            badRes = gradingService.LeaveBoard("gal_JoinBoardTest@gmail.com", 1);
+            Console.WriteLine(badRes);
+
+            Console.WriteLine("------------------");
         }
     }
 }

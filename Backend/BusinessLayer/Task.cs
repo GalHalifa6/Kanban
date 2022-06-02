@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IntroSE.Kanban.Backend.DataAccessLayer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,6 +17,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
        
         public DateTime DueDate { get; private set; }
 
+        public TaskDTO dto { get; private set; } 
+
         //private Boolean isDone;
         
 
@@ -27,6 +30,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             CreationTime = DateTime.Now;
             this.DueDate = dueDate;
             //isDone = false;
+
+            //ADD DTO
         }
 
         public void UpdateTaskTitle(string newTitle)

@@ -102,6 +102,27 @@ namespace IntroSE.Kanban.BackendTests
 
         }
 
+        public void AssignTaskTest()
+        {
+            Console.WriteLine("------Assign Task Test------");
+
+            Console.WriteLine("should succeed:");
+            GradingService gradingService = new GradingService();
+            gradingService.Register("gal@gmail.com", "123456Aa");
+            gradingService.Register("tomer@gmail.com", "123456Aa");
+            gradingService.Login("gal@gmail.com", "123456Aa");
+            gradingService.AddBoard("gal@gmail.com", "Board1");
+            gradingService.AddTask("gal@gmail.com", "Board1", "task1", "testing task1", new DateTime());
+            string res = gradingService.AssignTask("gal@gmail.com", "Board1", 0, 0, "tomer@gmail.com");
+            Console.WriteLine(res);
+
+            Console.WriteLine("should fail - assigner is not the one assigned to the task:");
+            string res = gradingService.AssignTask("gal@gmail.com", "Board1", 0, 0, "tomer@gmail.com");
+            Console.WriteLine(res);
+
+
+        }
+
 
         /*
         ///<summary>
