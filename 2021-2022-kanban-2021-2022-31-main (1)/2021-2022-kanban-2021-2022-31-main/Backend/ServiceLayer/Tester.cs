@@ -9,6 +9,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 {
     internal class Tester
     {
+
         static void Main(String[] args)
         {
             DBConnector db = DBConnector.GetInstance();

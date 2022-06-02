@@ -68,7 +68,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
-            return BS.LimitColumn(email, boardName, columnOrdinal, limit);
+            return BS.LimitColumn(email, boardName, columnOrdinal, limit);  
         }
 
         internal string GetColumnLimit(string email, string boardName, int columnOrdinal)
@@ -146,7 +146,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 if (r == "{}")
                 {
                     return r;
-                }
+        }
                 US.RemoveBoard(email, name);
                 return r;
             }
@@ -258,6 +258,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
             }
 
-        }
     }
+}
     
