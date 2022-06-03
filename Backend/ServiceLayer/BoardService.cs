@@ -53,7 +53,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
             {
                 Response response = new Response("Cannot have an empty board name", true);
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore });
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             return InvokeMethod(new Func<string, string, Response>(bc.AddBoard), "{}", email, name);
         }
@@ -122,6 +122,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with the result of the procedure</returns>
         public string LimitColumn(string email, string boardName, int columnNumber, int newLimit) {
             return InvokeMethod(new Func<string, string, int, int, Response>(bc.LimitColumnTasks), "{}", email, boardName, columnNumber, newLimit);
+        }
+
+        internal Response LoadData()
+        {
+            return bc.LoadData();
         }
 
 

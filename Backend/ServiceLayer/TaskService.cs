@@ -17,7 +17,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         public TaskService(UserController uc, BoardController bc)
         {
             this.uc = uc;
-            this.bc = bc;
+            this.bc = bc;   
         }
 
         private string InvokeMethod(Delegate method, string ret, params object[] args)
@@ -159,6 +159,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
             return InvokeMethod(new Func<BusinessLayer.Task, string, Response>(column.UpdateTaskDescription), "{}", task, newDesc);
+        }
+
+        internal Response LoadData()
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
