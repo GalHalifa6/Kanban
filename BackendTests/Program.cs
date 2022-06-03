@@ -1,5 +1,4 @@
-﻿using IntroSE.Kanban.BackendTests;
-using System;
+﻿using System;
 namespace IntroSE.Kanban.Backend;
 
 class Program
@@ -7,11 +6,9 @@ class Program
     static void Main(String[] args)
     {
         UserServiceTest userServiceTest = new UserServiceTest();
-        BoardServiceTest boardServiceTest = new BoardServiceTest();
-        TaskServiceTest taskServiceTest = new TaskServiceTest();
-        boardServiceTest.RunTests();
-        //userServiceTest.RunTests();
-        //taskServiceTest.runTests();
+        // BoardServiceTest boardServiceTest = new BoardServiceTest();
+        //boardServiceTest.RunTests();
+        userServiceTest.RunTests();
         
     }
 }

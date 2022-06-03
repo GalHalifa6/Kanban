@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using System.Text.Json;
-using Newtonsoft.Json;
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
 {
@@ -18,212 +17,95 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             bc = new BoardController();
         }
 
-        /// <summary>
-        /// this function dynamically invokes methods in a more functional programming paradigm
-        /// </summary>
-        /// <param name="method">function to be invoked</param>
-        /// <param name="ret">value to return if no errors occured</param>
-        /// <param name="args">the method's arguments</param>
-        /// <returns>json string of the result of the procedure</returns>
         private string InvokeMethod(Delegate method, string ret, params object[] args)
         {
             Response response = (Response) method.DynamicInvoke(args);
             if (response.ErrorOccured())
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonSerializer.Serialize(response);
             return ret;
         }
-
-        /// <summary>
-        /// Called when a successful registeration occurs. Adds a new (key,value) pair to the user boards dictionary
-        /// </summary>
-        /// <param name="email">newly registered user</param>
-        internal void Register(string email)
+        private string GenerateBadResponseString(string errMsg)
         {
-            bc.Register(email);
+            return "{ErrorMessage: " + errMsg + ", ReturnValue: null}";
+        }
+        private string GenerateGoodResponseString(string value)
+        {
+            return "{ErrorMessage: null, ReturnValue: " + value +"}";
         }
 
-        /// <summary>
-        /// Add a new board to a user
-        /// </summary>
-        /// <param name="email">email of the user to add the board to</param>
-        /// <param name="name"> name of the board that is being added</param>
-        /// <returns>Response indicating the outcome of the procedure</returns>
         public string AddBoard(string email, string name)
         {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
-                Response response = new Response("Cannot have an empty board name", true);
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonSerializer.Serialize(new Response("Cannot have an empty board name", true));
             }
             return InvokeMethod(new Func<string, string, Response>(bc.AddBoard), "{}", email, name);
         }
 
-        /// <summary>
-        /// Removes a board from a given user
-        /// </summary>
-        /// <param name="email">user that made the request</param>
-        /// <param name="boardName">board to be removed</param>
-        /// <returns>Reponse with the outcome of the procedure</returns>
         public string RemoveBoard(string email, string name) {
             return InvokeMethod(new Func<string, string, Response>(bc.RemoveBoard), "{}", email, name);
         }
 
-
-        /// <summary>
-        /// This method adds a new task to the specified user.
-        /// </summary>
-        /// <param name="email">Email of the user. The user must be logged in.</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="title">Title of the new task</param>
-        /// <param name="description">Description of the new task</param>
-        /// <param name="dueDate">The due date if the new task</param>
-        /// <returns>Response with user-email, unless an error occurs.</returns>
         public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
-/*            if (dueDate < DateTime.Now)
-                return JsonConvert.SerializeObject(new Response("Due date cannot be in the past.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-*/            if (string.IsNullOrWhiteSpace(title) || title.Length > 50 || string.IsNullOrEmpty(title))
-                return JsonConvert.SerializeObject(new Response("Invalid title. A valid  title must have up to 50 characters and cannot be empty.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            if (description == null)
-                description = "";
-            if (description.Length > 300)
-                return JsonConvert.SerializeObject(new Response("Description too long"), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            
             Response response = bc.AddTask(email, boardName, title, description, dueDate);
-            return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            return JsonSerializer.Serialize(response);
         }
 
-        /* public string removeTask(string email, string boardName, int columnOrdinal, int taskId)
-         {
-             throw new NotImplementedException();
-         }
- */
+        public string removeTask(string email, string boardName, int columnOrdinal, int taskId)
+        {
+            throw new NotImplementedException();
+        }
 
-        /// <summary>
-        /// This method advances a task to the next column in a user's board
-        /// </summary>
-        /// <param name="email">Email of user. Must be logged in</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
-        /// <param name="taskId">The task to be updated identified task Id</param>
-        /// <returns>The string "{}", unless an error occurs.</returns>
+
         public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
             return InvokeMethod(new Func<string, string, int ,int, Response>(bc.AdvanceTask), "{}", email,
                 boardName, columnOrdinal, taskId);
         }
 
-        /// <summary>
-        /// This method limits the number of tasks in a specific column.
-        /// </summary>
-        /// <param name="email">The email address of the user, must be logged in</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
-        /// <param name="limit">The new limit value. A value of -1 indicates no limit.</param>
-        /// <returns>Response with the result of the procedure</returns>
         public string LimitColumn(string email, string boardName, int columnNumber, int newLimit) {
             return InvokeMethod(new Func<string, string, int, int, Response>(bc.LimitColumnTasks), "{}", email, boardName, columnNumber, newLimit);
         }
 
-        internal Response LoadData()
-        {
-            return bc.LoadData();
-        }
-
-
-        /// <summary>
-        /// This method assigns a task to a user
-        /// </summary>
-        /// <param name="email">Email of the user performing the action</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column number. The first column is 0, the number increases by 1 for each column</param>
-        /// <param name="taskID">The task to be updated identified a task ID</param>        
-        /// <param name="emailAssignee">Email of the asignee user</param>
-        /// <returns>An empty response, unless an error occurs</returns>
-        internal string AssignTask(string email, string boardName, int columnOrdinal, int taskID, string emailAssignee)
-        {
-            return InvokeMethod(new Func<string, string, int, int, string, Response>(bc.AssignTask), "{}", email, boardName, columnOrdinal, taskID, email);
-
-        }
-
-        /// <summary>
-        /// Gets the specified column's tasks limit
-        /// </summary>
-        /// <param name="email">user sending the reuqest</param>
-        /// <param name="boardName">board in which the column appears</param>
-        /// <param name="columnNumber">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
-        /// <returns>Json response with the limit of the column, unless an error occurs.</returns>
         public string GetColumnLimit(string email, string boardName, int columnNumber)
         {
             Response response = bc.GetColumnLimit(email, boardName, columnNumber);
-            return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            /*            if (response.ErrorOccured()) 
+                            return GenerateBadResponseString(response.ErrorMessage);
+                        return GenerateGoodResponseString(response.ReturnValue.ToString());*/
+            return JsonSerializer.Serialize(response);
         }
 
-        /// <summary>
-        /// Gets a column name
-        /// </summary>
-        /// <param name="email"> user that holds the column</param>
-        /// <param name="boardName">board that holds the column</param>
-        /// <param name="columnNumber">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
-        /// <returns> Json response with the name of the column, unless an error occurs.</returns>
         public string GetColumnName(string email, string boardName, int columnNumber)
         {
             Response response = bc.GetColumnName(email, boardName, columnNumber);
-            return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            /*if (response.ErrorOccured())
+                            return GenerateBadResponseString(response.ErrorMessage);
+                        return GenerateGoodResponseString(response.ReturnValue.ToString());*/
+            return JsonSerializer.Serialize(response);
         }
 
-        internal string JoinBoard(string email, int boardID)
-        {
-            return InvokeMethod(new Func<string, int, Response>(bc.JoinBoard), "{}", email, boardID);
-        }
-
-
-        /// <summary>
-        /// This method returns a column given it's name
-        /// </summary>
-        /// <param name="email">Email of the user.</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
-        /// <returns>Response with a list of the column's tasks, unless an error occurs.</returns>
         public string GetColumn(string email, string boardName, int columnOrdinal)
         {
             Response response = bc.GetColumn(email, boardName, columnOrdinal);
-            return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            /*            if (response.ErrorOccured())
+                            return GenerateBadResponseString(response.ErrorMessage);
+                        return GenerateGoodResponseString(response.ReturnValue.ToString());*/
+            return JsonSerializer.Serialize(response);
         }
 
-
-        /// <summary>
-        /// returns the user's in progress tasks
-        /// </summary>
-        /// <param name="email">user requesting to view the tasks</param>
-        /// <returns>json string of the list of tasks</returns>
         public string InProgressTasks(string email)
         {
             Response response = bc.InProgressTasks(email);
-            return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            /* if (response.ErrorOccured())
+                            return GenerateBadResponseString(response.ErrorMessage);
+                        return GenerateGoodResponseString(response.ReturnValue.ToString());*/
+            return JsonSerializer.Serialize(response);
         }
 
 
-        /// <summary>
-        /// This method removes a user from the members list of a board.
-        /// </summary>
-        /// <param name="email">The email of the user.</param>
-        /// <param name="boardID">The board's ID</param>
-        /// <returns>An empty response, unless an error occurs</returns>
-        internal string LeaveBoard(string email, int boardID)
-        {
-            return InvokeMethod(new Func<string, int, Response>(bc.LeaveBoard), "{}", email, boardID);
-        }
 
-        /// <summary>
-        /// This method transfers a board ownership.
-        /// </summary>
-        /// <param name="currentOwnerEmail">Email of the current owner.</param>
-        /// <param name="newOwnerEmail">Email of the new owner</param>
-        /// <param name="boardName">The name of the board</param>
-        /// <returns>An empty response, unless an error occurs</returns>
-        internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
-        {
-            return InvokeMethod(new Func<string, string, string, Response>(bc.TransferOwnership), "{}", currentOwnerEmail, newOwnerEmail, boardName);
-        }
     }
 }

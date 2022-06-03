@@ -1,5 +1,4 @@
-﻿using IntroSE.Kanban.Backend.DataAccessLayer;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,8 +12,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public int maxTasks { get; private set; }
         private List<Task> tasks { get; set; }
 
-        public ColumnDTO dto { get; private set; }
-
         private log4net.ILog logger = Utility.Logger.GetLogger();
 
         public Column(string name)
@@ -22,11 +19,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.name = name;
             tasks = new List<Task>();
             maxTasks = int.MaxValue; //If there's no limit on number of tasks, the value is the maximum value of int
-            // ADD DTO
-        }
-
-        public Column(ColumnDTO column)
-        {
         }
 
         internal Response AddTask(Task task)
@@ -38,10 +30,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             for (int i = 0; i < tasks.Count; i++)
             {
-                if (task.Id == tasks[i].Id)
+                if (task.ID == tasks[i].ID)
                 {
-                    logger.Warn("Cannot add task because a task with the same Id already exists.");
-                    return new Response("A task with the same Id already exists.", true);
+                    logger.Warn("Cannot add task because a task with the same ID already exists.");
+                    return new Response("A task with the same ID already exists.", true);
                 }
             }
             if (tasks.Count == maxTasks)
@@ -50,7 +42,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response("The maximum capacity of tasks in this column is full.", true);
             }
             tasks.Add(task);
-            logger.Info("Added task: " + task.Title);
+            logger.Info("Added task: " + task.toString());
             return new Response(true);
         }
 
@@ -63,15 +55,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             for (int i = 0; i < tasks.Count; i++)
             {
-                if (ID == tasks[i].Id)
+                if (ID == tasks[i].ID)
                 {
-                    logger.Warn("Cannot add task because a task with the same Id already exists.");
-                    return new Response("A task with the same Id already exists.", true);
+                    logger.Warn("Cannot add task because a task with the same ID already exists.");
+                    return new Response("A task with the same ID already exists.", true);
                 }
             }
             Task newTask = new Task(ID, title, description, dueDate);
             tasks.Add(newTask);
-            logger.Info("Added task: " + newTask.Title);
+            logger.Info("Added task: " + newTask.toString());
             return new Response(true);
         }
 
@@ -82,17 +74,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("Cannot remove task because it doesn't exist.");
                 return new Response("The task doesn't exist.", true);
             }
-            logger.Info("Task: " + task.Title + " is removed.");
+            logger.Info("Task: " + task.title + " is removed.");
             tasks.Remove(task);
             return new Response(true);
         }
 
-        internal Response RemoveTask(int id)
+        internal Response RemoveTask(string taskName)
         {
             Boolean found = false;
             for (int i = 0; i < tasks.Count & !found; i++)
             {
-                if (tasks[i].Id == id)
+                if (tasks[i].title == taskName)
                 {
                     tasks.RemoveAt(i);
                     found = true;
@@ -103,7 +95,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("Cannot remove task because it doesn't exist.");
                 return new Response("The task doesn't exist.", true);
             }
-            logger.Info("Task: " + id + " is removed.");
+            logger.Info("Task: " + taskName + " is removed.");
             return new Response(true);
         }
         internal Response UpdateTaskTitle(Task task, string newTitle)
@@ -114,7 +106,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response("The task doesn't exist in this column", true);
             }
             task.UpdateTaskTitle(newTitle);
-            logger.Info("Task Title changed to:" + newTitle);
+            logger.Info("Task title changed to:" + newTitle);
             return new Response(true);
         }
 
@@ -126,7 +118,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response("That task doesn't exist in this column.", true);
             }
             task.UpdateTaskDescription(newDescription);
-            logger.Info("Task Description changed to:" + newDescription);
+            logger.Info("Task description changed to:" + newDescription);
             return new Response(true);
         }
 
@@ -142,20 +134,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response(true);
         }
 
-
-        /// <summary>
-        /// תומר אני צריך שתשנה טיפה את המימוש של הפונקציה הזאת, ככה שהיא גם תפעיל את הדאטה לייר 
-        /// ואז תחזיר ריספנוס שאומר אם הכל היה תקיו או לא
-        /// </summary>
-        /// <param name="maxTasks"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public Response SetMax(int maxTasks)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SetMax2(int maxTasks)
+        public void SetMax(int maxTasks)
         {
             this.maxTasks = maxTasks;
         }
@@ -164,7 +143,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             for (int i = 0; i < tasks.Count; i++)
             {
-                if (tasks[i].Id == taskID)
+                if (tasks[i].ID == taskID)
                 {
                     return tasks[i];
                 }
@@ -172,9 +151,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return null;
         }
 
-        public List<Task> GetTasksList()
+        public string GetTasksList()
         {
-            /*string output = "";
+            string output = "";
             if (tasks.Count > 0)
             {
                 for (int i = 0; i < tasks.Count; i++) {
@@ -188,18 +167,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     }
                 }
             }
-            return output;*/
-            return tasks;
-        }
-
-        internal List<Task> GetAllAssignedTasks(string email)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal void UnassignTasks(string email)
-        {
-            throw new NotImplementedException();
+            return output;
         }
     }
 }
