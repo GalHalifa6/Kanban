@@ -15,12 +15,10 @@ namespace IntroSE.Kanban.Backend
         }
         public void RunTests()
         {
-            //addTaskTest();
-            //removeBoardTest();
-            //editTaskTitleTest();
-            //addBoardTest();
-            //advanceTaskPhaseTest("task1");
-            editTaskDescriptionTest();
+            addTaskTest();
+            removeBoardTest();
+            addBoardTest();
+            advanceTaskPhaseTest("task1");
 
 
         }
@@ -91,101 +89,6 @@ namespace IntroSE.Kanban.Backend
 
 
 
-        ///<summary>
-        ///This function test Requirement 14,15
-        ///</summary>
-        public void editTaskTitleTest()
-        {
-            Console.WriteLine("Editing task to a user. should succeed");
-            GradingService gradingService = new GradingService();
-            gradingService.Register("gal@gmail.com", "123456Aa");
-            gradingService.Login("gal@gmail.com", "123456Aa");
-            gradingService.AddBoard("gal@gmail.com", "Board1");
-            string res = gradingService.AddTask("gal@gmail.com", "Board1", "task1", "testing task1", new DateTime());
-            Console.WriteLine(res);
-            res = gradingService.UpdateTaskTitle("gal@gmail.com", "Board1", 0, 1, "task2");
-            Console.WriteLine(res);
-
-            Console.WriteLine("-----------------------");
-            Console.WriteLine("Editing task to an non exist user. should fail");
-            gradingService.Login("tomer@gmail.com", "123456Aa");
-            gradingService.AddBoard("tomer@gmail.com", "Board1");
-            res = gradingService.AddTask("tomer@gmail.com", "Board1", "task1", "testing rask1", new DateTime());
-            Console.WriteLine(res);           
-
-            Console.WriteLine("-----------------------");
-            Console.WriteLine("editing a task that not exist. should succeed");
-            res =  gradingService.UpdateTaskTitle("gal@gmail.com", "Board1", 0, 2, "task2");
-            Console.WriteLine(res);
-
-            Console.WriteLine("-----------------------");
-            Console.WriteLine("editing a task with an empty name, should fail");
-            gradingService.Register("itay@gmail.com", "123456Aa");
-            gradingService.Login("itay@gmail.com", "123456Aa");
-            gradingService.AddBoard("itay@gmail.com", "Board2");
-            gradingService.AddTask("itay@gmail.com", "Board2", "", "testing task2", new DateTime());
-            res =  gradingService.UpdateTaskTitle("itay@gmail.com", "Board1", 0, 1, "");
-            Console.WriteLine(res);
-
-
-
-
-
-
-
-        }
-
-
-
-        ///<summary>
-        ///This function test Requirement 14,15
-        ///</summary>
-        public void editTaskDescriptionTest()
-        {
-            Console.WriteLine("Editing task to a user. should succeed");
-            GradingService gradingService = new GradingService();
-            gradingService.Register("gal@gmail.com", "123456Aa");
-            gradingService.Login("gal@gmail.com", "123456Aa");
-            gradingService.AddBoard("gal@gmail.com", "Board1");
-            string res = gradingService.AddTask("gal@gmail.com", "Board1", "task1", "testing task1", new DateTime());
-            Console.WriteLine(res);
-            res = gradingService.UpdateTaskDescription("gal@gmail.com", "Board1", 0, 1, "testing task2");
-            Console.WriteLine(res);
-
-            Console.WriteLine("-----------------------");
-            Console.WriteLine("Editing task to an non exist user. should fail");
-            gradingService.Login("tomer@gmail.com", "123456Aa");
-            gradingService.AddBoard("tomer@gmail.com", "Board1");
-            res = gradingService.AddTask("tomer@gmail.com", "Board1", "task1", "testing rask1", new DateTime());
-            res = gradingService.UpdateTaskDescription("tomer@gmail.com", "Board1", 0, 2, "testing task2");
-            Console.WriteLine(res);
-
-            Console.WriteLine("-----------------------");
-            Console.WriteLine("editing a task that not exist. should fail");
-            res = gradingService.UpdateTaskDescription("gal@gmail.com", "Board1", 0, 3, "task3");
-            Console.WriteLine(res);
-
-            Console.WriteLine("-----------------------");
-            Console.WriteLine("editing a task with an empty name, should fail");
-            gradingService.Register("itay@gmail.com", "123456Aa");
-            gradingService.Login("itay@gmail.com", "123456Aa");
-            gradingService.AddBoard("itay@gmail.com", "Board2");
-            gradingService.AddTask("itay@gmail.com", "Board2", "task7", "testing task7", new DateTime());
-            res = gradingService.UpdateTaskDescription("itay@gmail.com", "Board2", 0, 2, " ");
-            Console.WriteLine(res);
-
-        }
-
-
-        /*
-        ///<summary>
-        ///This function test Requirement 14,15
-        ///</summary>
-        public void editTaskDueDateTest()
-        {
-
-        }
-        */
 
 
 
@@ -278,7 +181,7 @@ namespace IntroSE.Kanban.Backend
             string res = gradingService.AdvanceTask("gal@gmail.com", "Board1", 0, 1);
             Console.Write(res);
             res = gradingService.AdvanceTask("gal@gmail.com", "Board1", 1, 1);
-            Console.Write(res+"\n");
+            Console.Write(res + "\n");
 
             Console.WriteLine("-----------------------");
             Console.WriteLine("advace task three times. should fail");
@@ -299,14 +202,6 @@ namespace IntroSE.Kanban.Backend
             gradingService.AddTask("gal@gmail.com", "Board2", Title, "testing task9", new DateTime());
             res = gradingService.AdvanceTask("gal@gmail.com", "Board2", 0, 4);
             Console.Write(res);
-
-
-
-
-
-
-
         }
     }
-}       
-       
+}
