@@ -22,7 +22,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery(query);
             HashSet<BoardDTO> boards = new HashSet<BoardDTO>();
             while (res.Read())
-            { 
+            {
 
                 // TODO: TaskControllerDTO should load all tasks to itself, then ColumnControllerDTO does the same, and then here
                 int id = res.GetInt32(res.GetOrdinal("id"));

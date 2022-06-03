@@ -1,11 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\Backend",
-    "\\BackendTests",
-    "\\Backend\\BusinessLayer",
-    "\\Backend\\ServiceLayer"
+    ""
   ],
-  "SelectedNode": "\\Backend\\ServiceLayer\\UserService.cs",
+  "SelectedNode": "\\C:\\Users\\tomer\\Desktop\\Kanban",
   "PreviewInSolutionExplorer": false
 }

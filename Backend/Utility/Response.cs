@@ -15,7 +15,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public string ErrorMessage { get; }
 
         [JsonProperty("ReturnValue", NullValueHandling = NullValueHandling.Ignore)]
-        public object ReturnValue { get; }  
+        public object ReturnValue { get; }
 
         public Response(object val)
         {
@@ -23,9 +23,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
         public Response(string msg, bool err)
         {
-            if(err)
+            if (err)
                 ErrorMessage = msg;
-        }     
+        }
 
         public bool ErrorOccured()
         {

@@ -67,7 +67,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
-            return BS.LimitColumn(email, boardName, columnOrdinal, limit);  
+            return BS.LimitColumn(email, boardName, columnOrdinal, limit);
         }
 
         internal string GetColumnLimit(string email, string boardName, int columnOrdinal)
@@ -96,7 +96,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
         {
-             string res = InitialValidation(ref email);
+            string res = InitialValidation(ref email);
             if (res != null)
                 return res;
             return TS.UpdateTaskDueDate(email, boardName, columnOrdinal, taskId, dueDate);
@@ -128,7 +128,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string GetColumn(string email, string boardName, int columnOrdinal)
         {
-             string res = InitialValidation(ref email);
+            string res = InitialValidation(ref email);
             if (res != null)
                 return res;
             return BS.GetColumn(email, boardName, columnOrdinal);
