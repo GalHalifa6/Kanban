@@ -257,13 +257,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email"></param>
         /// <returns>A response with a list of IDs of all user's boards, unless an error occurs (see <see cref="GradingService"/>)</returns>
-        /// 
-        
         public string GetUserBoards(string email)
         {
             return sc.GetUserBoards(email);
         }
-        
 
         /// <summary>
         /// This method adds a user as member to an existing board.
@@ -332,16 +329,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="newOwnerEmail">Email of the new owner</param>
         /// <param name="boardName">The name of the board</param>
         /// <returns>An empty response, unless an error occurs (see <see cref="GradingService"/>)</returns>
-        /// 
-
-        
-        
         public string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
             return sc.TransferOwnership(currentOwnerEmail, newOwnerEmail, boardName);
         }
-        
-
-        
     }
 }
