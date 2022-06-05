@@ -229,7 +229,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return sc.AddBoard(email, name);
         }
 
-
+        
         /// <summary>
         /// This method deletes a board.
         /// </summary>

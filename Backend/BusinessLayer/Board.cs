@@ -105,6 +105,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return r;
         }
 
+        internal void SetOwner(string email)
+        {
+            throw new NotImplementedException();
+        }
+
         internal Response AddBoard()
         {
             return dto.AddBoard(owner, id, name);

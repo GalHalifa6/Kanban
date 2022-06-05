@@ -71,7 +71,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             logger.Info("board " + name + " created for user " + email);
             nextBoardID++;
-            return r;
+            return new Response(b);
         }
 
         /// <summary>

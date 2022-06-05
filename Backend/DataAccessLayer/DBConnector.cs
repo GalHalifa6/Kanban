@@ -11,7 +11,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
     public class DBConnector
     {
         private SQLiteConnection conn;
-        public static DBConnector instance = new DBConnector(); 
+        private static DBConnector instance = new DBConnector(); 
         //relative path 
         string path = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "kanban.db"));
 
@@ -29,6 +29,11 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             {
                 conn.Close();
             }
+        }
+
+        public static DBConnector GetInstance()
+        {
+            return instance;
         }
 
         /// <summary>
@@ -69,17 +74,17 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         }
 
-        public static DBConnector GetInstance()
-        {
-            if (instance == null)
-                instance = new DBConnector();
-            return instance;
-        }
-
         private void CreateTables()
         {
             SQLiteCommand cmd = conn.CreateCommand();
-            string query = "CREATE TABLE IF NOT EXISTS UsersBoards(" +
+            string query = "CREATE TABLE IF NOT EXISTS Users(" +
+               "email VARCHAR(200)," +
+               "password VARCHAR(200)," +
+               "PRIMARY KEY (email)" +
+               ")";
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+            query = "CREATE TABLE IF NOT EXISTS UsersBoards(" +
                 "userEmail VARCHAR(200)," +
                 "boardID INTEGER," +
                 "PRIMARY KEY (userEmail,boardID)," +
