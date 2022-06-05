@@ -20,6 +20,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         public ServiceController()
         {
+
             US = new UserService();
             BS = new BoardService();
             TS = new TaskService(US.uc, BS.bc);
@@ -67,6 +68,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
+
             return BS.LimitColumn(email, boardName, columnOrdinal, limit);
         }
 
@@ -139,7 +141,28 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
-            return BS.AddBoard(email, name);
+            Response r = BS.AddBoard(email, name);
+            if (r.ErrorOccured())
+                return GenerateBadResponseString(r.ErrorMessage);
+            Board b = (Board) r.ReturnValue;
+            if (US.AddBoard(email, b))
+            {
+                return "{}";
+            }
+            BS.RemoveBoard(email, name);
+            return GenerateBadResponseString($"{email} already has a board with the name '{name}'");
+
+/*            if (US.AddBoard(email, name))
+            {
+                string r = BS.AddBoard(email, name);
+                if (r == "{}")
+                {
+                    return r;
+                }
+                US.RemoveBoard(email, name);
+                return r;
+            }
+            return GenerateBadResponseString("can't add two boards with the same name");*/
         }
 
         internal string RemoveBoard(string email, string name)
@@ -147,6 +170,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
+            US.RemoveBoard(email, name);
             return BS.RemoveBoard(email, name);
         }
 
@@ -164,9 +188,14 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
 
+
         internal string GetUserBoards(string email)
         {
-            throw new NotImplementedException();
+            string res = InitialValidation(ref email);
+            if (res != null)
+                return res;
+            string r = US.GetUserBoards(email);
+            return r;
         }
 
         internal string JoinBoard(string email, int boardID)
@@ -174,15 +203,28 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
-            return BS.JoinBoard(email, boardID);
+
+            string r = BS.JoinBoard(email, boardID);
+            if (r == "{}")
+            {
+                return r;
+            }
+            US.JoinBoard(email, boardID);
+            return r;
         }
+
 
         internal string LeaveBoard(string email, int boardID)
         {
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
-            return BS.LeaveBoard(email, boardID);
+            string r = BS.LeaveBoard(email, boardID);
+            if (r == "{}")
+            {
+                US.LeaveBoard(email, boardID);
+            }
+            return r;
         }
 
         internal string AssignTask(string email, string boardName, int columnOrdinal, int taskID, string emailAssignee)
@@ -195,25 +237,14 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string LoadData()
         {
-            Response r1 = TS.LoadData();
-            Response r2 = BS.LoadData();
-            Response r3 = US.LoadData();
-            if (!(r1.ErrorOccured() || r2.ErrorOccured() || r3.ErrorOccured()))
-                return "{}";
-            string err = "";
-            if (r1.ErrorOccured())
-                err += $"Tasks issues: {r1.ErrorMessage}";
-            if (r2.ErrorOccured())
-                err += $"Boards issues: {r2.ErrorMessage}";
-            if (r3.ErrorOccured())
-                err += $"Users issues: {r3.ErrorMessage}";
-            return GenerateBadResponseString(err);
+            throw new NotImplementedException();
         }
 
         internal string DeleteData()
         {
             throw new NotImplementedException();
         }
+
 
         internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
@@ -223,8 +254,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             if (newOwnerEmail == null)
                 return GenerateBadResponseString("new owner email cannot be null");
             newOwnerEmail = newOwnerEmail.ToLower();
-            return BS.TransferOwnership(currentOwnerEmail, newOwnerEmail, boardName);
+            string r = US.TransferOwnership(currentOwnerEmail, newOwnerEmail, boardName);
+            if(r == "{}")
+            {
+                return r;
+            }
+            return GenerateBadResponseString(r);
 
+
+//change in BS
         }
+
     }
 }

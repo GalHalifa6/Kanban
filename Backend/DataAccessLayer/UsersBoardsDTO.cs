@@ -12,7 +12,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         private Response GeneralNonQuery(string query, string goodMsg, string badMsg)
         {
-            if (!DBConnector.instance.ExecuteNonQuery(query))
+            if (!DBConnector.GetInstance().ExecuteNonQuery(query))
             {
                 return new Response(badMsg, true);
             }

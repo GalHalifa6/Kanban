@@ -48,14 +48,19 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email">email of the user to add the board to</param>
         /// <param name="name"> name of the board that is being added</param>
         /// <returns>Response indicating the outcome of the procedure</returns>
-        public string AddBoard(string email, string name)
+        public Response AddBoard(string email, string name)
         {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
+            /*if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
             {
                 Response response = new Response("Cannot have an empty board name", true);
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore });
             }
-            return InvokeMethod(new Func<string, string, Response>(bc.AddBoard), "{}", email, name);
+            return InvokeMethod(new Func<string, string, Response>(bc.AddBoard), "{}", email, name);*/
+            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
+            {
+               return new Response("Cannot have an empty board name", true);
+            }
+            return bc.AddBoard(email, name);
         }
 
         /// <summary>
@@ -122,6 +127,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with the result of the procedure</returns>
         public string LimitColumn(string email, string boardName, int columnNumber, int newLimit) {
             return InvokeMethod(new Func<string, string, int, int, Response>(bc.LimitColumnTasks), "{}", email, boardName, columnNumber, newLimit);
+        }
+
+        internal Response LoadData()
+        {
+            throw new NotImplementedException();
         }
 
 
