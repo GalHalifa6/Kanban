@@ -19,43 +19,67 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         public TaskDTO dto { get; private set; } 
 
-        //private Boolean isDone;
-        
+        public String AssigneeEmail { get; private set; }
 
-        public Task(int ID, string name, string description, DateTime dueDate)
+        private log4net.ILog logger = Utility.Logger.GetLogger();
+
+        //private Boolean isDone;
+
+
+        public Task(int ID, string title, string description, DateTime dueDate)
         {
             this.Id = ID;
-            this.Title = name;
+            this.Title = title;
             this.Description = description;
             CreationTime = DateTime.Now;
             this.DueDate = dueDate;
+            AssigneeEmail = null;
             //isDone = false;
-
-            //ADD DTO
+            dto = new TaskDTO(ID, title, description, dueDate);
         }
 
-        public void UpdateTaskTitle(string newTitle)
+        public Response UpdateTaskTitle(string newTitle)
         {
             Title = newTitle;
+            return dto.UpdateTaskTitle(newTitle);
         }
-        public void UpdateTaskDescription(string newDescription)
+        public Response UpdateTaskDescription(string newDescription)
         {
             Description = newDescription;
+            return dto.UpdateTaskDescription(newDescription);
         }
 
-        public void UpdateTaskDueDate(DateTime newDueDate)
+        public Response UpdateTaskDueDate(DateTime newDueDate)
         {
             DueDate = newDueDate;
+            return dto.UpdateTaskDueDate(newDueDate);
         }
 
         internal Response AssignTask(string assigner, string assignee)
         {
-            throw new NotImplementedException();
+            if (assignee != null && assignee != assigner)
+            {
+                logger.Warn("Failed to assign task because the assigner doesn't have permissions");
+                return new Response("User can't assign to this task", true);
+            }
+            AssigneeEmail = assignee;
+            logger.Info("Assigned " + assignee + " to the task: " + Id);
+            return dto.AssignTask(assigner, assignee);
         }
 
         internal bool IsAssigned(string email)
         {
-            throw new NotImplementedException();
+            if (email != null && email == AssigneeEmail)
+            {
+                return true;
+            }
+            return false;
+        }
+
+        internal Response UnassignTask()
+        {
+            AssigneeEmail = null;
+            return dto.UnassignTask();
         }
 
         /*public string toString()

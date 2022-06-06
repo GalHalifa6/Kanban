@@ -125,6 +125,17 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 ")";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
+            query = "CREATE TABLE IF NOT EXISTS Tasks(" +
+                "id INTEGER," +
+                "title STRING," +
+                "description STRING," +
+                "dueDate DATETIME" +
+                "assignee STRING" +
+                "PRIMARY KEY (boardID, columnOrdinal)," +
+                "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
+                ")";
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
         }
 
 
