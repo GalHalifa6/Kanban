@@ -131,7 +131,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "description STRING," +
                 "dueDate DATETIME" +
                 "assignee STRING" +
-                "PRIMARY KEY (boardID, columnOrdinal)," +
+                "PRIMARY KEY (id, assignee)," +
                 "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
                 ")";
             cmd.CommandText = query;
