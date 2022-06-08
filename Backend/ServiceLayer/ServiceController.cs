@@ -232,6 +232,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
+            if (emailAssignee == null)
+            {
+                return GenerateBadResponseString("Assignee email cannot be null");
+            }
+            emailAssignee = emailAssignee.ToLower();
             return BS.AssignTask(email, boardName, columnOrdinal, taskID, emailAssignee);
         }
 

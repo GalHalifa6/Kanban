@@ -11,7 +11,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     {
         public string name { get; private set; }
         public int maxTasks { get; private set; }
-        private List<Task> tasks { get; set; }
+        public List<Task> tasks { get; private set; }
 
         public ColumnDTO dto { get; private set; }
 
@@ -22,11 +22,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.name = name;
             tasks = new List<Task>();
             maxTasks = int.MaxValue; //If there's no limit on number of tasks, the value is the maximum value of int
-            // ADD DTO
+            dto = new ColumnDTO(this);
         }
 
         public Column(ColumnDTO column)
         {
+            name = column.name;
+            maxTasks = column.maxTasks;
+            dto = column;
+            foreach (TaskDTO task in column.tasks)
+            {
+                Task t = new Task(task.Id, task.Title, task.Description, task.DueDate);
+                tasks.Add(t);
+            }
         }
 
         internal Response AddTask(Task task)
@@ -51,7 +59,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             tasks.Add(task);
             logger.Info("Added task: " + task.Title);
-            return new Response(true);
+            return dto.AddTask(task.Id, task.Title, task.Description, task.DueDate);
         }
 
         internal Response AddTask(int ID, string title, string description, DateTime dueDate)
@@ -72,7 +80,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Task newTask = new Task(ID, title, description, dueDate);
             tasks.Add(newTask);
             logger.Info("Added task: " + newTask.Title);
-            return new Response(true);
+            return dto.AddTask(ID, title, description, dueDate);
         }
 
         internal Response RemoveTask(Task task)
@@ -84,7 +92,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             logger.Info("Task: " + task.Title + " is removed.");
             tasks.Remove(task);
-            return new Response(true);
+            return dto.RemoveTask(task.Id);
         }
 
         internal Response RemoveTask(int id)
@@ -104,7 +112,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response("The task doesn't exist.", true);
             }
             logger.Info("Task: " + id + " is removed.");
-            return new Response(true);
+            return dto.RemoveTask(id);
         }
         internal Response UpdateTaskTitle(Task task, string newTitle)
         {
@@ -114,7 +122,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response("The task doesn't exist in this column", true);
             }
             task.UpdateTaskTitle(newTitle);
-            logger.Info("Task Title changed to:" + newTitle);
+            logger.Info("Task Title changed to: " + newTitle);
             return new Response(true);
         }
 
@@ -126,7 +134,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response("That task doesn't exist in this column.", true);
             }
             task.UpdateTaskDescription(newDescription);
-            logger.Info("Task Description changed to:" + newDescription);
+            logger.Info("Task Description changed to: " + newDescription);
             return new Response(true);
         }
 
@@ -138,26 +146,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response("That task doesn't exist in this column.", true);
             }
             task.UpdateTaskDueDate(newDueDate);
-            logger.Info("Task due date changed to:" + newDueDate);
+            logger.Info("Task due date changed to: " + newDueDate);
             return new Response(true);
         }
 
-
-        /// <summary>
-        /// תומר אני צריך שתשנה טיפה את המימוש של הפונקציה הזאת, ככה שהיא גם תפעיל את הדאטה לייר 
-        /// ואז תחזיר ריספנוס שאומר אם הכל היה תקיו או לא
-        /// </summary>
-        /// <param name="maxTasks"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public Response SetMax(int maxTasks)
         {
-            throw new NotImplementedException();
-        }
-
-        public void SetMax2(int maxTasks)
-        {
+            logger.Info("Column's tasks limit was changed to: " + maxTasks);
             this.maxTasks = maxTasks;
+            return dto.SetMax(maxTasks);
         }
 
         public Task GetTask(int taskID)
@@ -194,12 +191,32 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         internal List<Task> GetAllAssignedTasks(string email)
         {
-            throw new NotImplementedException();
+            List<Task> output = new List<Task>();
+            foreach(Task task in tasks)
+            {
+                if (task.AssigneeEmail == email)
+                {
+                    output.Add(task);
+                }
+            }
+            return output;
         }
 
-        internal void UnassignTasks(string email)
+        internal Response UnassignTasks(string email)
         {
-            throw new NotImplementedException();
+            foreach (Task task in tasks)
+            {
+                if (task.AssigneeEmail.Equals(email))
+                {
+                    Response r = task.UnassignTask();
+                    if (r.ErrorOccured())
+                    {
+                        return r;
+                    }
+                }
+            }
+            logger.Info("Unassigned " + email + " from all tasks");
+            return new Response(email + " was unassigned from all tasks");
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using IntroSE.Kanban.Backend.BusinessLayer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,19 +9,90 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
     public class ColumnDTO
     {
+        public string name { get; set; }
         public int boardID { get; }
         public int ordinal{ get; }
         public int maxTasks { get; private set; }
         public HashSet<TaskDTO> tasks { get; private set; }
 
-        internal void RemoveTask(TaskDTO taskDTO)
+        public ColumnDTO(string name, int maxTasks, HashSet<TaskDTO> tasks)
         {
-            throw new NotImplementedException();
+            this.name = name;
+            this.maxTasks = maxTasks;
+            if (name == "backlog")
+            {
+                ordinal = 0;
+            }
+            else if (name == "inProgress")
+            {
+                ordinal = 1;
+            }
+            else
+            {
+                ordinal = 2;
+            }
         }
 
-        internal void AddTask(TaskDTO taskDTO)
+        public ColumnDTO(Column column)
         {
-            throw new NotImplementedException();
+            name = column.name;
+            maxTasks = column.maxTasks;
+            if (column.name == "backlog")
+            {
+                ordinal = 0;
+            }
+            else if (column.name == "inProgress")
+            {
+                ordinal = 1;
+            }
+            else
+            {
+                ordinal = 2;
+            }
+            tasks = new HashSet<TaskDTO>();
+            for (int i = 0; i < column.tasks.Count; i++)
+            {
+                TaskDTO t = new TaskDTO(column.tasks[i]);
+                tasks.Add(t);
+            }
+        }
+        private Response GeneralNonQuery(string query, string goodMsg, string badMsg)
+        {
+            if (!DBConnector.GetInstance().ExecuteNonQuery(query))
+            {
+                return new Response(badMsg, true);
+            }
+            return new Response(goodMsg);
+        }
+        internal Response RemoveTask(int id)
+        {
+            string query = $"DELETE FROM Tasks WHERE id = {id}";
+            Response r = GeneralNonQuery(query, "Task was removed successfully", "Something went wrong");
+            if (!r.ErrorOccured())
+            {
+                foreach(TaskDTO task in tasks)
+                {
+                    if(task.Id == id)
+                    {
+                        tasks.Remove(task);
+                        break;
+                    }
+                }
+            }
+            return r;
+        }
+
+        internal Response AddTask(int ID, string title, string description, DateTime dueDate)
+        {
+            string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({ID},'{title}',{description},'{dueDate}', 'null')";
+            return GeneralNonQuery(query, "Task was added successfully", "A task with this id already exists");
+        }
+
+        internal Response SetMax(int newLimit)
+        {
+            string query = $"UPDATE Columns SET maxTasks = '{newLimit}' WHERE columnOrdinal = {ordinal}";
+            maxTasks = newLimit;
+            return GeneralNonQuery(query, "Limit of tasks was updated successfully", "Something went wrong");
         }
     }
 }
