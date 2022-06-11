@@ -82,10 +82,15 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             return r;
         }
 
-        internal Response AddTask(int ID, string title, string description, DateTime dueDate)
+        internal Response AddTask(TaskDTO task)
         {
-            string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({ID},'{title}',{description},'{dueDate}', 'null')";
-            return GeneralNonQuery(query, "Task was added successfully", "A task with this id already exists");
+
+            //int ID, string title, string description, DateTime dueDate
+            string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({task.Id},'{task.Title}',{task.Description},'{task.DueDate}', 'null')";
+            Response r = GeneralNonQuery(query, "Task was added successfully", "A task with this id already exists");
+            if (!r.ErrorOccured())
+                tasks.Add(task);
+            return r;
         }
 
         internal Response SetMax(int newLimit)
