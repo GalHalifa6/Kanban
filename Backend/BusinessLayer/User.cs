@@ -86,7 +86,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             CommonBoards.Remove(boardID);
         }
-
         
         internal Response GetUserBoards()
         {
@@ -99,7 +98,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return r;
         }
         
-
         public Board renounceOwnership(string boardName) {
             foreach(Board board in MyBoards)
             {
@@ -113,16 +111,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return null;
         }
-
-        public bool takeOwnership(Board board)  {
+        public Response takeOwnership(Board board, string currentUser)  {
+            Response r = board.ChangeOwner(currentUser, this.email);
             if (!MyBoards.Contains(board))
             {
-                MyBoards.Add(board);
-                board.SetOwner(email);
-                return true;
+                if (r.ErrorOccured() ==  false)
+                {
+                    MyBoards.Add(board);
+
+                }             
             }
-            return false;
-        
+            return r;      
         }
 
         public bool CheckIfCanAddBoard(string boardName)
@@ -135,7 +134,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
             }
             return true;
-
         }
     }
 } 

@@ -196,16 +196,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 User currentOwner = users[currentOwnerEmail];
                 User newOwner = users[newOwnerEmail];
                 if (newOwner.CheckIfCanAddBoard(boardName)){
-                    Board board = currentOwner.renounceOwnership(boardName);
-                    newOwner.takeOwnership(board);
-                    return new Response($"{newOwnerEmail} is the new owner of '{boardName}' instead of {currentOwnerEmail} ");
+                    if (currentOwner.renounceOwnership(boardName) != null)
+                    {
+                        Board board = currentOwner.renounceOwnership(boardName);
+                        newOwner.takeOwnership(board, currentOwnerEmail);
+                        return new Response($"{newOwnerEmail} is the new owner of '{boardName}' instead of {currentOwnerEmail} ");
+                    }
+                    return new Response($"{currentOwnerEmail} has no board called '{boardName}' ");
                 }
                 return new Response($"{newOwnerEmail} already has a board called {boardName}");
             }
-            return new Response($"{newOwnerEmail} is not registered, can not transfer the ownership of '{boardName}");
-
-            
-            
+            return new Response($"{newOwnerEmail} is not registered, can not transfer the ownership of '{boardName}");           
             
         }
         
