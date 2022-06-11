@@ -15,7 +15,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         private HashSet<Board> MyBoards;
         // MyBoards is a set with string key
-        private HashSet<int> CommonBoards;
+        private HashSet<Board> CommonBoards;
         // CommonBoards is a set with int key
         private UserDTO dto;
 
@@ -24,7 +24,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.email = email;
             this.password = password;
             MyBoards = new HashSet<Board>();
-            CommonBoards = new HashSet<int>();
+            CommonBoards = new HashSet<Board>();
             this.isLoggedIn = false;
             dto = new UserDTO(email, password);
         }
@@ -77,14 +77,22 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return false;
         }
 
+        /*
         internal void JoinBoard(string email, int boardID)
         {
             CommonBoards.Add(boardID);
         }
+        */
 
         internal void LeaveBoard(int boardID)
         {
-            CommonBoards.Remove(boardID);
+            foreach(Board board in CommonBoards)
+            {
+                if(board.id == boardID)
+                {
+                    CommonBoards.Remove(board);
+                }
+            }
         }
         
         internal Response GetUserBoards()
@@ -105,7 +113,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 {
 
                     MyBoards.Remove(board);
-                    CommonBoards.Add(board.id);
+                    CommonBoards.Add(board);
                     return board;
                 }
             }
@@ -134,6 +142,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
             }
             return true;
+        }
+
+        internal bool JoinBoard(Board b)
+        {
+            foreach(Board board in CommonBoards)
+            {
+                if(b.name == board.name)
+                {
+                    return false;
+                }
+            }
+            CommonBoards.Add(b);
+            return true;
+
         }
     }
 } 

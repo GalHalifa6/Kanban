@@ -48,19 +48,13 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email">email of the user to add the board to</param>
         /// <param name="name"> name of the board that is being added</param>
         /// <returns>Response indicating the outcome of the procedure</returns>
-        public Response AddBoard(string email, string name)
+        public Response AddBoard(string email, string name, UserService US)
         {
-            /*if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
-            {
-                Response response = new Response("Cannot have an empty board name", true);
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore });
-            }
-            return InvokeMethod(new Func<string, string, Response>(bc.AddBoard), "{}", email, name);*/
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
             {
                return new Response("Cannot have an empty board name", true);
             }
-            return bc.AddBoard(email, name);
+            return bc.AddBoard(email, name, US.uc);
         }
 
         /// <summary>
@@ -176,9 +170,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
 
-        internal string JoinBoard(string email, int boardID)
+        internal string JoinBoard(string email, int boardID, UserService US)
         {
-            return InvokeMethod(new Func<string, int, Response>(bc.JoinBoard), "{}", email, boardID);
+            return InvokeMethod(new Func<string, int, UserController, Response>(bc.JoinBoard), "{}", email, boardID, US.uc);
         }
 
 

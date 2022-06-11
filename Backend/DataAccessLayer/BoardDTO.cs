@@ -19,6 +19,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         public ColumnDTO inProgress { get; private set; }
         public ColumnDTO done { get; private set; }
         public HashSet<string> users { get; private set; }
+
         public BoardDTO(int id, string name, string owner, int nextTaskID)
         {
             this.id = id;
@@ -97,7 +98,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         internal Response AdvanceTask(ColumnDTO currentColDTO, ColumnDTO nextColDTO, TaskDTO taskDTO)
         {
             nextColDTO.AddTask(taskDTO);
-            currentColDTO.RemoveTask(taskDTO);
+            currentColDTO.RemoveTask(taskDTO.Id);
             return new TasksColumnsBoardsDTO().AdvanceTask(id, currentColDTO.ordinal, nextColDTO.ordinal, taskDTO.Id);
         }
     }

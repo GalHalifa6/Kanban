@@ -56,7 +56,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
 
-        public Response AddBoard(string email, string name)
+        public Response AddBoard(string email, string name, UserController uc)
         {
 /*            if (GetBoard(email, name) != null)
             {
@@ -64,14 +64,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response("Board with this name already exists", true);
             }*/
             Board b = new Board(name, nextBoardID, email);
-            Response r = b.AddBoard();
-            if (r.ErrorOccured())
-                return r;
-            boards[email].Add(b);
-
-            logger.Info("board " + name + " created for user " + email);
-            nextBoardID++;
-            return new Response(b);
+            if (uc.AddBoard(email, b))
+            {
+                Response r = b.AddBoard();
+                if (r.ErrorOccured())
+                    return r;
+                boards[email].Add(b);
+                logger.Info("board " + name + " created for user " + email);
+                nextBoardID++;
+                return new Response("Board was created successfully");
+            }
+            return new Response("User already has a board with that name", true);
         }
 
         /// <summary>
@@ -213,7 +216,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return null;
         }
 
-        internal Response JoinBoard(string email, int boardID)
+        internal Response JoinBoard(string email, int boardID, UserController uc)
         {
             Board b = GetBoard(boardID);
             if (b == null)
@@ -221,10 +224,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn(email + " attempted to join a board that doesn't exist");
                 return new Response("A board with id: " + boardID + " does not exist", true);
             }
-            Response r = b.AddUser(email);
-            if (!r.ErrorOccured())
-                boards[email].Add(b);
-            return r;
+            if (uc.JoinBoard(email ,b))
+            {
+                Response r = b.AddUser(email);
+                if (!r.ErrorOccured())
+                    boards[email].Add(b);
+                return r;
+            }
+            return new Response("User already has a board with that name");
         }
 
         internal Response LeaveBoard(string email, int boardID)

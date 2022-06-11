@@ -176,10 +176,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             uc.LeaveBoard(email, boardID);
         }
 
+        /*
         internal void JoinBoard(string email, int boardID)
         {
             uc.JoinBoard(email, boardID);
         }
+        */
 
         /// <summary>
         /// validataion function for passwords, uses helper functions for smaller validations

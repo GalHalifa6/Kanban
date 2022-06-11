@@ -56,6 +56,11 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 tasks.Add(t);
             }
         }
+
+        public ColumnDTO()
+        {
+        }
+
         private Response GeneralNonQuery(string query, string goodMsg, string badMsg)
         {
             if (!DBConnector.GetInstance().ExecuteNonQuery(query))
@@ -82,10 +87,16 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             return r;
         }
 
-        internal Response AddTask(int ID, string title, string description, DateTime dueDate)
+        internal Response AddTask(TaskDTO taskDTO)
         {
-            string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({ID},'{title}',{description},'{dueDate}', 'null')";
-            return GeneralNonQuery(query, "Task was added successfully", "A task with this id already exists");
+            string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({taskDTO.Id},'{taskDTO.Title}',{taskDTO.Description},'{taskDTO.DueDate}', 'null')";
+
+            Response r = GeneralNonQuery(query, "Task was added successfully", "A task with this id already exists");
+            if (!r.ErrorOccured())
+            {
+                tasks.Add(taskDTO);
+            }
+            return r;
         }
 
         internal Response SetMax(int newLimit)
