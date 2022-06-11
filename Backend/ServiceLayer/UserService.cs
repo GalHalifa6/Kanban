@@ -202,7 +202,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         
         internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
-            return uc.TransferOwnership(currentOwnerEmail, newOwnerEmail, boardName);
+            Response r = uc.TransferOwnership(currentOwnerEmail, newOwnerEmail, boardName);
+            if (r.ErrorOccured())
+            {
+                return r.ErrorMessage;
+            }
+            return "{}";
         }
         
 
