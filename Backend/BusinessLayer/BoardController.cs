@@ -123,26 +123,26 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return board.GetColumnLimit(boardName, columnNumber);
         }
 
-        public Response GetColumnName(string email, string boardName, int columnOrdinal)
+        public string GetColumnName(string email, string boardName, int columnOrdinal)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
-                return new Response("The board '" + boardName + "' does not exist", true);
+                throw new Exception("The board '" + boardName + "' does not exist");
             Column column = board.GetColumn(columnOrdinal);
             if (column == null)
-                return new Response("Invalid column", true);
-            return new Response(column.name);
+                throw new Exception("Invalid column");
+            return column.name;
         }
 
-        internal Response GetColumn(string email, string boardName, int columnOrdinal)
+        internal List<Task> GetColumn(string email, string boardName, int columnOrdinal)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
-                return new Response("The board '" + boardName + "' does not exist", true);
+                throw new Exception("The board '" + boardName + "' does not exist");
             Column column = board.GetColumn(columnOrdinal);
             if (column == null)
-                return new Response("Invalid column", true);
-            return new Response(column.GetTasksList());
+                throw new Exception("Invalid column");
+            return column.GetTasksList();
         }
 
         
@@ -172,14 +172,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             board.AdvanceTask(email, columnOrdinal, taskId);
         }
 
-        public Response InProgressTasks(string email)
+        public List<Task> InProgressTasks(string email)
         {
             HashSet<Board> boardList = boards[email];
             List<Task> tasks = new List<Task>();
             foreach (Board b in boardList) {
                 tasks.AddRange(b.getInProgressTasks());
             }
-            return new Response(tasks);
+            return tasks;
         }
 
 /*        public Task GetTask(string email, string boardID, int taskId)

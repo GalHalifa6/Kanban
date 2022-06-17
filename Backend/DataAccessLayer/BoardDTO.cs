@@ -94,11 +94,11 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             return new UsersBoardsDTO().RemoveUserFromBoard(email, id);
         }
 
-        internal Response AdvanceTask(ColumnDTO currentColDTO, ColumnDTO nextColDTO, TaskDTO taskDTO)
+        internal void AdvanceTask(ColumnDTO currentColDTO, ColumnDTO nextColDTO, TaskDTO taskDTO)
         {
             nextColDTO.AddTask(taskDTO);
             currentColDTO.RemoveTask(taskDTO.Id);
-            return new TasksColumnsBoardsDTO().AdvanceTask(id, currentColDTO.ordinal, nextColDTO.ordinal, taskDTO.Id);
+            new TasksColumnsBoardsDTO().AdvanceTask(id, currentColDTO.ordinal, nextColDTO.ordinal, taskDTO.Id);
         }
     }
 }
