@@ -18,6 +18,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             users = new Dictionary<string, User>();
         }
 
+        /// <summary>
+        /// check if the user is logged in or loggedout
+        /// </summary>
+        /// <param name="email"> Email of the user</param>
+        /// <returns> Bool by the statment of the proprety </returns>
         public bool IsLoggedIn(string email)
         {
             email = email.ToLower();
@@ -31,28 +36,35 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return true;
             }
             return false;
-
         }
 
-        public Response createUser(string email, string password)
+        /// <summary>
+        /// create new user 
+        /// </summary>
+        /// <param name="email"> Email of the new user</param>
+        /// <param name="password"> Password of the new user </param>
+        /// <returns> string if the creation failed or not </returns>
+        public void createUser(string email, string password)
         {
             if (!users.ContainsKey(email))
             {
                 User user = new User(email, password);
-                Response r = user.RegisterUser(email, password);
-                if (r.ErrorOccured())
-                    return r;
+                user.RegisterUser(email, password);
                 users.Add(email, user);
                 logger.Info("User: " + email + ", registered successfully");
-                return r;
             }
             else
             {
                 logger.Warn("Failed to create user " + email + ", because a user with that name already exists.");
-                return new Response("This email is already taken", true);
+                throw new Exception("This email is already taken");
             }
         }
 
+        /// <summary>
+        /// get a user by his email
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns> User Object </returns>
         public User GetUser(string email)
         {
             if (exists(email))
@@ -66,6 +78,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         }
 
+        /// <summary>
+        /// check if the user is sign up
+        /// </summary>
+        /// <param name="email"> Email of the candidate user </param>
+        /// <returns>Bool statement</returns>
         public bool exists(string email)
         {
             email = email.ToLower();
@@ -75,6 +92,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return false;
         }
 
+        /// <summary>
+        /// Delete user by the email of the user
+        /// </summary>
+        /// <param name="email"> Email of the user </param>
+        /// <param name="password"> Password of the user </param>
+        /// <returns></returns>
         public Response DeleteUser(string email, string password)
         {
             if (GetUser(email) != null)
@@ -97,7 +120,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return new Response("The user " + email + " does not exist", true);
         }
 
-        public Response login(string email, string password)
+        /// <summary>
+        /// login function for a user that signed up
+        /// </summary>
+        /// <param name="email"> Email of a user  </param>
+        /// <param name="password"> Password of the user </param>
+        /// <returns></returns>
+        public void login(string email, string password)
         {
             if (GetUser(email) != null)
             {
@@ -105,20 +134,24 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 {
                     GetUser(email).logIn();
                     logger.Info("The user " + email + " logged in successfully");
-                    return new Response(true);
                 }
                 else
                 {
                     logger.Warn("Faild to login the user " + email + ", because there is no match between the email and password");
-                    return new Response("Incorrect password", true);
+                    throw new Exception("Incorrect password");
                 }
             }
             else
                 logger.Warn("Failed to delete user " + email + ", because a user with that name is not exists");
-            return new Response("The user " + email + " does not exist", true);
+            throw new Exception("The user " + email + " does not exist");
         }
 
-        public Response LogOut(string email)
+        /// <summary>
+        /// logout function for a user that signed up
+        /// </summary>
+        /// <param name="email"> Email of a user  </param>
+        /// <returns></returns>
+        public void LogOut(string email)
         {
             if (GetUser(email) != null)
             {
@@ -126,16 +159,22 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 {
                     GetUser(email).logOut();
                     logger.Info("The user " + email + " logged out successfully");
-                    return new Response(true);
                 }
                 logger.Warn("Faild to logout the user " + email + ", because the user is not connected");
-                return new Response("The user logged out unsuccesssfully", true);
+                throw new Exception("The user logged out unsuccesssfully");
             }
             logger.Warn("Failed to logout user " + email + ", because a user with that name is not exists");
-            return new Response("The user " + email + " does not exist", true);
+            throw new Exception("The user " + email + " does not exist");
         }
 
-        public Response changePassword(string email, string oldPassword, string newPassword)
+        /// <summary>
+        /// change Password for a user
+        /// </summary>
+        /// <param name="email"> Email of the user </param>
+        /// <param name="oldPassword"> Old password of the user </param>
+        /// <param name="newPassword"> New password for a user </param>
+        /// <returns></returns>
+        public void changePassword(string email, string oldPassword, string newPassword)
         {
             if (GetUser(email) != null)
             {
@@ -145,51 +184,80 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     {
                         GetUser(email).setPassword(newPassword);
                         logger.Info("The password of the user " + email + " changed successfully");
-                        return new Response(true);
                     }
                     logger.Warn("Faild to change password of the user " + email + ", because there is no match between the email and password");
-                    return new Response("There is no match between the password and the user name", true);
+                    throw new Exception("There is no match between the password and the user name");
                 }
                 logger.Warn("The user's password can not be changed, because the user " + email + " is not connected");
-                return new Response("This user is not connected, password can't be changed", true);
+                throw new Exception("This user is not connected, password can't be changed");
             }
             logger.Warn("Failed to change the user's password at " + email + ", because a user with that email is not exists");
-            return new Response("The user " + email + " does not exist", true);
+            throw new Exception("The user " + email + " does not exist");
         }
 
+        /// <summary>
+        /// remove board- by name from the user's MyBoards list
+        /// </summary>
+        /// <param name="email"> Email of the user </param>
+        /// <param name="name"> Name the candidate board to be remove</param>
+        /// <returns> Bool statment of the procedure </returns>
         internal bool RemoveBoard(string email, string name)
         {
             User user = users[email];
             return user.RemoveBoard(name);
         }
 
+
+        /// <summary>
+        /// Add board to a users board list- the list of boards that the user is the owner of them
+        /// </summary>
+        /// <param name="email"> Email of a user </param>
+        /// <param name="board"> Board the the user will be the owner </param>
+        /// <returns> Bool- if the procedure succeed or not </returns>
         public bool AddBoard(string email, Board board)
         {
             User user = users[email];
             return user.AddBoard(board);
         }
 
+        /*
         internal void JoinBoard(string email, int boardID)
         {
             User user = users[email];
             user.JoinBoard(email, boardID);
         }
+        */
 
+        /// <summary>
+        /// leave board that the user is taking apart, not the owner of them
+        /// </summary>
+        /// <param name="email"> Email of the user </param>
+        /// <param name="boardID"> ID of the board that the user should leave </param>
         internal void LeaveBoard(string email, int boardID)
         {
             User user = users[email];
             user.LeaveBoard(boardID);
         }
 
-        
+        /// <summary>
+        /// get boards of a user by the email
+        /// </summary>
+        /// <param name="email"> Email of the user </param>
+        /// <returns> return list of boards- by their id </returns>
         internal Response GetUserBoards(string email)
         {
             User user = users[email];
-            return user.GetUserBoards();
+             return user.GetUserBoards();
         }
-        
-        
-        internal Response TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
+
+        /// <summary>
+        /// Transfer the ownership of a board to another user
+        /// </summary>
+        /// <param name="currentOwnerEmail"> Email of the owner user</param>
+        /// <param name="newOwnerEmail"> Email of the new owner- user </param>
+        /// <param name="boardName"> name of the board we want to trasfer the ownership</param>
+        /// <returns> string- the result of the transfer</returns>
+        internal void TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
             if(GetUser(newOwnerEmail) != null)
             {
@@ -200,16 +268,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     {
                         Board board = currentOwner.renounceOwnership(boardName);
                         newOwner.takeOwnership(board, currentOwnerEmail);
-                        return new Response($"{newOwnerEmail} is the new owner of '{boardName}' instead of {currentOwnerEmail} ");
                     }
-                    return new Response($"{currentOwnerEmail} has no board called '{boardName}' ");
+                    throw new Exception($"{currentOwnerEmail} has no board called '{boardName}' ");
                 }
-                return new Response($"{newOwnerEmail} already has a board called {boardName}");
+                throw new Exception($"{newOwnerEmail} already has a board called {boardName}");
             }
-            return new Response($"{newOwnerEmail} is not registered, can not transfer the ownership of '{boardName}");           
+            throw new Exception($"{newOwnerEmail} is not registered, can not transfer the ownership of '{boardName}");           
             
         }
-
         internal bool JoinBoard(string email, Board b)
         {
             User user = users[email];

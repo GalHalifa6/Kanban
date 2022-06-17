@@ -191,8 +191,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 return r;
             }
-            US.JoinBoard(email, boardID);
-            return r;
+            return GenerateBadResponseString(r);
         }
 
 
@@ -247,9 +246,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return r;
             }
             return GenerateBadResponseString(r);
-
-
-//change in BS
         }
 
     }

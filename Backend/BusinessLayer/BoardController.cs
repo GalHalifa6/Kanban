@@ -58,7 +58,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return null;
         }
 
-
         public void AddBoard(string email, string name, UserController uc)
         {
             Board b = new Board(name, nextBoardID, email);

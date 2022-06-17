@@ -18,20 +18,25 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             this.password = password;
         }
 
-        private Response GeneralNonQuery(string query, string goodMsg, string badMsg)
+        private void GeneralNonQuery(string query, string badMsg)
         {
             if (!DBConnector.GetInstance().ExecuteNonQuery(query))
             {
-                return new Response(badMsg, true);
+                throw new Exception(badMsg);
             }
-            return new Response(goodMsg);
         }
 
 
-        public Response RegisterUser(string email, string password)
+        /// <summary>
+        /// Register user in the database
+        /// </summary>
+        /// <param name="email"> Email of the user </param>
+        /// <param name="password"> Password of the user </param>
+        /// <returns></returns>
+        public void RegisterUser(string email, string password)
         {
             string query = $"INSERT INTO Users(email, password) VALUES('{email}', '{password}')";
-            return GeneralNonQuery(query, "User was added successfully", "A user with this email already exists");
+            GeneralNonQuery(query, "A user with this email already exists");
         }
     }
 }

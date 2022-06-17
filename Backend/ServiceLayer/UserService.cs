@@ -28,7 +28,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email"> email to be registered </param>
         /// <param name="password"> password of the user </param>
-        /// <returns></returns>
+        /// <returns> json of the procedure </returns>
         public string Register(string email, string password)
         {
             if (IsValidEmail(email) == false)
@@ -41,10 +41,14 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 Response r = new Response("Invalid password", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            Response response = uc.createUser(email, password);
-            if (response.ErrorOccured())
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            return "{}";
+            try {
+                uc.createUser(email, password);
+                return "{}";
+            }
+            catch(Exception e)
+            {
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
         }
 
         /// <summary>
@@ -52,7 +56,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email">Email of the user that is trying to log in</param>
         /// <param name="password">Password of the user trying to log in</param>
-        /// <returns></returns>
+        /// <returns> json of the procedure </returns>
         public string Login(string email, string password)
         {
             if (currentEmail != null)
@@ -71,18 +75,23 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 Response r = new Response("Invalid password", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            Response response = uc.login(email, password);
-            if (response.ErrorOccured())
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            currentEmail = email;
-            return JsonConvert.SerializeObject(new Response(email), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            try
+            {
+                uc.login(email, password);
+                currentEmail = email;
+                return "{}";
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }           
         }
 
         /// <summary>
         /// Allows a logged in user to log out
         /// </summary>
         /// <param name="email"> Email of the user trying to log out</param>
-        /// <returns></returns>
+        /// <returns> json of the procedure </returns>
         public string Logout(string email)
         {
             if (IsValidEmail(email) == false)
@@ -90,22 +99,25 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 Response r = new Response("Invalid email", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            Response response = uc.LogOut(email);
-            if (response.ErrorOccured())
+            try
             {
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                uc.LogOut(email);
+                currentEmail = null;
+                return "{}";
             }
-            currentEmail = null;
-            return "{}";
+            catch(Exception e)
+            {
+                return JsonConvert.SerializeObject(e.Message, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
         }
 
 
         /// <summary>
         /// Deletes an existing user from the system
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="password"></param>
-        /// <returns></returns>
+        /// <param name="email"> Email of the user trying to deleted </param>
+        /// <param name="password"> Password of the user trying to deleted </param>
+        /// <returns> json of the procedure </returns>
         public string DeleteUser(string email, string password)
         {
             if (IsValidEmail(email) == false)
@@ -122,6 +134,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
 
+        /// <summary>
+        /// remove board- by name from the user's MyBoards list
+        /// </summary>
+        /// <param name="email"> Email of the user </param>
+        /// <param name="name"> Name the candidate board to be remove</param>
+        /// <returns> Bool statment of the procedure </returns>
         internal bool RemoveBoard(string email, string name)
         {
             return uc.RemoveBoard(email, name);
@@ -131,10 +149,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <summary>
         /// Allows a user to change password
         /// </summary>
-        /// <param name="email"></param>
-        /// <param name="oldPassword"></param>
-        /// <param name="newPassword"></param>
-        /// <returns></returns>
+        /// <param name="email"> Email of the user </param>
+        /// <param name="oldPassword"> Old password of the user</param>
+        /// <param name="newPassword"> New password of the user </param>
+        /// <returns> json string </returns>
 
         public string ChangePassword(string email, string oldPassword, string newPassword)
         {
@@ -153,38 +171,58 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 Response r = new Response("Invalid email", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            Response response = uc.changePassword(email, oldPassword, newPassword);
-            return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
+            try
+            {
+                uc.changePassword(email, oldPassword, newPassword);
+                return "{}";
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(e.Message, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
         }
 
+        /// <summary>
+        /// return user controller 
+        /// </summary>
+        /// <returns> user controller </returns>
         internal UserController GetUc()
         {
             return uc;
         }
 
-        
+        /// <summary>
+        /// get boards of a user by the email
+        /// </summary>
+        /// <param name="email"> Email of the user </param>
+        /// <returns> return list of boards- by their id </returns>
         internal string GetUserBoards(string email)
         {
             Response response = uc.GetUserBoards(email);
             return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
-        
 
+        /// <summary>
+        /// leave board that the user is taking apart, not the owner of them
+        /// </summary>
+        /// <param name="email"> Email of the user </param>
+        /// <param name="boardID"> ID of the board that the user should leave </param>
         internal void LeaveBoard(string email, int boardID)
         {
             uc.LeaveBoard(email, boardID);
         }
 
+        /*
         internal void JoinBoard(string email, int boardID)
         {
             uc.JoinBoard(email, boardID);
         }
+        */
 
         /// <summary>
         /// validataion function for passwords, uses helper functions for smaller validations
         /// </summary>
-        /// <param name="pass">password to validate</param>
+        /// <param name="pass"> Password to validate</param>
         /// <returns>boolean indicating the validity of the password</returns>
         public bool IsValidPassword(string pass)
         {
@@ -199,18 +237,31 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return true;
         }
 
-        
+        /// <summary>
+        /// Transfer the ownership of a board to another user
+        /// </summary>
+        /// <param name="currentOwnerEmail"> Email of the owner user</param>
+        /// <param name="newOwnerEmail"> Email of the new owner- user </param>
+        /// <param name="boardName"> name of the board we want to trasfer the ownership</param>
+        /// <returns> string- the result of the transfer</returns>
         internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
-            Response r = uc.TransferOwnership(currentOwnerEmail, newOwnerEmail, boardName);
-            if (r.ErrorOccured())
+            try
             {
-                return r.ErrorMessage;
+                uc.TransferOwnership(currentOwnerEmail, newOwnerEmail, boardName);
+                return "{}";
             }
-            return "{}";
+            catch(Exception e)
+            {
+                return JsonConvert.SerializeObject(e.Message, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
         }
         
-
+        /// <summary>
+        /// check if the password is valid
+        /// </summary>
+        /// <param name="pass"> password of the user</param>
+        /// <returns> return Bool- if the password is correct or not</returns>
         private bool validPassword(string pass)
         {
             bool atLeastOneUpper = false;
@@ -267,7 +318,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return false; ;
             }
         }
-
+        // test1, test2, test3 -helpers functions to validation of email and password //
         public bool test2(string email)
         {
             Regex regex = new Regex(@"^[\w!#$%&'+\-/=?\^_`{|}~]+(\.[\w!#$%&'+\-/=?\^_`{|}~]+)*@" + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$");
@@ -300,13 +351,23 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return false;
             }
         }
-
+        /// <summary>
+        /// check if the user is logged in or loggedout
+        /// </summary>
+        /// <param name="email"> Email of the user</param>
+        /// <returns> Bool by the statment of the proprety </returns>
         public bool IsLoggedIn(string email)
         {
             email = email.ToLower();
             return uc.IsLoggedIn(email);
         }
 
+        /// <summary>
+        /// Add board to a users board list- the list of boards that the user is the owner of them
+        /// </summary>
+        /// <param name="email"> Email of a user </param>
+        /// <param name="board"> Board the the user will be the owner </param>
+        /// <returns> Bool- if the procedure succeed or not </returns>
         public bool AddBoard(string email, Board board)
         {
             return uc.AddBoard(email, board);
