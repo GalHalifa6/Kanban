@@ -117,7 +117,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 bc.AddTask(email, boardName, title, description, dueDate);
-                Response response = new Response("Task was added successfully");
+                Response response = new Response("{}");
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             catch (Exception e)
@@ -188,7 +188,17 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Json response with the limit of the column, unless an error occurs.</returns>
         public string GetColumnLimit(string email, string boardName, int columnNumber)
         {
-            return InvokeMethod(new Func<string, string, int, int>(bc.GetColumnLimit), "{}", email, boardName, columnNumber);
+            try
+            {
+                int output = bc.GetColumnLimit(email, boardName, columnNumber);
+                Response response = new Response(output);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            catch (Exception e)
+            {
+                Response response = new Response(e.Message, true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
         }
 
         /// <summary>
@@ -200,7 +210,17 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns> Json response with the name of the column, unless an error occurs.</returns>
         public string GetColumnName(string email, string boardName, int columnNumber)
         {
-            return InvokeMethod(new Func<string, string, int, string>(bc.GetColumnName), "{}", email, boardName, columnNumber);
+            try
+            {
+                string output = bc.GetColumnName(email, boardName, columnNumber);
+                Response response = new Response(output);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            catch (Exception e)
+            {
+                Response response = new Response(e.Message, true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
         }
 
         internal string JoinBoard(string email, int boardID, UserService US)
@@ -218,7 +238,17 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with a list of the column's tasks, unless an error occurs.</returns>
         public string GetColumn(string email, string boardName, int columnOrdinal)
         {
-            return InvokeMethod(new Func<string, string, int, List<BusinessLayer.Task>>(bc.GetColumn), "{}", email, boardName, columnOrdinal);
+            try
+            {
+                List<BusinessLayer.Task> output = bc.GetColumn(email, boardName, columnOrdinal);
+                Response response = new Response(output);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            catch (Exception e)
+            {
+                Response response = new Response(e.Message, true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
         }
 
 
@@ -229,7 +259,17 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>json string of the list of tasks</returns>
         public string InProgressTasks(string email)
         {
-            return InvokeMethod(new Func<string, List<BusinessLayer.Task>>(bc.InProgressTasks), "{}", email);
+            try
+            {
+                List<BusinessLayer.Task> output = bc.InProgressTasks(email);
+                Response response = new Response(output);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            catch (Exception e)
+            {
+                Response response = new Response(e.Message, true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
         }
 
 
