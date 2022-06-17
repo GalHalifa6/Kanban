@@ -41,63 +41,61 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             AssigneeEmail = null;
         }
 
-        private Response GeneralNonQuery(string query, string goodMsg, string badMsg)
+        private void GeneralNonQuery(string query, string badMsg)
         {
             if (!DBConnector.GetInstance().ExecuteNonQuery(query))
             {
-                return new Response(badMsg, true);
+                throw new Exception(badMsg);
             }
-            return new Response(goodMsg);
         }
-
-        internal Response UpdateTaskTitle(string newTitle)
+        /// <summary>
+        /// Update a task's title
+        /// </summary>
+        /// <param name="newTitle">The new title</param>
+        internal void UpdateTaskTitle(string newTitle)
         {
             string query = $"UPDATE Tasks SET newTitle = '{newTitle}' WHERE id = {Id}";
-            Response r = GeneralNonQuery(query, "Task's title was updated successfully", "Something went wrong");
-            if (!r.ErrorOccured())
-            {
-                Title = newTitle;
-            }
-            return r;
+            GeneralNonQuery(query, "Something went wrong");
+            Title = newTitle;
         }
-
-        internal Response UpdateTaskDescription(string newDesc)
+        /// <summary>
+        /// Update a task's description
+        /// </summary>
+        /// <param name="newDesc">The new description</param>
+        internal void UpdateTaskDescription(string newDesc)
         {
             string query = $"UPDATE Tasks SET description = '{newDesc}' WHERE id = {Id}";
-            Response r = GeneralNonQuery(query, "Task's description was updated successfully", "Something went wrong");
-            if (!r.ErrorOccured())
-            {
-                Description = newDesc;
-            }
-            return r;
+            GeneralNonQuery(query, "Something went wrong");
+            Description = newDesc;
         }
-
-        internal Response UpdateTaskDueDate(DateTime newDueDate)
+        /// <summary>
+        /// Update a task's due date
+        /// </summary>
+        /// <param name="newDueDate">The new due date</param>
+        internal void UpdateTaskDueDate(DateTime newDueDate)
         {
             string query = $"UPDATE Tasks SET dueDate = '{newDueDate}' WHERE id = {Id}";
-            Response r = GeneralNonQuery(query, "Task's due date was updated successfully", "Something went wrong");
-            if (!r.ErrorOccured())
-            {
-                DueDate = newDueDate;
-            }
-            return r;
+            GeneralNonQuery(query, "Something went wrong");
+            DueDate = newDueDate;
         }
-
-        internal Response AssignTask(string assigner, string assignee)
+        /// <summary>
+        /// Assign a task to a user
+        /// </summary>
+        /// <param name="assigner">The assigner</param>
+        /// <param name="assignee">The assigned user</param>
+        internal void AssignTask(string assigner, string assignee)
         {
             string query = $"UPDATE Tasks SET assignee = '{assignee}' WHERE id = {Id}";
-            Response r = GeneralNonQuery(query, "Task's assignee was updated successfully", "Something went wrong");
-            if (!r.ErrorOccured())
-            {
-                AssigneeEmail = assignee;
-            }
-            return r;
+            GeneralNonQuery(query, "Something went wrong");
+            AssigneeEmail = assignee;
         }
-
-        internal Response UnassignTask()
+        /// <summary>
+        /// Unassign task from its' user
+        /// </summary>
+        internal void UnassignTask()
         {
             string query = $"UPDATE Tasks SET assignee = 'null' WHERE id = {Id}";
-            return GeneralNonQuery(query, "Task's assignee was updated successfully", "Something went wrong");
+            GeneralNonQuery(query, "Something went wrong");
         }
     }
 }

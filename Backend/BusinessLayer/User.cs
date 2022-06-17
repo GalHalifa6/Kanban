@@ -196,7 +196,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return true;
         }
-
         /// <summary>
         /// user will take apart in a board, he will not the owner 
         /// </summary>
@@ -213,7 +212,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             CommonBoards.Add(b);
             return true;
-
         }
     }
 } 

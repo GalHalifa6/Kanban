@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
@@ -58,6 +59,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return inProgress.GetTasksList();
         }
 
+        /// <summary>
+        /// retrieves a column based on the column ordinal
+        /// </summary>
+        /// <param name="columnNumber"> 0 = backlog, 1 = in progress, 2 = done</param>
+        /// <returns> column object based on the given ordinal </returns>
         public Column GetColumn(int columnNumber)
         {
             if (columnNumber > 2 || columnNumber < 0)
@@ -76,17 +82,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
-        internal Response LimitColumnTasks(int columnNumber, int newLimit)
+        internal void LimitColumnTasks(int columnNumber, int newLimit)
         {
             if (newLimit < -1)
             {
                 logger.Warn("Failed to limit column tasks due to invalid limit");
-                return new Response("Invalid limitation of tasks", true);
+                throw new Exception("Invalid limitation of tasks");
             }
             if (newLimit % 1 != 0)
             {
                 logger.Warn("Failed to limit column tasks due to invalid limit");
-                return new Response("Invalid limitation of tasks", true);
+                throw new Exception("Invalid limitation of tasks");
             }
             if (newLimit == -1)
             {
@@ -97,12 +103,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (col == null)
             {
                 logger.Warn("Failed to limit column tasks due to invalid column ordinal");
-                return new Response("Invalid column", true);
+                throw new Exception("Invalid column");
             }
-            Response r = col.SetMax(newLimit);
-            if (!r.ErrorOccured())
-                logger.Info("Max tasks limited to " + newLimit);
-            return r;
+            col.SetMax(newLimit);
+            logger.Info("Max tasks limited to " + newLimit);
         }
 
         internal void SetOwner(string email)
@@ -110,9 +114,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             throw new NotImplementedException();
         }
 
-        internal Response AddBoard()
-        {
-            return dto.AddBoard(owner, id, name);
+        internal void AddBoard() { 
+            dto.AddBoard(owner, id, name);
         }
 
         /// <summary>
@@ -120,43 +123,45 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">deleter's email</param>
         /// <returns></returns>
-        internal Response RemoveBoard(string email)
+        internal void RemoveBoard(string email)
         {
             if (email != owner)
             {
                 logger.Info("Non owner attempted to delete board");
-                return new Response("Only board owner can delete a board");
+                throw new Exception("Only board owner can delete a board");
             }
-            return dto.RemoveBoard();
+            dto.RemoveBoard();
         }
 
-        internal Response GetColumnLimit(string boardName, int columnNumber)
+        internal int GetColumnLimit(string boardName, int columnNumber)
         {
             Column col = GetColumn(columnNumber);
             if (col == null)
-                return new Response("Invalid column", true);
+                throw new Exception("Invalid column");
             if (col.maxTasks == int.MaxValue)
-                return new Response(-1);
-            return new Response(col.maxTasks);
+                return 1;
+            return col.maxTasks;
         }
-
-        internal Response AddTask(string email, string title, string description, DateTime dueDate)
+        /// <summary>
+        /// Add a task to this board
+        /// </summary>
+        /// <param name="email">The user to add the task to</param>
+        /// <param name="title">The title of the task</param>
+        /// <param name="description">The description of the task</param>
+        /// <param name="dueDate">The due date of the task</param>
+        /// <exception cref="Exception"></exception>
+        internal void AddTask(string email, string title, string description, DateTime dueDate)
         {
             if (IsInBoard(email))
             {
-                Response r = backlog.AddTask(nextTaskID, title, description, dueDate);
-                if (r.ErrorOccured())
-                {
-                    return r;
-                }
+                backlog.AddTask(nextTaskID, title, description, dueDate);
                 nextTaskID++;
                 logger.Info("Task was successfully added");
-                return new Response("The task was added successfully");
             }
             else
             {
                 logger.Warn("Cannot add a task since the email provided is not registered in the board");
-                return new Response("Cannot add a task since the email provided is not registered in the board", true);
+                throw new Exception("Cannot add a task since the email provided is not registered in the board");
             }
         }
 
@@ -177,124 +182,106 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Info("Task was removed successfully");
             return new Response("Task was removed successfully");
         }*/
-
-        internal Response AdvanceTask(string email, int columnOrdinal, int taskId)
+        internal void AdvanceTask(string email, int columnOrdinal, int taskId)
         {
             
             Column c = GetColumn(columnOrdinal);
             if (c == null)
             {
                 logger.Warn("Cannot advance task since an invalid column ordinal was entered");
-                return new Response("Task could not advance because of a wrong column ordinal", true);
+                throw new Exception("Task could not advance because of a wrong column ordinal");
             }
             Task t = c.GetTask(taskId);
             if (t == null)
             {
                 logger.Warn("Cannot advance task because it doesn't exist");
-                return new Response("Task could not advance because of a wrong task id", true);
+                throw new Exception("Task could not advance because of a wrong task id");
             }
             if (!t.IsAssigned(email))
             {
                 logger.Warn("Cannot advance task because the user advancing it is not assigned to it");
-                return new Response("Cannot advance task because the user advancing it is not assigned to it", true);
+                throw new Exception("Cannot advance task because the user advancing it is not assigned to it");
             }
             if (c == backlog)
             {
-                Response r = inProgress.AddTask(t);
-                if (r.ErrorOccured())
-                    return r;
-                r = dto.AdvanceTask(c.dto, inProgress.dto, t.dto);
-                if (r.ErrorOccured())
-                    return r;
+                inProgress.AddTask(t);
+                dto.AdvanceTask(c.dto, inProgress.dto, t.dto);
                 backlog.RemoveTask(t);
                 logger.Info("Task " + t.Title + " advanced");
-                return new Response("Task " + t.Title + " advanced and is now in progress");
             }
-            if (c == inProgress)
+            else if (c == inProgress)
             {
-                Response r = done.AddTask(t);
-                if (r.ErrorOccured())
-                    return r;
-                r = dto.AdvanceTask(c.dto, done.dto, t.dto);
-                if (r.ErrorOccured())
-                    return r;
+                done.AddTask(t);
+                dto.AdvanceTask(c.dto, done.dto, t.dto);
                 inProgress.RemoveTask(t);
                 logger.Info("Task " + t.Title + " advanced");
-                return new Response("Task " + t.Title + " advanced and is now done");
             }
             else // (c == done)
             {
                 logger.Warn("Failed to advance task because the task is already done");
-                return new Response("Failed to advance task because the task is already done", true);
+                throw new Exception("Failed to advance task because the task is already done");
             }
         }
 
-        public Response AddUser(string email)
+        public void AddUser(string email)
         {
             if (usernames.Contains(email) || owner == email)
             {
                 logger.Warn(email + " attempted to join a board that he's already in");
-                return new Response(email + " is already in " + name, true);
+                throw new Exception(email + " is already in " + name);
             }
-            Response r = dto.AddUser(email);
-            if (r.ErrorOccured())
-                return r;
+            dto.AddUser(email);
             logger.Info(email + " added to board " + name);
             usernames.Add(email);
-            return new Response(email + " added successfully to " + name);
-
         }
 
-        public Response RemoveUser(string email)
+        public void RemoveUser(string email)
         {
             if (usernames.Contains(email))
             {
-                Response r = dto.RemoveUser(email);
-                if (r.ErrorOccured())
-                    return r;
+                dto.RemoveUser(email);
                 usernames.Remove(email);
                 UnassignTasks(email);
                 logger.Info(email + " removed from board " + name);
-                return r;
             }
             else if (owner == email)
             {
                 logger.Warn("Attempt to remove board owner failed");
-                return new Response("Cannot remove owner from board without providing another owner", true);
+                throw new Exception("Cannot remove owner from board without providing another owner");
             }
-            logger.Warn("Attempt to remove user from board that the user was not in");
-            return new Response(email + " is not in " + name, true);
+            else
+            {
+                logger.Warn("Attempt to remove user from board that the user was not in");
+                throw new Exception(email + " is not in " + name);
+            }
         }
 
 
 
         private void UnassignTasks(string email)
         {
-            //backlog.UnassignTasks(email);
-            //inProgress.UnassignTasks(email);
+            backlog.UnassignTasks(email);
+            inProgress.UnassignTasks(email);
         }
 
-        public Response ChangeOwner(string currentOwner, string newOwner)
+        public void ChangeOwner(string currentOwner, string newOwner)
         {
             if (currentOwner != owner)
             {
                 logger.Warn("Attempt to change owner of board failed due to incorrect currentOwner name");
-                return new Response("Failed to change owner because " + currentOwner + " is not the owner of the board", true);
+                throw new Exception("Failed to change owner because " + currentOwner + " is not the owner of the board");
             }
             if (!usernames.Contains(newOwner))
             {
                 logger.Warn("Attempt to change owner of board failed due to newOwner not in the board");
-                return new Response("Failed to change owner because " + newOwner + " is not the in the board", true);
+                throw new Exception("Failed to change owner because " + newOwner + " is not the in the board");
 
             }
-            Response r = dto.ChangeOwner(newOwner);
-            if (r.ErrorOccured())
-                return r;
+            dto.ChangeOwner(newOwner);
             usernames.Add(owner);
             usernames.Remove(newOwner);
             owner = newOwner;
             logger.Info("Owner changed successfully");
-            return r;
         }
 
         internal Task GetTask(int columnOrdinal, int taskId)
@@ -328,15 +315,60 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
 
-        public Response AssignTask(string assigner, int columnOrdinal, int taskID, string assignee)
+        public void AssignTask(string assigner, int columnOrdinal, int taskID, string assignee)
         {   
             Task t = GetTask(columnOrdinal, taskID);
             if (t == null)
             {
                 logger.Warn(assigner + " attempted to reassign a task that doesn't exist");
-                return new Response("Task does not exist");
+                throw new Exception("Task does not exist");
             }
-            return t.AssignTask(assigner, assignee);
+            t.AssignTask(assigner, assignee);
+        }
+
+        public void UpdateTaskTitle(int columnOrdinal, int taskId, string newTitle)
+        {
+            Column column = GetColumn(columnOrdinal);
+            if (column == null)
+            {
+                throw new Exception("Invalid column ordinal.");
+            }
+            if (column.name == "done")
+            {
+                throw new Exception("Cannot edit tasks that are done.");
+            }
+            Task task = GetTask(columnOrdinal, taskId);
+            column.UpdateTaskTitle(task, newTitle);
+        }
+
+        public void UpdateTaskDescription(int columnOrdinal, int taskId, string newDesc)
+        {
+            Column column = GetColumn(columnOrdinal);
+            if (column == null)
+            {
+                throw new Exception("Invalid column ordinal.");
+            }
+            if (column.name == "done")
+            {
+                throw new Exception("Cannot edit tasks that are done.");
+            }
+            Task task = GetTask(columnOrdinal, taskId);
+            column.UpdateTaskDescription(task, newDesc);
+        }
+
+        public void UpdateTaskDueDate(int columnOrdinal, int taskId, DateTime newDueDate)
+        {
+            Column column = GetColumn(columnOrdinal);
+            if (column == null)
+            {
+                throw new Exception("Invalid column ordinal.");
+            }
+            if (column.name == "done")
+            {
+                throw new Exception("Cannot edit tasks that are done.");
+            }
+            Task task = GetTask(columnOrdinal, taskId);
+            column.UpdateTaskDueDate(task, newDueDate);
         }
     }
 }

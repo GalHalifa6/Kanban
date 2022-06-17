@@ -26,10 +26,10 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             this.name = name;
             this.owner = owner;
             this.nextTaskID = nextTaskID;
-
-            backlog = new ColumnDTO();
-            inProgress = new ColumnDTO();
-            done = new ColumnDTO();
+            HashSet<TaskDTO> tasks = new HashSet<TaskDTO>();
+            backlog = new ColumnDTO("backlog", tasks);
+            inProgress = new ColumnDTO("inProgress", tasks);
+            done = new ColumnDTO("done", tasks);
 
             users = new HashSet<string>();
         }
@@ -49,57 +49,52 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             this.users = users;
         }
 
-        private Response GeneralNonQuery(string query, string goodMsg, string badMsg)
+        private void GeneralNonQuery(string query, string badMsg)
         {
             if (!DBConnector.GetInstance().ExecuteNonQuery(query))
             {
-                return new Response(badMsg, true);
+                throw new Exception(badMsg);
             }
-            return new Response(goodMsg);
         }
 
-        public Response AddBoard(string email, int id, string name)
+        public void AddBoard(string email, int id, string name)
         {
             string query = $"INSERT INTO Boards(id, name, nextTaskID, owner) VALUES({id},'{name}',{0},'{email}')";
-            return GeneralNonQuery(query, "Board was added successfully", "A board with this id already exists");
+            GeneralNonQuery(query, "A board with this id already exists");
         }
 
-        internal Response ChangeOwner(string newOwner)
+        internal void ChangeOwner(string newOwner)
         {
             string boardsUpdate = $"UPDATE Boards SET owner = '{newOwner}' WHERE id = {id}";
-            Response r1 = GeneralNonQuery(boardsUpdate, "Owner was changed successfully", "Something went wrong");
+            GeneralNonQuery(boardsUpdate, "Something went wrong");
             UsersBoardsDTO ub = new UsersBoardsDTO();
-            Response r2 = ub.AddUserToBoard(owner, id);
-            Response r3 = ub.RemoveUserFromBoard(newOwner, id);
-            if (!r1.ErrorOccured() && !r2.ErrorOccured() && !r3.ErrorOccured())
-            {
-                owner = newOwner;
-            }
-            return r1;
+            ub.AddUserToBoard(owner, id);
+            ub.RemoveUserFromBoard(newOwner, id);
+            owner = newOwner;
         }
 
-        internal Response RemoveBoard()
+        internal void RemoveBoard()
         {
             string query = $"DELETE FROM Boards WHERE id = {id}";
-            return GeneralNonQuery(query, "Board was removed successfully", "Something went wrong");
+            GeneralNonQuery(query, "Something went wrong");
 
         }
 
-        internal Response AddUser(string email)
+        internal void AddUser(string email)
         {
-            return new UsersBoardsDTO().AddUserToBoard(email, id);
+            new UsersBoardsDTO().AddUserToBoard(email, id);
         }
 
-        internal Response RemoveUser(string email)
+        internal void RemoveUser(string email)
         {
-            return new UsersBoardsDTO().RemoveUserFromBoard(email, id);
+            new UsersBoardsDTO().RemoveUserFromBoard(email, id);
         }
 
-        internal Response AdvanceTask(ColumnDTO currentColDTO, ColumnDTO nextColDTO, TaskDTO taskDTO)
+        internal void AdvanceTask(ColumnDTO currentColDTO, ColumnDTO nextColDTO, TaskDTO taskDTO)
         {
             nextColDTO.AddTask(taskDTO);
             currentColDTO.RemoveTask(taskDTO.Id);
-            return new TasksColumnsBoardsDTO().AdvanceTask(id, currentColDTO.ordinal, nextColDTO.ordinal, taskDTO.Id);
+            new TasksColumnsBoardsDTO().AdvanceTask(id, currentColDTO.ordinal, nextColDTO.ordinal, taskDTO.Id);
         }
     }
 }

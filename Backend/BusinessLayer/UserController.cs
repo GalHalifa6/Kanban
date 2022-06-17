@@ -276,8 +276,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             throw new Exception($"{newOwnerEmail} is not registered, can not transfer the ownership of '{boardName}");           
             
         }
-
-        internal bool JoinBoard(string email ,Board b)
+        internal bool JoinBoard(string email, Board b)
         {
             User user = users[email];
             return user.JoinBoard(b);

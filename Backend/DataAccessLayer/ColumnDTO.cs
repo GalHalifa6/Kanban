@@ -15,10 +15,10 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         public int maxTasks { get; private set; }
         public HashSet<TaskDTO> tasks { get; private set; }
 
-        public ColumnDTO(string name, int maxTasks, HashSet<TaskDTO> tasks)
+        public ColumnDTO(string name, HashSet<TaskDTO> tasks)
         {
             this.name = name;
-            this.maxTasks = maxTasks;
+            this.maxTasks = int.MaxValue;
             if (name == "backlog")
             {
                 ordinal = 0;
@@ -56,54 +56,48 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 tasks.Add(t);
             }
         }
-
-        public ColumnDTO()
-        {
-        }
-
-        private Response GeneralNonQuery(string query, string goodMsg, string badMsg)
+        private void GeneralNonQuery(string query, string badMsg)
         {
             if (!DBConnector.GetInstance().ExecuteNonQuery(query))
             {
-                return new Response(badMsg, true);
+                throw new Exception(badMsg);
             }
-            return new Response(goodMsg);
         }
-        internal Response RemoveTask(int id)
+        /// <summary>
+        /// Remove a task
+        /// </summary>
+        /// <param name="id">The task id</param>
+        internal void RemoveTask(int id)
         {
             string query = $"DELETE FROM Tasks WHERE id = {id}";
-            Response r = GeneralNonQuery(query, "Task was removed successfully", "Something went wrong");
-            if (!r.ErrorOccured())
+            GeneralNonQuery(query, "Something went wrong");
+            foreach(TaskDTO task in tasks)
             {
-                foreach(TaskDTO task in tasks)
+                if(task.Id == id)
                 {
-                    if(task.Id == id)
-                    {
-                        tasks.Remove(task);
-                        break;
-                    }
+                    tasks.Remove(task);
+                    break;
                 }
             }
-            return r;
         }
-
-        internal Response AddTask(TaskDTO taskDTO)
+        /// <summary>
+        /// Add a task
+        /// </summary>
+        /// <param name="taskDTO">The task</param>
+        internal void AddTask(TaskDTO taskDTO)
         {
             string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({taskDTO.Id},'{taskDTO.Title}',{taskDTO.Description},'{taskDTO.DueDate}', 'null')";
-
-            Response r = GeneralNonQuery(query, "Task was added successfully", "A task with this id already exists");
-            if (!r.ErrorOccured())
-            {
-                tasks.Add(taskDTO);
-            }
-            return r;
+            GeneralNonQuery(query, "A task with this id already exists");
         }
-
-        internal Response SetMax(int newLimit)
+        /// <summary>
+        /// Set a limitation on the tasks number in this column
+        /// </summary>
+        /// <param name="newLimit"></param>
+        internal void SetMax(int newLimit)
         {
             string query = $"UPDATE Columns SET maxTasks = '{newLimit}' WHERE columnOrdinal = {ordinal}";
             maxTasks = newLimit;
-            return GeneralNonQuery(query, "Limit of tasks was updated successfully", "Something went wrong");
+            GeneralNonQuery(query, "Something went wrong");
         }
     }
 }

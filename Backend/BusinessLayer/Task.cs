@@ -38,35 +38,55 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             dto = new TaskDTO(ID, title, description, dueDate);
         }
 
-        public Response UpdateTaskTitle(string newTitle)
+        /// <summary>
+        /// Update a task's title
+        /// </summary>
+        /// <param name="newTitle">The new title</param>
+        public void UpdateTaskTitle(string newTitle)
         {
             Title = newTitle;
-            return dto.UpdateTaskTitle(newTitle);
+            dto.UpdateTaskTitle(newTitle);
         }
-        public Response UpdateTaskDescription(string newDescription)
+        /// <summary>
+        /// Update a task's description
+        /// </summary>
+        /// <param name="newDescription">The new description</param>
+        public void UpdateTaskDescription(string newDescription)
         {
             Description = newDescription;
-            return dto.UpdateTaskDescription(newDescription);
+            dto.UpdateTaskDescription(newDescription);
         }
-
-        public Response UpdateTaskDueDate(DateTime newDueDate)
+        /// <summary>
+        /// Update a task's due date
+        /// </summary>
+        /// <param name="newDueDate">The new due date</param>
+        public void UpdateTaskDueDate(DateTime newDueDate)
         {
             DueDate = newDueDate;
-            return dto.UpdateTaskDueDate(newDueDate);
+            dto.UpdateTaskDueDate(newDueDate);
         }
-
-        internal Response AssignTask(string assigner, string assignee)
+        /// <summary>
+        /// Assign a task to a user
+        /// </summary>
+        /// <param name="assigner">The user assigning</param>
+        /// <param name="assignee">The user assigned</param>
+        /// <exception cref="Exception">The user can't assign this task</exception>
+        internal void AssignTask(string assigner, string assignee)
         {
             if (assignee != null && assignee != assigner)
             {
                 logger.Warn("Failed to assign task because the assigner doesn't have permissions");
-                return new Response("User can't assign to this task", true);
+                throw new Exception("User can't assign to this task");
             }
             AssigneeEmail = assignee;
             logger.Info("Assigned " + assignee + " to the task: " + Id);
-            return dto.AssignTask(assigner, assignee);
+            dto.AssignTask(assigner, assignee);
         }
-
+        /// <summary>
+        /// Returns if the user is assigned to this task
+        /// </summary>
+        /// <param name="email">The user's email</param>
+        /// <returns></returns>
         internal bool IsAssigned(string email)
         {
             if (email != null && email == AssigneeEmail)
@@ -75,11 +95,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return false;
         }
-
-        internal Response UnassignTask()
+        /// <summary>
+        /// Unassign this task from its' assignee
+        /// </summary>
+        internal void UnassignTask()
         {
             AssigneeEmail = null;
-            return dto.UnassignTask();
+            dto.UnassignTask();
         }
 
         /*public string toString()

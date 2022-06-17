@@ -14,22 +14,18 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         private UserController uc { get; }
         private BoardController bc { get; }
 
+        private static int MAX_TASK_DESC_LENGTH = 300;
+        private static int MAX_TASK_TITLE_LENGTH = 50;
+
         public TaskService(UserController uc, BoardController bc)
         {
             this.uc = uc;
             this.bc = bc;
         }
 
-        private string InvokeMethod(Delegate method, string ret, params object[] args)
-        {
-            Response response = (Response)method.DynamicInvoke(args);
-            if (response.ErrorOccured())
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            return ret;
-        }
 
         /// <summary>
-        /// update an existing tasks title
+        /// update an existing tasks' title
         /// </summary>
         /// <param name="email">user holding the board that holds the task</param>
         /// <param name="boardName">board holding the column that holds task</param>
@@ -40,60 +36,43 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         public string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string newTitle)
         {
             if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
+            {
+                Response response = new Response("Email cannot be null", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
             email = email.ToLower();
             if (string.IsNullOrEmpty(newTitle) || string.IsNullOrWhiteSpace(newTitle))
             {
-                Response r = new Response("Cannot have an empy title.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Response response = new Response("Cannot have an empy title.", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            if (newTitle.Length > 50)
+            if (newTitle.Length > MAX_TASK_TITLE_LENGTH)
             {
-                Response r = new Response("Title is too long. Max number of characters is 50", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Response response = new Response("Title is too long. Max number of characters is 50", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             if (!uc.exists(email)) //The user doesn't exist
             {
-                Response r = new Response("The user trying to access does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Response response = new Response("The user trying to access does not exist.", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             if (!uc.IsLoggedIn(email)) //The user isn't logged in
             {
-                Response r = new Response("The user trying to access is not logged in.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Response response = new Response("The user trying to access is not logged in.", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            if (bc.GetBoard(email, boardName) == null) //The board doesn't exist
-            {
-                Response r = new Response("The specified board does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            }
-            if (bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null) //Task doesn't exist in the given board & column.
-            {
-                Response r = new Response("The specified task does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            }
-            Board board = bc.GetBoard(email, boardName);
-            if (board == null)
-            {
-                Response r = new Response("Board " + boardName + " does not exist", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-            }
-            Column column = board.GetColumn(columnOrdinal);
-            if (column == null)
+            try
             {
-                Response r = new Response("Invalid column ordinal.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
+                bc.UpdateTaskTitle(email, boardName, columnOrdinal, taskId, newTitle);
+                Response response = new Response("Task's title was updated successfully");
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            if (column.name == "done")
+            catch(Exception e)
             {
-                Response r = new Response("Cannot edit tasks that are done.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
+                Response response = new Response(e.Message, true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
-            return InvokeMethod(new Func<BusinessLayer.Task, string, Response>(column.UpdateTaskTitle), "{}", task, newTitle);
         }
 
         /// <summary>
@@ -108,57 +87,39 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         public string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string newDesc)
         {
             if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
+            {
+                Response response = new Response("Email cannot be null");
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
             email = email.ToLower();
             if (newDesc == null)
                 newDesc = "";
-            if (newDesc.Length > 300)
+            if (newDesc.Length > MAX_TASK_DESC_LENGTH)
             {
-                Response r = new Response("Description is too long. Max number of characters is 300", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Response response = new Response("Description is too long. Max number of characters is 300", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             if (!uc.exists(email)) //The user doesn't exist
             {
-                Response r = new Response("The user trying to access does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Response response = new Response("The user trying to access does not exist.", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             if (!uc.IsLoggedIn(email)) //The user isn't logged in
             {
-                Response r = new Response("The user trying to access is not logged in.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Response response = new Response("The user trying to access is not logged in.", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            if (bc.GetBoard(email, boardName) == null) //The board doesn't exist
+            try
             {
-                Response r = new Response("The specified board does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                bc.UpdateTaskDescription(email, boardName, columnOrdinal, taskId, newDesc);
+                Response response = new Response("Task's description was updated successfully");
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            if (bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null) //Task doesn't exist in the given board & column.
+            catch (Exception e)
             {
-                Response r = new Response("The specified task does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Response response = new Response(e.Message, true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            Board board = bc.GetBoard(email, boardName);
-            if (board == null)
-            {
-                Response r = new Response("Board " + boardName + " does not exist", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            Column column = board.GetColumn(columnOrdinal);
-            if (column == null)
-            {
-                Response r = new Response("Invalid column ordinal.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            if (column.name == "done")
-            {
-                Response r = new Response("Cannot edit tasks that are done.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
-            return InvokeMethod(new Func<BusinessLayer.Task, string, Response>(column.UpdateTaskDescription), "{}", task, newDesc);
         }
 
         internal Response LoadData()
@@ -180,56 +141,32 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             /*if (newDueDate < DateTime.Now)
                 return JsonConvert.SerializeObject(new Response("Due date cannot be in the past.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 */          if (email == null)
-                return GenerateBadResponseString("Email cannot be null");
+            {
+                Response response = new Response("Email cannot be null", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
             email = email.ToLower();
             if (!uc.exists(email)) //The user doesn't exist
             {
-                Response r = new Response("The user trying to access does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Response response = new Response("The user trying to access does not exist.", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             if (!uc.IsLoggedIn(email)) //The user isn't logged in
             {
-                Response r = new Response("The user trying to access is not logged in.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Response response = new Response("The user trying to access is not logged in.", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            if (bc.GetBoard(email, boardName) == null) //The board doesn't exist
+            try
             {
-                Response r = new Response("The specified board does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                bc.UpdateTaskDueDate(email, boardName, columnOrdinal, taskId, newDueDate);
+                Response response = new Response("Task's due date was updated successfully");
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            if (bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null) //Task doesn't exist in the given board & column.
+            catch (Exception e)
             {
-                Response r = new Response("The specified task does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                Response response = new Response(e.Message, true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            Board board = bc.GetBoard(email, boardName);
-            if (board == null)
-            {
-                Response r = new Response("Board " + boardName + " does not exist", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            Column column = board.GetColumn(columnOrdinal);
-            if (column == null)
-            {
-                Response r = new Response("Invalid column ordinal.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            if (column.name == "done")
-            {
-                Response r = new Response("Cannot edit tasks that are done.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
-            return InvokeMethod(new Func<BusinessLayer.Task, DateTime, Response>(column.UpdateTaskDueDate), "{}", task, newDueDate);
-        }
-
-        private string GenerateBadResponseString(string s)
-        {
-            Response r = new Response(s, true);
-            return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
     }
 }
