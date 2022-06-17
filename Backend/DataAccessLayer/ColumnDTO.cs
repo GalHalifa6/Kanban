@@ -63,6 +63,10 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 throw new Exception(badMsg);
             }
         }
+        /// <summary>
+        /// Remove a task
+        /// </summary>
+        /// <param name="id">The task id</param>
         internal void RemoveTask(int id)
         {
             string query = $"DELETE FROM Tasks WHERE id = {id}";
@@ -76,12 +80,19 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
             }
         }
+        /// <summary>
+        /// Add a task
+        /// </summary>
+        /// <param name="taskDTO">The task</param>
         internal void AddTask(TaskDTO taskDTO)
         {
             string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({taskDTO.Id},'{taskDTO.Title}',{taskDTO.Description},'{taskDTO.DueDate}', 'null')";
             GeneralNonQuery(query, "A task with this id already exists");
         }
-
+        /// <summary>
+        /// Set a limitation on the tasks number in this column
+        /// </summary>
+        /// <param name="newLimit"></param>
         internal void SetMax(int newLimit)
         {
             string query = $"UPDATE Columns SET maxTasks = '{newLimit}' WHERE columnOrdinal = {ordinal}";
