@@ -135,5 +135,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return true;
         }
+
+        internal bool JoinBoard(Board b)
+        {
+            throw new NotImplementedException();
+        }
     }
 } 

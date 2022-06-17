@@ -59,6 +59,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return inProgress.GetTasksList();
         }
 
+        /// <summary>
+        /// retrieves a column based on the column ordinal
+        /// </summary>
+        /// <param name="columnNumber"> 0 = backlog, 1 = in progress, 2 = done</param>
+        /// <returns> column object based on the given ordinal </returns>
         public Column GetColumn(int columnNumber)
         {
             if (columnNumber > 2 || columnNumber < 0)
@@ -109,9 +114,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             throw new NotImplementedException();
         }
 
-        internal Response AddBoard()
-        {
-            return dto.AddBoard(owner, id, name);
+        internal void AddBoard() { 
+            dto.AddBoard(owner, id, name);
         }
 
         /// <summary>
@@ -119,14 +123,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">deleter's email</param>
         /// <returns></returns>
-        internal Response RemoveBoard(string email)
+        internal void RemoveBoard(string email)
         {
             if (email != owner)
             {
                 logger.Info("Non owner attempted to delete board");
-                return new Response("Only board owner can delete a board");
+                throw new Exception("Only board owner can delete a board");
             }
-            return dto.RemoveBoard();
+            dto.RemoveBoard();
         }
 
         internal int GetColumnLimit(string boardName, int columnNumber)
@@ -213,41 +217,37 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
-        public Response AddUser(string email)
+        public void AddUser(string email)
         {
             if (usernames.Contains(email) || owner == email)
             {
                 logger.Warn(email + " attempted to join a board that he's already in");
-                return new Response(email + " is already in " + name, true);
+                throw new Exception(email + " is already in " + name);
             }
-            Response r = dto.AddUser(email);
-            if (r.ErrorOccured())
-                return r;
+            dto.AddUser(email);
             logger.Info(email + " added to board " + name);
             usernames.Add(email);
-            return new Response(email + " added successfully to " + name);
-
         }
 
-        public Response RemoveUser(string email)
+        public void RemoveUser(string email)
         {
             if (usernames.Contains(email))
             {
-                Response r = dto.RemoveUser(email);
-                if (r.ErrorOccured())
-                    return r;
+                dto.RemoveUser(email);
                 usernames.Remove(email);
                 UnassignTasks(email);
                 logger.Info(email + " removed from board " + name);
-                return r;
             }
             else if (owner == email)
             {
                 logger.Warn("Attempt to remove board owner failed");
-                return new Response("Cannot remove owner from board without providing another owner", true);
+                throw new Exception("Cannot remove owner from board without providing another owner");
             }
-            logger.Warn("Attempt to remove user from board that the user was not in");
-            return new Response(email + " is not in " + name, true);
+            else
+            {
+                logger.Warn("Attempt to remove user from board that the user was not in");
+                throw new Exception(email + " is not in " + name);
+            }
         }
 
 
@@ -258,27 +258,24 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             inProgress.UnassignTasks(email);
         }
 
-        public Response ChangeOwner(string currentOwner, string newOwner)
+        public void ChangeOwner(string currentOwner, string newOwner)
         {
             if (currentOwner != owner)
             {
                 logger.Warn("Attempt to change owner of board failed due to incorrect currentOwner name");
-                return new Response("Failed to change owner because " + currentOwner + " is not the owner of the board", true);
+                throw new Exception("Failed to change owner because " + currentOwner + " is not the owner of the board");
             }
             if (!usernames.Contains(newOwner))
             {
                 logger.Warn("Attempt to change owner of board failed due to newOwner not in the board");
-                return new Response("Failed to change owner because " + newOwner + " is not the in the board", true);
+                throw new Exception("Failed to change owner because " + newOwner + " is not the in the board");
 
             }
-            Response r = dto.ChangeOwner(newOwner);
-            if (r.ErrorOccured())
-                return r;
+            dto.ChangeOwner(newOwner);
             usernames.Add(owner);
             usernames.Remove(newOwner);
             owner = newOwner;
             logger.Info("Owner changed successfully");
-            return r;
         }
 
         internal Task GetTask(int columnOrdinal, int taskId)

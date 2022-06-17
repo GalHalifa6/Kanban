@@ -76,7 +76,6 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 }
             }
         }
-
         internal void AddTask(TaskDTO taskDTO)
         {
             string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({taskDTO.Id},'{taskDTO.Title}',{taskDTO.Description},'{taskDTO.DueDate}', 'null')";

@@ -141,28 +141,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
-            Response r = BS.AddBoard(email, name);
+            Response r = BS.AddBoard(email, name, US);
             if (r.ErrorOccured())
                 return GenerateBadResponseString(r.ErrorMessage);
-            Board b = (Board) r.ReturnValue;
-            if (US.AddBoard(email, b))
-            {
-                return "{}";
-            }
-            BS.RemoveBoard(email, name);
-            return GenerateBadResponseString($"{email} already has a board with the name '{name}'");
-
-/*            if (US.AddBoard(email, name))
-            {
-                string r = BS.AddBoard(email, name);
-                if (r == "{}")
-                {
-                    return r;
-                }
-                US.RemoveBoard(email, name);
-                return r;
-            }
-            return GenerateBadResponseString("can't add two boards with the same name");*/
+            return "{}";
         }
 
         internal string RemoveBoard(string email, string name)
@@ -204,7 +186,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             if (res != null)
                 return res;
 
-            string r = BS.JoinBoard(email, boardID);
+            string r = BS.JoinBoard(email, boardID, US);
             if (r == "{}")
             {
                 return r;

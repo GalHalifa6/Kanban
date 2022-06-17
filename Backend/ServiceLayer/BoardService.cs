@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using System.Text.Json;
 using Newtonsoft.Json;
+using IntroSE.Kanban.Backend.Utility;
+using log4net;
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
 {
     public class BoardService
     {
         public BoardController bc { get; }
-
+        public ILog logger = Logger.GetLogger();
+        private static int MAX_TASK_DESC_LENGTH = 300;
+        private static int MAX_TASK_TITLE_LENGTH = 50;
         public BoardService()
         {
             bc = new BoardController();
@@ -35,7 +39,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             catch (Exception ex)
             {
                 return JsonConvert.SerializeObject(new Response(ex.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
             }
         }
 
@@ -54,19 +57,22 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email">email of the user to add the board to</param>
         /// <param name="name"> name of the board that is being added</param>
         /// <returns>Response indicating the outcome of the procedure</returns>
-        public Response AddBoard(string email, string name)
+        public Response AddBoard(string email, string name, UserService US)
         {
-            /*if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
-            {
-                Response response = new Response("Cannot have an empty board name", true);
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore });
-            }
-            return InvokeMethod(new Func<string, string, Response>(bc.AddBoard), "{}", email, name);*/
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
             {
-               return new Response("Cannot have an empty board name", true);
+                logger.Warn(email + " tried to create a board with invalid name");
+                return new Response("Cannot have an empty board name", true);
             }
-            return bc.AddBoard(email, name);
+
+            try {
+                bc.AddBoard(email, name, US.uc);
+                return new Response("Board was added successfully");
+            }
+            catch (Exception e)
+            {
+                return new Response(e.Message, true);
+            }
         }
 
         /// <summary>
@@ -76,7 +82,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="boardName">board to be removed</param>
         /// <returns>Reponse with the outcome of the procedure</returns>
         public string RemoveBoard(string email, string name) {
-            return InvokeMethod(new Func<string, string, Response>(bc.RemoveBoard), "{}", email, name);
+            return InvokeMethod(new Action<string, string>(bc.RemoveBoard), "{}", email, name);
         }
 
 
@@ -197,9 +203,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return InvokeMethod(new Func<string, string, int, string>(bc.GetColumnName), "{}", email, boardName, columnNumber);
         }
 
-        internal string JoinBoard(string email, int boardID)
+        internal string JoinBoard(string email, int boardID, UserService US)
         {
-            return InvokeMethod(new Func<string, int, Response>(bc.JoinBoard), "{}", email, boardID);
+            return InvokeMethod(new Action<string, int, UserController>(bc.JoinBoard), "{}", email, boardID, US.uc);
         }
 
 
@@ -235,7 +241,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs</returns>
         internal string LeaveBoard(string email, int boardID)
         {
-            return InvokeMethod(new Func<string, int, Response>(bc.LeaveBoard), "{}", email, boardID);
+            return InvokeMethod(new Action<string, int>(bc.LeaveBoard), "{}", email, boardID);
         }
 
         /// <summary>
@@ -247,7 +253,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs</returns>
         internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
-            return InvokeMethod(new Func<string, string, string, Response>(bc.TransferOwnership), "{}", currentOwnerEmail, newOwnerEmail, boardName);
+            return InvokeMethod(new Action<string, string, string> (bc.TransferOwnership), "{}", currentOwnerEmail, newOwnerEmail, boardName);
         }
     }
 }
