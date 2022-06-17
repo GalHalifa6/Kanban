@@ -142,7 +142,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return 1;
             return col.maxTasks;
         }
-
+        /// <summary>
+        /// Add a task to this board
+        /// </summary>
+        /// <param name="email">The user to add the task to</param>
+        /// <param name="title">The title of the task</param>
+        /// <param name="description">The description of the task</param>
+        /// <param name="dueDate">The due date of the task</param>
+        /// <exception cref="Exception"></exception>
         internal void AddTask(string email, string title, string description, DateTime dueDate)
         {
             if (IsInBoard(email))
@@ -175,7 +182,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Info("Task was removed successfully");
             return new Response("Task was removed successfully");
         }*/
-
         internal void AdvanceTask(string email, int columnOrdinal, int taskId)
         {
             
