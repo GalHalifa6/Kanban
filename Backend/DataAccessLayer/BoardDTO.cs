@@ -26,10 +26,10 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             this.name = name;
             this.owner = owner;
             this.nextTaskID = nextTaskID;
-
-            backlog = new ColumnDTO();
-            inProgress = new ColumnDTO();
-            done = new ColumnDTO();
+            HashSet<TaskDTO> tasks = new HashSet<TaskDTO>();
+            backlog = new ColumnDTO("backlog", tasks);
+            inProgress = new ColumnDTO("inProgress", tasks);
+            done = new ColumnDTO("done", tasks);
 
             users = new HashSet<string>();
         }

@@ -14,15 +14,13 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         private UserController uc { get; }
         private BoardController bc { get; }
 
-        public static int title_Max_Length;
-        public static int desc_Max_Length;
+        private static int MAX_TASK_DESC_LENGTH = 300;
+        private static int MAX_TASK_TITLE_LENGTH = 50;
 
         public TaskService(UserController uc, BoardController bc)
         {
             this.uc = uc;
             this.bc = bc;
-            title_Max_Length = 50;
-            desc_Max_Length = 300;
         }
 
 
@@ -48,7 +46,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 Response response = new Response("Cannot have an empy title.", true);
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            if (newTitle.Length > title_Max_Length)
+            if (newTitle.Length > MAX_TASK_TITLE_LENGTH)
             {
                 Response response = new Response("Title is too long. Max number of characters is 50", true);
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
@@ -96,7 +94,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             email = email.ToLower();
             if (newDesc == null)
                 newDesc = "";
-            if (newDesc.Length > desc_Max_Length)
+            if (newDesc.Length > MAX_TASK_DESC_LENGTH)
             {
                 Response response = new Response("Description is too long. Max number of characters is 300", true);
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });

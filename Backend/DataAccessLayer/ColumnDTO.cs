@@ -15,10 +15,10 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         public int maxTasks { get; private set; }
         public HashSet<TaskDTO> tasks { get; private set; }
 
-        public ColumnDTO(string name, int maxTasks, HashSet<TaskDTO> tasks)
+        public ColumnDTO(string name, HashSet<TaskDTO> tasks)
         {
             this.name = name;
-            this.maxTasks = maxTasks;
+            this.maxTasks = int.MaxValue;
             if (name == "backlog")
             {
                 ordinal = 0;
