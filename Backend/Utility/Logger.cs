@@ -7,7 +7,7 @@ using log4net;
 
 namespace IntroSE.Kanban.Backend.Utility
 {
-    internal class Logger
+    public class Logger
     {
         private static readonly ILog logger = LogManager.GetLogger("KanbanLogger");
 

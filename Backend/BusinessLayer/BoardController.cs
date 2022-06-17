@@ -19,7 +19,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boards = new Dictionary<string, HashSet<Board>>();
             nextBoardID = 0;
         }
+    
 
+       
         /// <summary>
         /// Get a specific board
         /// </summary>
@@ -56,22 +58,19 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
 
-        public Response AddBoard(string email, string name)
+        public void AddBoard(string email, string name, UserController uc)
         {
-/*            if (GetBoard(email, name) != null)
-            {
-                logger.Warn("Failed to create board " + name + ", because a board with that name already exists.");
-                return new Response("Board with this name already exists", true);
-            }*/
             Board b = new Board(name, nextBoardID, email);
-            Response r = b.AddBoard();
-            if (r.ErrorOccured())
-                return r;
-            boards[email].Add(b);
+            if (uc.AddBoard(email, b)) {
+                b.AddBoard();
+                boards[email].Add(b);
 
-            logger.Info("board " + name + " created for user " + email);
-            nextBoardID++;
-            return new Response(b);
+                logger.Info("board " + name + " created for user " + email);
+                nextBoardID++;
+            }
+            else {
+                throw new Exception("User already has a board with that name");
+            }
         }
 
         /// <summary>
@@ -83,20 +82,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             boards.Add(email, new HashSet<Board>());
         }
 
-        public Response RemoveBoard(string email, string boardName)
+        public void RemoveBoard(string email, string boardName)
         {
             Board board = GetBoard(email, boardName);
-            if (board != null)
+            if (board == null)
             {
-                Response r = board.RemoveBoard(email);
-                if (r.ErrorOccured())
-                    return r; // so that if the db deletion failed, nothing would change
-                boards[email].Remove(board);
-                logger.Info("board " + boardName + " removed from user " + email);
-                return r;
+                logger.Warn("Failed to remove board " + boardName + ", because a board with that name doesn't exists.");
+                throw new Exception("The board '" + boardName + "' does not exist");
             }
-            logger.Warn("Failed to remove board " + boardName + ", because a board with that name doesn't exists.");
-            return new Response("The board '" + boardName + "' does not exist", true);
+            board.RemoveBoard(email);
+            boards[email].Remove(board);
+            logger.Info("board " + boardName + " removed from user " + email);
         }
 
 
@@ -153,7 +149,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response("The board '" + boardName + "' does not exist", true);
             Response r = board.AddTask(email, title, description, dueDate);
             return r;
-
         }
 
         /*public Response<string> RemoveTask(string email, string boardID, string Title)
@@ -165,12 +160,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }*/
 
 
-        public Response AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
+        public void AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
-                return new Response("The board '" + boardName + "' does not exist", true);
-            return board.AdvanceTask(email, columnOrdinal, taskId);
+                throw new Exception("The board '" + boardName + "' does not exist");
+            board.AdvanceTask(email, columnOrdinal, taskId);
         }
 
         public Response InProgressTasks(string email)
@@ -188,6 +183,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return GetBoard(email, boardID).GetTask(taskId);
         }*/
 
+        
         public Task GetTaskInColumn(string email, string boardName, int columnOrdinal, int taskId)
         {
             Board b = GetBoard(email, boardName);
@@ -213,43 +209,46 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return null;
         }
 
-        internal Response JoinBoard(string email, int boardID)
+        internal void JoinBoard(string email, int boardID, UserController uc)
         {
             Board b = GetBoard(boardID);
             if (b == null)
             {
                 logger.Warn(email + " attempted to join a board that doesn't exist");
-                return new Response("A board with id: " + boardID + " does not exist", true);
+                throw new Exception("A board with id: " + boardID + " does not exist");
             }
-            Response r = b.AddUser(email);
-            if (!r.ErrorOccured())
+            if (uc.JoinBoard(email, b))
+            {
+                b.AddUser(email);
                 boards[email].Add(b);
-            return r;
+            }
+            else
+            {
+                throw new Exception("User already has a board with that name");
+            }
         }
 
-        internal Response LeaveBoard(string email, int boardID)
+        internal void LeaveBoard(string email, int boardID)
         {
             Board b = GetBoard(boardID);
             if (b == null)
             {
                 logger.Warn(email + " attempted to leave a board that doesn't exist");
-                return new Response("The board '" + boardID + "' does not exist", true);
+                throw new Exception("The board '" + boardID + "' does not exist");
             }
-            Response r = b.RemoveUser(email);
-            if (!r.ErrorOccured())
-                boards[email].Remove(b);
-            return r;
+            b.RemoveUser(email);
+            boards[email].Remove(b);
         }
 
-        internal Response TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
+        internal void TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
             Board b = GetBoard(currentOwnerEmail, boardName);
             if (b == null)
             {
                 logger.Warn(currentOwnerEmail + " attempted to leave a board that doesn't exist");
-                return new Response("The board '" + boardName + "' does not exist", true);
+                throw new Exception("The board '" + boardName + "' does not exist");
             }
-            return b.ChangeOwner(currentOwnerEmail, newOwnerEmail);
+            b.ChangeOwner(currentOwnerEmail, newOwnerEmail);
         }
     }
 }

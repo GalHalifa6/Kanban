@@ -62,6 +62,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 Response r = new Response("The user trying to access is not logged in.", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
+
             if (bc.GetBoard(email, boardName) == null) //The board doesn't exist
             {
                 Response r = new Response("The specified board does not exist.", true);
@@ -72,13 +73,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 Response r = new Response("The specified task does not exist.", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
+
+
+
             Board board = bc.GetBoard(email, boardName);
-            if (board == null)
+/*            if (board == null)
             {
                 Response r = new Response("Board " + boardName + " does not exist", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-            }
+            }*/
             Column column = board.GetColumn(columnOrdinal);
             if (column == null)
             {

@@ -6,13 +6,17 @@ using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using System.Text.Json;
 using Newtonsoft.Json;
+using IntroSE.Kanban.Backend.Utility;
+using log4net;
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
 {
     public class BoardService
     {
         public BoardController bc { get; }
-
+        public ILog logger = Logger.GetLogger();
+        private static int MAX_TASK_DESC_LENGTH = 300;
+        private static int MAX_TASK_TITLE_LENGTH = 50;
         public BoardService()
         {
             bc = new BoardController();
@@ -27,10 +31,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>json string of the result of the procedure</returns>
         private string InvokeMethod(Delegate method, string ret, params object[] args)
         {
-            Response response = (Response) method.DynamicInvoke(args);
-            if (response.ErrorOccured())
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            return ret;
+            try
+            {
+                method.DynamicInvoke(args);
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new Response(ex.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+            }            
         }
 
         /// <summary>
@@ -48,19 +58,22 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email">email of the user to add the board to</param>
         /// <param name="name"> name of the board that is being added</param>
         /// <returns>Response indicating the outcome of the procedure</returns>
-        public Response AddBoard(string email, string name)
+        public Response AddBoard(string email, string name, UserService US)
         {
-            /*if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
-            {
-                Response response = new Response("Cannot have an empty board name", true);
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings {NullValueHandling = NullValueHandling.Ignore });
-            }
-            return InvokeMethod(new Func<string, string, Response>(bc.AddBoard), "{}", email, name);*/
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
             {
-               return new Response("Cannot have an empty board name", true);
+                logger.Warn(email + " tried to create a board with invalid name");
+                return new Response("Cannot have an empty board name", true);
             }
-            return bc.AddBoard(email, name);
+
+            try {
+                bc.AddBoard(email, name, US.uc);
+                return new Response("Board was added successfully");
+            }
+            catch (Exception e)
+            {
+                return new Response(e.Message, true);
+            }
         }
 
         /// <summary>
@@ -70,7 +83,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="boardName">board to be removed</param>
         /// <returns>Reponse with the outcome of the procedure</returns>
         public string RemoveBoard(string email, string name) {
-            return InvokeMethod(new Func<string, string, Response>(bc.RemoveBoard), "{}", email, name);
+            return InvokeMethod(new Action<string, string>(bc.RemoveBoard), "{}", email, name);
         }
 
 
@@ -85,15 +98,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response with user-email, unless an error occurs.</returns>
         public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
-/*            if (dueDate < DateTime.Now)
-                return JsonConvert.SerializeObject(new Response("Due date cannot be in the past.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-*/            if (string.IsNullOrWhiteSpace(title) || title.Length > 50 || string.IsNullOrEmpty(title))
+            if (string.IsNullOrWhiteSpace(title) || title.Length > MAX_TASK_TITLE_LENGTH || string.IsNullOrEmpty(title))
                 return JsonConvert.SerializeObject(new Response("Invalid title. A valid  title must have up to 50 characters and cannot be empty.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             if (description == null)
                 description = "";
-            if (description.Length > 300)
+            if (description.Length > MAX_TASK_DESC_LENGTH)
                 return JsonConvert.SerializeObject(new Response("Description too long"), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            Response response = bc.AddTask(email, boardName, title, description, dueDate);
+            try
+            {
+                Response response = bc.AddTask(email, boardName, title, description, dueDate);
+            }
             return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
 
@@ -113,7 +127,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>The string "{}", unless an error occurs.</returns>
         public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
-            return InvokeMethod(new Func<string, string, int ,int, Response>(bc.AdvanceTask), "{}", email,
+            return InvokeMethod(new Action<string, string, int ,int>(bc.AdvanceTask), "{}", email,
                 boardName, columnOrdinal, taskId);
         }
 
@@ -176,9 +190,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
 
-        internal string JoinBoard(string email, int boardID)
+        internal string JoinBoard(string email, int boardID, UserService US)
         {
-            return InvokeMethod(new Func<string, int, Response>(bc.JoinBoard), "{}", email, boardID);
+            return InvokeMethod(new Action<string, int, UserController>(bc.JoinBoard), "{}", email, boardID, US.uc);
         }
 
 
@@ -216,7 +230,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs</returns>
         internal string LeaveBoard(string email, int boardID)
         {
-            return InvokeMethod(new Func<string, int, Response>(bc.LeaveBoard), "{}", email, boardID);
+            return InvokeMethod(new Action<string, int>(bc.LeaveBoard), "{}", email, boardID);
         }
 
         /// <summary>
@@ -228,7 +242,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs</returns>
         internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
-            return InvokeMethod(new Func<string, string, string, Response>(bc.TransferOwnership), "{}", currentOwnerEmail, newOwnerEmail, boardName);
+            return InvokeMethod(new Action<string, string, string> (bc.TransferOwnership), "{}", currentOwnerEmail, newOwnerEmail, boardName);
         }
     }
 }
