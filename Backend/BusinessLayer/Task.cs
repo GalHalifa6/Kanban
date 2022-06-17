@@ -38,33 +38,33 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             dto = new TaskDTO(ID, title, description, dueDate);
         }
 
-        public Response UpdateTaskTitle(string newTitle)
+        public void UpdateTaskTitle(string newTitle)
         {
             Title = newTitle;
-            return dto.UpdateTaskTitle(newTitle);
+            dto.UpdateTaskTitle(newTitle);
         }
-        public Response UpdateTaskDescription(string newDescription)
+        public void UpdateTaskDescription(string newDescription)
         {
             Description = newDescription;
-            return dto.UpdateTaskDescription(newDescription);
+            dto.UpdateTaskDescription(newDescription);
         }
 
-        public Response UpdateTaskDueDate(DateTime newDueDate)
+        public void UpdateTaskDueDate(DateTime newDueDate)
         {
             DueDate = newDueDate;
-            return dto.UpdateTaskDueDate(newDueDate);
+            dto.UpdateTaskDueDate(newDueDate);
         }
 
-        internal Response AssignTask(string assigner, string assignee)
+        internal void AssignTask(string assigner, string assignee)
         {
             if (assignee != null && assignee != assigner)
             {
                 logger.Warn("Failed to assign task because the assigner doesn't have permissions");
-                return new Response("User can't assign to this task", true);
+                throw new Exception("User can't assign to this task");
             }
             AssigneeEmail = assignee;
             logger.Info("Assigned " + assignee + " to the task: " + Id);
-            return dto.AssignTask(assigner, assignee);
+            dto.AssignTask(assigner, assignee);
         }
 
         internal bool IsAssigned(string email)
@@ -76,10 +76,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return false;
         }
 
-        internal Response UnassignTask()
+        internal void UnassignTask()
         {
             AssigneeEmail = null;
-            return dto.UnassignTask();
+            dto.UnassignTask();
         }
 
         /*public string toString()

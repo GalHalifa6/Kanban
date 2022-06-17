@@ -14,22 +14,32 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         private UserController uc { get; }
         private BoardController bc { get; }
 
+        public static int title_Max_Length;
+
         public TaskService(UserController uc, BoardController bc)
         {
             this.uc = uc;
             this.bc = bc;
+            title_Max_Length = 50;
         }
 
         private string InvokeMethod(Delegate method, string ret, params object[] args)
         {
-            Response response = (Response)method.DynamicInvoke(args);
-            if (response.ErrorOccured())
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            return ret;
+            try
+            {
+                method.DynamicInvoke(args);
+                return ret;
+            }
+            catch (Exception ex)
+            {
+                return JsonConvert.SerializeObject(new Response(ex.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+            }
         }
 
+
         /// <summary>
-        /// update an existing tasks title
+        /// update an existing tasks' title
         /// </summary>
         /// <param name="email">user holding the board that holds the task</param>
         /// <param name="boardName">board holding the column that holds task</param>
@@ -62,38 +72,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 Response r = new Response("The user trying to access is not logged in.", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            if (bc.GetBoard(email, boardName) == null) //The board doesn't exist
-            {
-                Response r = new Response("The specified board does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            }
-            if (bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null) //Task doesn't exist in the given board & column.
-            {
-                Response r = new Response("The specified task does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            }
-            Board board = bc.GetBoard(email, boardName);
-            if (board == null)
-            {
-                Response r = new Response("Board " + boardName + " does not exist", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            Column column = board.GetColumn(columnOrdinal);
-            if (column == null)
-            {
-                Response r = new Response("Invalid column ordinal.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            if (column.name == "done")
-            {
-                Response r = new Response("Cannot edit tasks that are done.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
-            return InvokeMethod(new Func<BusinessLayer.Task, string, Response>(column.UpdateTaskTitle), "{}", task, newTitle);
+            return InvokeMethod(new Action<string, string, int, int, string>(bc.UpdateTaskTitle), "{}", email, boardName, columnOrdinal, taskId, newTitle);
         }
 
         /// <summary>
@@ -127,38 +106,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 Response r = new Response("The user trying to access is not logged in.", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            if (bc.GetBoard(email, boardName) == null) //The board doesn't exist
-            {
-                Response r = new Response("The specified board does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            }
-            if (bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null) //Task doesn't exist in the given board & column.
-            {
-                Response r = new Response("The specified task does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            }
-            Board board = bc.GetBoard(email, boardName);
-            if (board == null)
-            {
-                Response r = new Response("Board " + boardName + " does not exist", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            Column column = board.GetColumn(columnOrdinal);
-            if (column == null)
-            {
-                Response r = new Response("Invalid column ordinal.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            if (column.name == "done")
-            {
-                Response r = new Response("Cannot edit tasks that are done.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
-            return InvokeMethod(new Func<BusinessLayer.Task, string, Response>(column.UpdateTaskDescription), "{}", task, newDesc);
+            return InvokeMethod(new Action<string, string, int, int, string>(bc.UpdateTaskDescription), "{}", email, boardName, columnOrdinal, taskId, newDesc);
         }
 
         internal Response LoadData()
@@ -192,38 +140,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 Response r = new Response("The user trying to access is not logged in.", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-            if (bc.GetBoard(email, boardName) == null) //The board doesn't exist
-            {
-                Response r = new Response("The specified board does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            }
-            if (bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null) //Task doesn't exist in the given board & column.
-            {
-                Response r = new Response("The specified task does not exist.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            }
-            Board board = bc.GetBoard(email, boardName);
-            if (board == null)
-            {
-                Response r = new Response("Board " + boardName + " does not exist", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            Column column = board.GetColumn(columnOrdinal);
-            if (column == null)
-            {
-                Response r = new Response("Invalid column ordinal.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            if (column.name == "done")
-            {
-                Response r = new Response("Cannot edit tasks that are done.", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            BusinessLayer.Task task = bc.GetTaskInColumn(email, boardName, columnOrdinal, taskId);
-            return InvokeMethod(new Func<BusinessLayer.Task, DateTime, Response>(column.UpdateTaskDueDate), "{}", task, newDueDate);
+            return InvokeMethod(new Action<string, string, int, int, DateTime>(bc.UpdateTaskDueDate), "{}", email, boardName, columnOrdinal, taskId, newDueDate);
         }
 
         private string GenerateBadResponseString(string s)

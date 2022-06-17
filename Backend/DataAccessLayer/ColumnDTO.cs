@@ -56,43 +56,38 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 tasks.Add(t);
             }
         }
-        private Response GeneralNonQuery(string query, string goodMsg, string badMsg)
+        private void GeneralNonQuery(string query, string badMsg)
         {
             if (!DBConnector.GetInstance().ExecuteNonQuery(query))
             {
-                return new Response(badMsg, true);
+                throw new Exception(badMsg);
             }
-            return new Response(goodMsg);
         }
-        internal Response RemoveTask(int id)
+        internal void RemoveTask(int id)
         {
             string query = $"DELETE FROM Tasks WHERE id = {id}";
-            Response r = GeneralNonQuery(query, "Task was removed successfully", "Something went wrong");
-            if (!r.ErrorOccured())
+            GeneralNonQuery(query, "Something went wrong");
+            foreach(TaskDTO task in tasks)
             {
-                foreach(TaskDTO task in tasks)
+                if(task.Id == id)
                 {
-                    if(task.Id == id)
-                    {
-                        tasks.Remove(task);
-                        break;
-                    }
+                    tasks.Remove(task);
+                    break;
                 }
             }
-            return r;
         }
 
-        internal Response AddTask(int ID, string title, string description, DateTime dueDate)
+        internal void AddTask(TaskDTO taskDTO)
         {
-            string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({ID},'{title}',{description},'{dueDate}', 'null')";
-            return GeneralNonQuery(query, "Task was added successfully", "A task with this id already exists");
+            string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({taskDTO.Id},'{taskDTO.Title}',{taskDTO.Description},'{taskDTO.DueDate}', 'null')";
+            GeneralNonQuery(query, "A task with this id already exists");
         }
 
-        internal Response SetMax(int newLimit)
+        internal void SetMax(int newLimit)
         {
             string query = $"UPDATE Columns SET maxTasks = '{newLimit}' WHERE columnOrdinal = {ordinal}";
             maxTasks = newLimit;
-            return GeneralNonQuery(query, "Limit of tasks was updated successfully", "Something went wrong");
+            GeneralNonQuery(query, "Something went wrong");
         }
     }
 }

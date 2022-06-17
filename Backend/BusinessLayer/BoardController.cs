@@ -2,6 +2,7 @@ using IntroSE.Kanban.Backend.DataAccessLayer;
 using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
+using Newtonsoft.Json;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
@@ -101,23 +102,23 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
 
 
-        public Response LimitColumnTasks(string email, string boardName, int columnNumber, int newLimit)
+        public void LimitColumnTasks(string email, string boardName, int columnNumber, int newLimit)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
             {
                 logger.Warn("Failed to limit tasks in board " + boardName + ", because a board with that name doesn't exists.");
-                return new Response("The board '" + boardName + "' does not exist", true);
+                throw new Exception("The board '" + boardName + "' does not exist");
             }
-            return board.LimitColumnTasks(columnNumber, newLimit);
+            board.LimitColumnTasks(columnNumber, newLimit);
         }
 
-        public Response GetColumnLimit(string email, string boardName, int columnNumber)
+        public int GetColumnLimit(string email, string boardName, int columnNumber)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
             {
-                return new Response("The board '" + boardName + "' does not exist", true);
+                throw new Exception("The board '" + boardName + "' does not exist");
             }
             return board.GetColumnLimit(boardName, columnNumber);
         }
@@ -145,15 +146,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
         
-        public Response AddTask(string email, string boardName, string title, string description, DateTime dueDate)
+        public void AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
 
             Board board = GetBoard(email, boardName);
             if (board == null)
-                return new Response("The board '" + boardName + "' does not exist", true);
-            Response r = board.AddTask(email, title, description, dueDate);
-            return r;
-
+                throw new Exception("The board '" + boardName + "' does not exist");
+            board.AddTask(email, title, description, dueDate);
         }
 
         /*public Response<string> RemoveTask(string email, string boardID, string Title)
@@ -165,12 +164,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }*/
 
 
-        public Response AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
+        public void AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
-                return new Response("The board '" + boardName + "' does not exist", true);
-            return board.AdvanceTask(email, columnOrdinal, taskId);
+                throw new Exception("The board '" + boardName + "' does not exist");
+            board.AdvanceTask(email, columnOrdinal, taskId);
         }
 
         public Response InProgressTasks(string email)
@@ -196,15 +195,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return b.GetTask(columnOrdinal, taskId);
         }
 
-        internal Response AssignTask(string assigner, string boardName, int columnOrdinal, int taskID, string assignee)
+        internal void AssignTask(string assigner, string boardName, int columnOrdinal, int taskID, string assignee)
         {
             Board b = GetBoard(assigner, boardName);
             if (b == null)
             {
                 logger.Warn(assigner + " attempted to access a board that doesn't exist");
-                return new Response("The board '" + boardName + "' does not exist", true);
+                throw new Exception("The board '" + boardName + "' does not exist");
             }
-            return b.AssignTask(assigner, columnOrdinal, taskID, assignee);
+            b.AssignTask(assigner, columnOrdinal, taskID, assignee);
         }
 
         public Response LoadData()
@@ -250,6 +249,48 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return new Response("The board '" + boardName + "' does not exist", true);
             }
             return b.ChangeOwner(currentOwnerEmail, newOwnerEmail);
+        }
+
+        public void UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string newTitle)
+        {
+            if (GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null)
+            {
+                throw new Exception("The specified task does not exist.");
+            }
+            Board board = GetBoard(email, boardName);
+            if (board == null)
+            {
+                throw new Exception("The specified board does not exist.");
+            }
+            board.UpdateTaskTitle(columnOrdinal, taskId, newTitle);
+        }
+
+        public void UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string newDesc)
+        {
+            if (GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null)
+            {
+                throw new Exception("The specified task does not exist.");
+            }
+            Board board = GetBoard(email, boardName);
+            if (board == null)
+            {
+                throw new Exception("The specified board does not exist.");
+            }
+            board.UpdateTaskDescription(columnOrdinal, taskId, newDesc);
+        }
+
+        public void UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime newDueDate)
+        {
+            if (GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null)
+            {
+                throw new Exception("The specified task does not exist.");
+            }
+            Board board = GetBoard(email, boardName);
+            if (board == null)
+            {
+                throw new Exception("The specified board does not exist.");
+            }
+            board.UpdateTaskDueDate(columnOrdinal, taskId, newDueDate);
         }
     }
 }
