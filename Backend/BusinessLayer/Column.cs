@@ -59,7 +59,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             tasks.Add(task);
             logger.Info("Added task: " + task.Title);
-            return dto.AddTask(task.Id, task.Title, task.Description, task.DueDate);
+            return dto.AddTask(task.dto);
         }
 
         internal Response AddTask(int ID, string title, string description, DateTime dueDate)
@@ -80,7 +80,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Task newTask = new Task(ID, title, description, dueDate);
             tasks.Add(newTask);
             logger.Info("Added task: " + newTask.Title);
-            return dto.AddTask(ID, title, description, dueDate);
+            return dto.AddTask(newTask.dto);
         }
 
         internal Response RemoveTask(Task task)
