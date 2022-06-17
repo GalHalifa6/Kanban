@@ -97,7 +97,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         internal Response AdvanceTask(ColumnDTO currentColDTO, ColumnDTO nextColDTO, TaskDTO taskDTO)
         {
             nextColDTO.AddTask(taskDTO);
-            currentColDTO.RemoveTask(taskDTO);
+            currentColDTO.RemoveTask(taskDTO.Id);
             return new TasksColumnsBoardsDTO().AdvanceTask(id, currentColDTO.ordinal, nextColDTO.ordinal, taskDTO.Id);
         }
     }
