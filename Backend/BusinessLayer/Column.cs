@@ -36,66 +36,81 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 tasks.Add(t);
             }
         }
-
-        internal Response AddTask(Task task)
+        /// <summary>
+        /// Add a task to this column
+        /// </summary>
+        /// <param name="task">The task</param>
+        /// <exception cref="Exception"></exception>
+        internal void AddTask(Task task)
         {
             if (tasks.Contains(task))
             {
                 logger.Warn("Cannot add task because it already exists.");
-                return new Response("This task already exists.", true);
+                throw new Exception("This task already exists.");
             }
             for (int i = 0; i < tasks.Count; i++)
             {
                 if (task.Id == tasks[i].Id)
                 {
                     logger.Warn("Cannot add task because a task with the same Id already exists.");
-                    return new Response("A task with the same Id already exists.", true);
+                    throw new Exception("A task with the same Id already exists.");
                 }
             }
             if (tasks.Count == maxTasks)
             {
                 logger.Warn("Cannot add task because there are maximum tasks in this column.");
-                return new Response("The maximum capacity of tasks in this column is full.", true);
+                throw new Exception("The maximum capacity of tasks in this column is full.");
             }
             tasks.Add(task);
             logger.Info("Added task: " + task.Title);
-            return dto.AddTask(task.dto);
+            dto.AddTask(task.dto);
         }
-
-        internal Response AddTask(int ID, string title, string description, DateTime dueDate)
+        /// <summary>
+        /// Add a task to this column
+        /// </summary>
+        /// <param name="ID">The task id</param>
+        /// <param name="title">The task's title</param>
+        /// <param name="description">The task's description</param>
+        /// <param name="dueDate">The task's due date</param>
+        /// <exception cref="Exception"></exception>
+        internal void AddTask(int ID, string title, string description, DateTime dueDate)
         {
             if (tasks.Count == maxTasks)
             {
                 logger.Warn("Cannot add task because there are maximum tasks in this column.");
-                return new Response("The maximum capacity of tasks in this column is full.", true);
+                throw new Exception("The maximum capacity of tasks in this column is full.");
             }
             for (int i = 0; i < tasks.Count; i++)
             {
                 if (ID == tasks[i].Id)
                 {
                     logger.Warn("Cannot add task because a task with the same Id already exists.");
-                    return new Response("A task with the same Id already exists.", true);
+                    throw new Exception("A task with the same Id already exists.");
                 }
             }
             Task newTask = new Task(ID, title, description, dueDate);
             tasks.Add(newTask);
             logger.Info("Added task: " + newTask.Title);
-            return dto.AddTask(newTask.dto);
+            dto.AddTask(newTask.dto);
         }
-
-        internal Response RemoveTask(Task task)
+        /// <summary>
+        /// Remove a task from this column
+        /// </summary>
+        /// <param name="task">The task we need to remove</param>
+        /// <exception cref="Exception"></exception>
+        internal void RemoveTask(Task task)
         {
             if (!tasks.Contains(task))
             {
                 logger.Warn("Cannot remove task because it doesn't exist.");
-                return new Response("The task doesn't exist.", true);
+                throw new Exception("The task doesn't exist.");
             }
             logger.Info("Task: " + task.Title + " is removed.");
             tasks.Remove(task);
-            return dto.RemoveTask(task.Id);
+            dto.RemoveTask(task.Id);
         }
 
-        internal Response RemoveTask(int id)
+        /*internal void RemoveTask(int id)
         {
             Boolean found = false;
             for (int i = 0; i < tasks.Count & !found; i++)
@@ -109,54 +124,74 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (!found)
             {
                 logger.Warn("Cannot remove task because it doesn't exist.");
-                return new Response("The task doesn't exist.", true);
+                throw new Exception("The task doesn't exist.");
             }
             logger.Info("Task: " + id + " is removed.");
-            return dto.RemoveTask(id);
-        }
-        internal Response UpdateTaskTitle(Task task, string newTitle)
+            dto.RemoveTask(id);
+        }*/
+        /// <summary>
+        /// Update a task's title
+        /// </summary>
+        /// <param name="task">The task</param>
+        /// <param name="newTitle">The new title</param>
+        /// <exception cref="Exception"></exception>
+        internal void UpdateTaskTitle(Task task, string newTitle)
         {
             if (!tasks.Contains(task))
             {
                 logger.Warn("Cannot edit task because it doesn't exist.");
-                return new Response("The task doesn't exist in this column", true);
+                throw new Exception("The task doesn't exist in this column");
             }
             task.UpdateTaskTitle(newTitle);
             logger.Info("Task Title changed to: " + newTitle);
-            return new Response(true);
         }
-
-        internal Response UpdateTaskDescription(Task task, string newDescription)
+        /// <summary>
+        /// Update a task's description
+        /// </summary>
+        /// <param name="task">The task</param>
+        /// <param name="newDescription">The new description</param>
+        /// <exception cref="Exception"></exception>
+        internal void UpdateTaskDescription(Task task, string newDescription)
         {
             if (!tasks.Contains(task))
             {
                 logger.Warn("Cannot edit task because it doesn't exist.");
-                return new Response("That task doesn't exist in this column.", true);
+                throw new Exception("That task doesn't exist in this column.");
             }
             task.UpdateTaskDescription(newDescription);
             logger.Info("Task Description changed to: " + newDescription);
-            return new Response(true);
         }
-
-        internal Response UpdateTaskDueDate(Task task, DateTime newDueDate)
+        /// <summary>
+        /// Update a task's due date
+        /// </summary>
+        /// <param name="task">The task</param>
+        /// <param name="newDueDate">The new due date</param>
+        /// <exception cref="Exception"></exception>
+        internal void UpdateTaskDueDate(Task task, DateTime newDueDate)
         {
             if (!tasks.Contains(task))
             {
                 logger.Warn("Cannot edit task because it doesn't exist.");
-                return new Response("That task doesn't exist in this column.", true);
+                throw new Exception("That task doesn't exist in this column.");
             }
             task.UpdateTaskDueDate(newDueDate);
             logger.Info("Task due date changed to: " + newDueDate);
-            return new Response(true);
         }
-
-        public Response SetMax(int maxTasks)
+        /// <summary>
+        /// Set a limit of the column's tasks
+        /// </summary>
+        /// <param name="maxTasks">The new limit</param>
+        public void SetMax(int maxTasks)
         {
             logger.Info("Column's tasks limit was changed to: " + maxTasks);
             this.maxTasks = maxTasks;
-            return dto.SetMax(maxTasks);
+            dto.SetMax(maxTasks);
         }
-
+        /// <summary>
+        /// Get a task by the id
+        /// </summary>
+        /// <param name="taskID">The task id</param>
+        /// <returns></returns>
         public Task GetTask(int taskID)
         {
             for (int i = 0; i < tasks.Count; i++)
@@ -168,7 +203,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return null;
         }
-
+        /// <summary>
+        /// Get a list of tasks in this column
+        /// </summary>
+        /// <returns></returns>
         public List<Task> GetTasksList()
         {
             /*string output = "";
@@ -188,7 +226,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return output;*/
             return tasks;
         }
-
+        /// <summary>
+        /// Get a list of the assigned tasks of a user
+        /// </summary>
+        /// <param name="email">The user's email</param>
+        /// <returns></returns>
         internal List<Task> GetAllAssignedTasks(string email)
         {
             List<Task> output = new List<Task>();
@@ -201,22 +243,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return output;
         }
-
-        internal Response UnassignTasks(string email)
+        /// <summary>
+        /// Unassign all tasks from a user
+        /// </summary>
+        /// <param name="email">The user's email</param>
+        internal void UnassignTasks(string email)
         {
             foreach (Task task in tasks)
             {
                 if (task.AssigneeEmail.Equals(email))
                 {
-                    Response r = task.UnassignTask();
-                    if (r.ErrorOccured())
-                    {
-                        return r;
-                    }
+                    task.UnassignTask();
                 }
             }
             logger.Info("Unassigned " + email + " from all tasks");
-            return new Response(email + " was unassigned from all tasks");
         }
     }
 }
