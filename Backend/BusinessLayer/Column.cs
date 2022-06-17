@@ -36,7 +36,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 tasks.Add(t);
             }
         }
-
+        /// <summary>
+        /// Add a task to this column
+        /// </summary>
+        /// <param name="task">The task</param>
+        /// <exception cref="Exception"></exception>
         internal void AddTask(Task task)
         {
             if (tasks.Contains(task))
@@ -61,7 +65,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Info("Added task: " + task.Title);
             dto.AddTask(task.dto);
         }
-
+        /// <summary>
+        /// Add a task to this column
+        /// </summary>
+        /// <param name="ID">The task id</param>
+        /// <param name="title">The task's title</param>
+        /// <param name="description">The task's description</param>
+        /// <param name="dueDate">The task's due date</param>
+        /// <exception cref="Exception"></exception>
         internal void AddTask(int ID, string title, string description, DateTime dueDate)
         {
             if (tasks.Count == maxTasks)
@@ -82,7 +93,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Info("Added task: " + newTask.Title);
             dto.AddTask(newTask.dto);
         }
-
+        /// <summary>
+        /// Remove a task from this column
+        /// </summary>
+        /// <param name="task">The task we need to remove</param>
+        /// <exception cref="Exception"></exception>
         internal void RemoveTask(Task task)
         {
             if (!tasks.Contains(task))
@@ -95,7 +110,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             dto.RemoveTask(task.Id);
         }
 
-        internal void RemoveTask(int id)
+        /*internal void RemoveTask(int id)
         {
             Boolean found = false;
             for (int i = 0; i < tasks.Count & !found; i++)
@@ -113,7 +128,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             logger.Info("Task: " + id + " is removed.");
             dto.RemoveTask(id);
-        }
+        }*/
+        /// <summary>
+        /// Update a task's title
+        /// </summary>
+        /// <param name="task">The task</param>
+        /// <param name="newTitle">The new title</param>
+        /// <exception cref="Exception"></exception>
         internal void UpdateTaskTitle(Task task, string newTitle)
         {
             if (!tasks.Contains(task))
@@ -124,7 +145,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             task.UpdateTaskTitle(newTitle);
             logger.Info("Task Title changed to: " + newTitle);
         }
-
+        /// <summary>
+        /// Update a task's description
+        /// </summary>
+        /// <param name="task">The task</param>
+        /// <param name="newDescription">The new description</param>
+        /// <exception cref="Exception"></exception>
         internal void UpdateTaskDescription(Task task, string newDescription)
         {
             if (!tasks.Contains(task))
@@ -135,7 +161,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             task.UpdateTaskDescription(newDescription);
             logger.Info("Task Description changed to: " + newDescription);
         }
-
+        /// <summary>
+        /// Update a task's due date
+        /// </summary>
+        /// <param name="task">The task</param>
+        /// <param name="newDueDate">The new due date</param>
+        /// <exception cref="Exception"></exception>
         internal void UpdateTaskDueDate(Task task, DateTime newDueDate)
         {
             if (!tasks.Contains(task))
@@ -146,14 +177,21 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             task.UpdateTaskDueDate(newDueDate);
             logger.Info("Task due date changed to: " + newDueDate);
         }
-
+        /// <summary>
+        /// Set a limit of the column's tasks
+        /// </summary>
+        /// <param name="maxTasks">The new limit</param>
         public void SetMax(int maxTasks)
         {
             logger.Info("Column's tasks limit was changed to: " + maxTasks);
             this.maxTasks = maxTasks;
             dto.SetMax(maxTasks);
         }
-
+        /// <summary>
+        /// Get a task by the id
+        /// </summary>
+        /// <param name="taskID">The task id</param>
+        /// <returns></returns>
         public Task GetTask(int taskID)
         {
             for (int i = 0; i < tasks.Count; i++)
@@ -165,7 +203,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return null;
         }
-
+        /// <summary>
+        /// Get a list of tasks in this column
+        /// </summary>
+        /// <returns></returns>
         public List<Task> GetTasksList()
         {
             /*string output = "";
@@ -185,7 +226,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return output;*/
             return tasks;
         }
-
+        /// <summary>
+        /// Get a list of the assigned tasks of a user
+        /// </summary>
+        /// <param name="email">The user's email</param>
+        /// <returns></returns>
         internal List<Task> GetAllAssignedTasks(string email)
         {
             List<Task> output = new List<Task>();
@@ -198,7 +243,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             return output;
         }
-
+        /// <summary>
+        /// Unassign all tasks from a user
+        /// </summary>
+        /// <param name="email">The user's email</param>
         internal void UnassignTasks(string email)
         {
             foreach (Task task in tasks)
