@@ -65,7 +65,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 bc.UpdateTaskTitle(email, boardName, columnOrdinal, taskId, newTitle);
-                Response response = new Response("Task's title was updated successfully");
+                Response response = new Response("{}");
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             catch(Exception e)
@@ -112,7 +112,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 bc.UpdateTaskDescription(email, boardName, columnOrdinal, taskId, newDesc);
-                Response response = new Response("Task's description was updated successfully");
+                Response response = new Response("{}");
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             catch (Exception e)
@@ -159,7 +159,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 bc.UpdateTaskDueDate(email, boardName, columnOrdinal, taskId, newDueDate);
-                Response response = new Response("Task's due date was updated successfully");
+                Response response = new Response("{}");
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             catch (Exception e)
