@@ -9,11 +9,33 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
     public class ColumnDTO
     {
-        public string name { get; set; }
-        public int boardID { get; }
-        public int ordinal{ get; }
-        public int maxTasks { get; private set; }
-        public HashSet<TaskDTO> tasks { get; private set; }
+        private string name;
+        public string Name
+        {
+            get => name;
+        }
+        private int boardID;
+        public int BoardID
+        {
+            get => boardID;
+        }
+        private int ordinal;
+        public int Ordinal
+        {
+            get => ordinal;
+        }
+        private int maxTasks;
+        public int MaxTasks
+        {
+            get => maxTasks;
+            set => maxTasks = value;
+        }
+        private HashSet<TaskDTO> tasks;
+        public HashSet<TaskDTO> Tasks
+        {
+            get => tasks;
+            set => tasks = value;
+        }
 
         public ColumnDTO(int boardID, string name, HashSet<TaskDTO> tasks)
         {

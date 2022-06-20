@@ -11,8 +11,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 {
     internal class TaskService
     {
-        private UserController uc { get; }
-        private BoardController bc { get; }
+        private UserController uc;
+        public UserController UC
+        {
+            get => uc;
+        }
+        private BoardController bc;
+        public BoardController BC
+        {
+            get => bc;
+        }
 
         private static int MAX_TASK_DESC_LENGTH = 300;
         private static int MAX_TASK_TITLE_LENGTH = 50;
