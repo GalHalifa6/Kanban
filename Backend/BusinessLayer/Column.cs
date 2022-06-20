@@ -32,10 +32,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             dto = column;
             foreach (TaskDTO task in column.tasks)
             {
-                Task t = new Task(task.Id, task.Title, task.Description, task.DueDate);
+                Task t = new Task(task.boardID, task.columnOrdinal, task.Id, task.Title, task.Description, task.DueDate);
                 tasks.Add(t);
             }
         }
+
+        public int GetBoardID()
+        {
+            return dto.boardID;
+        }
+
         /// <summary>
         /// Add a task to this column
         /// </summary>
@@ -73,7 +79,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="description">The task's description</param>
         /// <param name="dueDate">The task's due date</param>
         /// <exception cref="Exception"></exception>
-        internal void AddTask(int ID, string title, string description, DateTime dueDate)
+        internal void AddTask(int boardID, int columnOrdinal, int ID, string title, string description, DateTime dueDate)
         {
             if (tasks.Count == maxTasks)
             {
@@ -88,7 +94,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     throw new Exception("A task with the same Id already exists.");
                 }
             }
-            Task newTask = new Task(ID, title, description, dueDate);
+            Task newTask = new Task(boardID, columnOrdinal, ID, title, description, dueDate);
             tasks.Add(newTask);
             logger.Info("Added task: " + newTask.Title);
             dto.AddTask(newTask.dto);

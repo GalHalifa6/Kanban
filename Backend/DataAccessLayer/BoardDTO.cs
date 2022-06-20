@@ -27,9 +27,9 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             this.owner = owner;
             this.nextTaskID = nextTaskID;
             HashSet<TaskDTO> tasks = new HashSet<TaskDTO>();
-            backlog = new ColumnDTO("backlog", tasks);
-            inProgress = new ColumnDTO("inProgress", tasks);
-            done = new ColumnDTO("done", tasks);
+            backlog = new ColumnDTO(id, "backlog", tasks);
+            inProgress = new ColumnDTO(id, "inProgress", tasks);
+            done = new ColumnDTO(id,"done", tasks);
 
             users = new HashSet<string>();
         }
