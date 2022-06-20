@@ -88,7 +88,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "userEmail VARCHAR(200)," +
                 "boardID INTEGER," +
                 "PRIMARY KEY (userEmail,boardID)," +
-                //"FOREIGN KEY (userEmail) REFERENCES Users(id)," +
+                "FOREIGN KEY (userEmail) REFERENCES Users(id)," +
                 "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
                 ")";
 
