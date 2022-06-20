@@ -104,17 +104,6 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 ")";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
-            query = "CREATE TABLE IF NOT EXISTS TasksColumnsBoards(" +
-                "boardID INTEGER," +
-                "columnOrdinal ," +
-                "taskID INTEGER," +
-                "PRIMARY KEY (boardID, taskID)," +
-                "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE," +
-                "FOREIGN KEY (columnOrdinal) REFERENCES Columns(columnOrdinal) ON DELETE CASCADE," +
-                "FOREIGN KEY (taskID) REFERENCES Tasks(id) ON DELETE CASCADE" +
-                ")";
-            cmd.CommandText = query;
-            cmd.ExecuteNonQuery();
             query = "CREATE TABLE IF NOT EXISTS Columns(" +
                 "boardID INTEGER," +
                 "columnOrdinal INTEGER," +
@@ -125,13 +114,15 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
             query = "CREATE TABLE IF NOT EXISTS Tasks(" +
+                "boardID INTEGER" +
+                "columnOrdinal INTEGER" +
                 "id INTEGER," +
                 "title STRING," +
                 "description STRING," +
-                "dueDate DATETIME," +
-                "assignee STRING," +
-                "PRIMARY KEY (id, assignee)" +
-                //"FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
+                "dueDate DATETIME" +
+                "assignee STRING" +
+                "PRIMARY KEY (boardId, id)," +
+                "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
                 ")";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();

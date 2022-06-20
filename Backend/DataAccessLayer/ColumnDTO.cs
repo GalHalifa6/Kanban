@@ -15,8 +15,9 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         public int maxTasks { get; private set; }
         public HashSet<TaskDTO> tasks { get; private set; }
 
-        public ColumnDTO(string name, HashSet<TaskDTO> tasks)
+        public ColumnDTO(int boardID, string name, HashSet<TaskDTO> tasks)
         {
+            this.boardID = boardID;
             this.name = name;
             this.maxTasks = int.MaxValue;
             if (name == "backlog")
@@ -69,7 +70,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="id">The task id</param>
         internal void RemoveTask(int id)
         {
-            string query = $"DELETE FROM Tasks WHERE id = {id}";
+            string query = $"DELETE FROM Tasks WHERE id = {id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
             foreach(TaskDTO task in tasks)
             {
@@ -86,7 +87,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="taskDTO">The task</param>
         internal void AddTask(TaskDTO taskDTO)
         {
-            string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({taskDTO.Id},'{taskDTO.Title}',{taskDTO.Description},'{taskDTO.DueDate}', 'null')";
+            string query = $"INSERT INTO Tasks(boardId, columnOrdinal, id, title, description, dueDate, assignee) VALUES({taskDTO.boardID}, {taskDTO.columnOrdinal}, {taskDTO.Id},'{taskDTO.Title}','{taskDTO.Description}',{taskDTO.DueDate}, 'null')";
             GeneralNonQuery(query, "A task with this id already exists");
         }
         /// <summary>
@@ -95,7 +96,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="newLimit"></param>
         internal void SetMax(int newLimit)
         {
-            string query = $"UPDATE Columns SET maxTasks = '{newLimit}' WHERE columnOrdinal = {ordinal}";
+            string query = $"UPDATE Columns SET maxTasks = '{newLimit}' WHERE columnOrdinal = {ordinal} AND boardID = {boardID}";
             maxTasks = newLimit;
             GeneralNonQuery(query, "Something went wrong");
         }

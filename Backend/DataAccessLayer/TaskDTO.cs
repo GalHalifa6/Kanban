@@ -16,12 +16,14 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         public DateTime DueDate { get; private set; }
 
-        public TaskDTO dto { get; private set; }
+        public String AssigneeEmail { get; set; }
+        public int boardID { get; private set; }
+        public int columnOrdinal { get; private set; }
 
-        public String AssigneeEmail { get; private set; }
-
-        public TaskDTO(int ID, string name, string description, DateTime dueDate)
+        public TaskDTO(int boardID, int columnOrdinal, int ID, string name, string description, DateTime dueDate)
         {
+            this.boardID = boardID;
+            this.columnOrdinal = columnOrdinal;
             this.Id = ID;
             this.Title = name;
             this.Description = description;
@@ -33,6 +35,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         public TaskDTO(BusinessLayer.Task task)
         {
+            this.boardID = task.boardID;
+            this.columnOrdinal = task.columnOrdinal;
             this.Id = task.Id;
             this.Title = task.Title;
             this.Description = task.Description;
@@ -54,7 +58,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="newTitle">The new title</param>
         internal void UpdateTaskTitle(string newTitle)
         {
-            string query = $"UPDATE Tasks SET newTitle = '{newTitle}' WHERE id = {Id}";
+            string query = $"UPDATE Tasks SET newTitle = '{newTitle}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
             Title = newTitle;
         }
@@ -64,7 +68,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="newDesc">The new description</param>
         internal void UpdateTaskDescription(string newDesc)
         {
-            string query = $"UPDATE Tasks SET description = '{newDesc}' WHERE id = {Id}";
+            string query = $"UPDATE Tasks SET description = '{newDesc}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
             Description = newDesc;
         }
@@ -74,7 +78,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="newDueDate">The new due date</param>
         internal void UpdateTaskDueDate(DateTime newDueDate)
         {
-            string query = $"UPDATE Tasks SET dueDate = '{newDueDate}' WHERE id = {Id}";
+            string query = $"UPDATE Tasks SET dueDate = '{newDueDate}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
             DueDate = newDueDate;
         }
@@ -85,7 +89,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="assignee">The assigned user</param>
         internal void AssignTask(string assigner, string assignee)
         {
-            string query = $"UPDATE Tasks SET assignee = '{assignee}' WHERE id = {Id}";
+            string query = $"UPDATE Tasks SET assignee = '{assignee}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
             AssigneeEmail = assignee;
         }
@@ -94,7 +98,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// </summary>
         internal void UnassignTask()
         {
-            string query = $"UPDATE Tasks SET assignee = 'null' WHERE id = {Id}";
+            string query = $"UPDATE Tasks SET assignee = 'null' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
         }
     }
