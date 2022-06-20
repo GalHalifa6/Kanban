@@ -168,7 +168,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="board"> board that sent from renounceOwnership </param>
         /// <param name="currentUser"> New owner of the board</param>
         public Response takeOwnership(Board board, string currentUser)  {
-            Response r = board.ChangeOwner(currentUser, this.email);
+            /*Response r = board.ChangeOwner(currentUser, this.email);
             if (!MyBoards.Contains(board))
             {
                 if (r.ErrorOccured() ==  false)
@@ -177,7 +177,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
                 }             
             }
-            return r;      
+            return r; */
+            return null;
         }
 
         /// <summary>
