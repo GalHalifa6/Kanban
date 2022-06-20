@@ -38,13 +38,5 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
                 DBConnector db = DBConnector.GetInstance();
                 db.ResetDB();              
         }
-
-
-
-
-
-
-
-
     }
 }
