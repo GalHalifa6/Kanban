@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using IntroSE.Kanban.Backend.DataAccessLayer;
+using IntroSE.Kanban.Backend.DataAccessLayer.Mappers;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
@@ -11,7 +12,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     {
         log4net.ILog logger = Utility.Logger.GetLogger();
 
+        //UserEmail, User//
         private Dictionary<string, User> users { get; set; }
+
+        private UserMapper usm;
 
         public UserController()
         {
@@ -193,17 +197,39 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                         GetUser(email).setPassword(newPassword);
                         logger.Info("The password of the user " + email + " changed successfully");
                     }
-                    logger.Warn("Faild to change password of the user " + email + ", because there is no match between the email and password");
-                    throw new Exception("There is no match between the password and the user name");
+                    else
+                    {
+                        logger.Warn("Faild to change password of the user " + email + ", because there is no match between the email and password");
+                        throw new Exception("There is no match between the password and the user name");
+                    }
                 }
-                logger.Warn("The user's password can not be changed, because the user " + email + " is not connected");
-                throw new Exception("This user is not connected, password can't be changed");
+                else
+                {
+                    logger.Warn("The user's password can not be changed, because the user " + email + " is not connected");
+                    throw new Exception("This user is not connected, password can't be changed");
+                }
             }
             else
             {
                 logger.Warn("Failed to change the user's password at " + email + ", because a user with that email is not exists");
                 throw new Exception("The user " + email + " does not exist");
             }
+        }
+
+        internal void DeleteDate()
+        {
+            usm.DeleteData();
+        }
+
+        internal void LoadDate()
+        {
+            HashSet<UserDTO> userDTOs = usm.LoadData();
+            foreach (UserDTO userDTO in userDTOs)
+            {
+
+                users.Add(userDTO.email ,new User(userDTO.email, userDTO.password));
+            }
+
         }
 
         /// <summary>

@@ -182,6 +182,34 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
         }
 
+        internal string LoadData()
+        {
+            try
+            {
+                uc.LoadDate();
+                return "{}";
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(e.Message, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+            }
+        }
+
+        internal string DeleteData()
+        {
+            try
+            {
+                uc.DeleteDate();
+                return "{}";
+            }
+            catch(Exception e)
+            {
+                return JsonConvert.SerializeObject(e.Message, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+            }
+        }
+
         /// <summary>
         /// return user controller 
         /// </summary>
