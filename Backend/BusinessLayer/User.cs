@@ -169,6 +169,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
                     MyBoards.Remove(board);
                     CommonBoards.Add(board);
+                    logger.Info($"User {this.email} gave up the ownership of the board '{board.name}'");
                     return board;
                 }
             }
@@ -184,7 +185,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             board.ChangeOwner(currentUser, this.email);
             if (!MyBoards.Contains(board))
             {
-                    MyBoards.Add(board);                  
+                    MyBoards.Add(board);
+                    logger.Info($"User {currentUser} took the ownership of the board '{board.name}'");
 
             }
 
@@ -217,9 +219,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 if(b.name == board.name)
                 {
+                    logger.Warn($"User {this.email} can not join to {b.name} ");
                     return false;
                 }
             }
+            logger.Info($"User {this.email} joined to '{b.name}'");
             CommonBoards.Add(b);
             return true;
         }
