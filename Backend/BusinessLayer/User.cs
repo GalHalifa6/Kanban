@@ -166,7 +166,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 if(board.name == boardName)
                 {
-
                     MyBoards.Remove(board);
                     CommonBoards.Add(board);
                     logger.Info($"User {this.email} gave up the ownership of the board '{board.name}'");

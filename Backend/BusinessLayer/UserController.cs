@@ -142,8 +142,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
             }
             else
+            {
                 logger.Warn("Failed to delete user " + email + ", because a user with that name is not exists");
-            throw new Exception("The user " + email + " does not exist");
+                throw new Exception("The user " + email + " does not exist");
+            }
         }
 
         /// <summary>
@@ -160,11 +162,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     GetUser(email).logOut();
                     logger.Info("The user " + email + " logged out successfully");
                 }
-                logger.Warn("Faild to logout the user " + email + ", because the user is not connected");
-                throw new Exception("The user logged out unsuccesssfully");
+                else
+                {
+                    logger.Warn("Faild to logout the user " + email + ", because the user is not connected");
+                    throw new Exception("The user logged out unsuccesssfully");
+                }
             }
-            logger.Warn("Failed to logout user " + email + ", because a user with that name is not exists");
-            throw new Exception("The user " + email + " does not exist");
+            else
+            {
+                logger.Warn("Failed to logout user " + email + ", because a user with that name is not exists");
+                throw new Exception("The user " + email + " does not exist");
+            }
         }
 
         /// <summary>
@@ -191,8 +199,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("The user's password can not be changed, because the user " + email + " is not connected");
                 throw new Exception("This user is not connected, password can't be changed");
             }
-            logger.Warn("Failed to change the user's password at " + email + ", because a user with that email is not exists");
-            throw new Exception("The user " + email + " does not exist");
+            else
+            {
+                logger.Warn("Failed to change the user's password at " + email + ", because a user with that email is not exists");
+                throw new Exception("The user " + email + " does not exist");
+            }
         }
 
         /// <summary>
@@ -259,21 +270,25 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns> string- the result of the transfer</returns>
         internal void TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
-            if(GetUser(newOwnerEmail) != null)
+            if (GetUser(newOwnerEmail) != null) // no need to check currentOwnerEmail, since he's already logged in so cannot be null
             {
                 User currentOwner = users[currentOwnerEmail];
                 User newOwner = users[newOwnerEmail];
-                if (newOwner.CheckIfCanAddBoard(boardName)){
-                    if (currentOwner.renounceOwnership(boardName) != null)
-                    {
-                        Board board = currentOwner.renounceOwnership(boardName);
+                if (newOwner.CheckIfCanAddBoard(boardName))
+                {
+                    Board board = currentOwner.renounceOwnership(boardName);
+                    if (board != null)
+                    {   
                         newOwner.takeOwnership(board, currentOwnerEmail);
                     }
                     throw new Exception($"{currentOwnerEmail} has no board called '{boardName}' ");
                 }
                 throw new Exception($"{newOwnerEmail} already has a board called {boardName}");
             }
-            throw new Exception($"{newOwnerEmail} is not registered, can not transfer the ownership of '{boardName}");           
+            else
+            {
+                throw new Exception($"{newOwnerEmail} is not registered, can not transfer the ownership of '{boardName}");
+            }
             
         }
         internal bool JoinBoard(string email, Board b)
