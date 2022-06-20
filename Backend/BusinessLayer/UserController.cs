@@ -278,12 +278,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 {
                     Board board = currentOwner.renounceOwnership(boardName);
                     if (board != null)
-                    {   
+                    {
                         newOwner.takeOwnership(board, currentOwnerEmail);
                     }
-                    throw new Exception($"{currentOwnerEmail} has no board called '{boardName}' ");
+                    else
+                    {
+                        throw new Exception($"{currentOwnerEmail} has no board called '{boardName}' ");
+                    }
                 }
-                throw new Exception($"{newOwnerEmail} already has a board called {boardName}");
+                else
+                {
+                    throw new Exception($"{newOwnerEmail} already has a board called {boardName}");
+                }
             }
             else
             {

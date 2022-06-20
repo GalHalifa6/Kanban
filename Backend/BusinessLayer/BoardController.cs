@@ -10,6 +10,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class BoardController
     {
         public Dictionary<string, HashSet<Board>> boards;
+        public BoardMapper boardMapper;
         //HashSet<Board> boards;
         log4net.ILog logger = Utility.Logger.GetLogger();
         public int nextBoardID { get; private set; }
@@ -19,6 +20,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             //DBConnector.GetInstance(); // to initialize db
             boards = new Dictionary<string, HashSet<Board>>();
             nextBoardID = 0;
+            boardMapper = new BoardMapper();
         }
     
 
@@ -202,10 +204,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             b.AssignTask(assigner, columnOrdinal, taskID, assignee);
         }
 
-        public Response LoadData()
+        public void LoadData()
         {
-            HashSet<BoardDTO> res = new BoardControllerDTO().LoadData();
-            return null;
+            HashSet<BoardDTO> dtos = boardMapper.LoadData();
+            foreach (BoardDTO b in dtos)
+            {
+                if (!boards.ContainsKey(b.owner))
+                {
+                    boards.Add(b.owner, new HashSet<Board>());
+                }
+                boards[b.owner].Add(new Board(b));
+            }
         }
 
         internal void JoinBoard(string email, int boardID, UserController uc)

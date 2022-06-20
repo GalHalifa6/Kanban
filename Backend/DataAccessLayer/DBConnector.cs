@@ -41,36 +41,28 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// </summary>
         public void ResetDB()
         {
-            try
-            {
-                conn.Open();
-                SQLiteCommand cmd = conn.CreateCommand();
-                string query = "DROP TABLE IF EXISTS Users";
-                cmd.CommandText = query;
-                cmd.ExecuteNonQuery();
-                query = "DROP TABLE IF EXISTS UsersBoards";
-                cmd.CommandText = query;
-                cmd.ExecuteNonQuery();
-                query = "DROP TABLE IF EXISTS Boards";
-                cmd.CommandText = query;
-                cmd.ExecuteNonQuery();
-                query = "DROP TABLE IF EXISTS TasksColumnsBoards";
-                cmd.CommandText = query;
-                cmd.ExecuteNonQuery();
-                query = "DROP TABLE IF EXISTS Columns";
-                cmd.CommandText = query;
-                cmd.ExecuteNonQuery();
-                query = "DROP TABLE IF EXISTS Tasks";
-                cmd.CommandText = query;
-                cmd.ExecuteNonQuery();
-
-            }
-            catch (Exception ex)
-            { Console.WriteLine(ex.Message); }
-            finally
-            {
-                conn.Close();
-            }
+            
+            conn.Open();
+            SQLiteCommand cmd = conn.CreateCommand();
+            string query = "DROP TABLE IF EXISTS Users";
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+            query = "DROP TABLE IF EXISTS UsersBoards";
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+            query = "DROP TABLE IF EXISTS Boards";
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+            query = "DROP TABLE IF EXISTS TasksColumnsBoards";
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+            query = "DROP TABLE IF EXISTS Columns";
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+            query = "DROP TABLE IF EXISTS Tasks";
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+            conn.Close();
 
         }
 

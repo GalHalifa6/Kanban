@@ -87,7 +87,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="taskDTO">The task</param>
         internal void AddTask(TaskDTO taskDTO)
         {
-            string query = $"INSERT INTO Tasks(boardId, columnOrdinal, id, title, description, dueDate, assignee) VALUES({taskDTO.boardID}, {taskDTO.columnOrdinal}, {taskDTO.Id},'{taskDTO.Title}','{taskDTO.Description}',{taskDTO.DueDate}, 'null')";
+            string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({taskDTO.Id},'{taskDTO.Title}','{taskDTO.Description}','{taskDTO.DueDate}', 'null')";
             GeneralNonQuery(query, "A task with this id already exists");
         }
         /// <summary>
