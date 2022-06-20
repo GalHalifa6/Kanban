@@ -1,0 +1,34 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data.SQLite;
+using IntroSE.Kanban.Backend.BusinessLayer;
+
+namespace IntroSE.Kanban.Backend.DataAccessLayer
+{
+    internal class TaskMapper
+    {
+        public static HashSet<TaskDTO> LoadData()
+        {
+            string query = $"SELECT * FROM Tasks";
+            SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery(query);
+            HashSet<TaskDTO> result = new HashSet<TaskDTO>();
+            while (res.Read())
+            {
+                int boardID = res.GetInt32(res.GetOrdinal("boardID"));
+                int columnOrdinal = res.GetInt32(res.GetOrdinal("columnOrdinal"));
+                int id = res.GetInt32(res.GetOrdinal("id"));
+                string title = res.GetString(res.GetOrdinal("title"));
+                string description = res.GetString(res.GetOrdinal("description"));
+                DateTime dueDate = res.GetDateTime(res.GetOrdinal("dueDate"));
+                string assignee = res.GetString(res.GetOrdinal("assignee"));
+                TaskDTO taskDTO = new TaskDTO(boardID, columnOrdinal, id, title, description, dueDate);
+                taskDTO.AssigneeEmail = assignee;
+                Task task = new Task(taskDTO);
+                result.Add(taskDTO);
+            }
+            return result;
+        }
+    }
+}

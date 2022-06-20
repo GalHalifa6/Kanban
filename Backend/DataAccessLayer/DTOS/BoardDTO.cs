@@ -15,10 +15,10 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         public string name { get; private set; }
         public int nextTaskID { get; private set; }
         public string owner { get; private set; }
-        public ColumnDTO backlog { get; private set; }
+/*        public ColumnDTO backlog { get; private set; }
         public ColumnDTO inProgress { get; private set; }
         public ColumnDTO done { get; private set; }
-        public HashSet<string> users { get; private set; }
+        public HashSet<string> users { get; private set; }*/
 
         public BoardDTO(int id, string name, string owner, int nextTaskID)
         {
@@ -27,11 +27,11 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             this.owner = owner;
             this.nextTaskID = nextTaskID;
             HashSet<TaskDTO> tasks = new HashSet<TaskDTO>();
-            backlog = new ColumnDTO("backlog", tasks);
+/*            backlog = new ColumnDTO("backlog", tasks);
             inProgress = new ColumnDTO("inProgress", tasks);
             done = new ColumnDTO("done", tasks);
 
-            users = new HashSet<string>();
+            users = new HashSet<string>();*/
         }
 
 
@@ -42,11 +42,11 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             this.owner = owner;
             this.nextTaskID = nextTaskID;
 
-            this.backlog = backlog;
+/*            this.backlog = backlog;
             this.inProgress = inProgress;
             this.done = done;
 
-            this.users = users;
+            this.users = users;*/
         }
 
         private void GeneralNonQuery(string query, string badMsg)
