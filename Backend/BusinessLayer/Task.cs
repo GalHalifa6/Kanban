@@ -22,12 +22,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public String AssigneeEmail { get; private set; }
 
         private log4net.ILog logger = Utility.Logger.GetLogger();
+        public int boardID { get; private set; }
+        public int columnOrdinal { get; private set; }
 
         //private Boolean isDone;
 
 
-        public Task(int ID, string title, string description, DateTime dueDate)
+        public Task(int boardID, int columnOrdinal, int ID, string title, string description, DateTime dueDate)
         {
+            this.boardID = boardID;
+            this.columnOrdinal = columnOrdinal;
             this.Id = ID;
             this.Title = title;
             this.Description = description;
@@ -35,7 +39,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.DueDate = dueDate;
             AssigneeEmail = null;
             //isDone = false;
-            dto = new TaskDTO(ID, title, description, dueDate);
+            dto = new TaskDTO(boardID, columnOrdinal, ID, title, description, dueDate);
+        }
+
+        public Task(TaskDTO dto) 
+        {
+            this.boardID = dto.boardID;
+            this.columnOrdinal = dto.columnOrdinal;
+            this.Id = dto.Id;
+            this.Title = dto.Title;
+            this.Description = dto.Description;
+            CreationTime = dto.CreationTime;
+            this.DueDate = dto.DueDate;
+            this.AssigneeEmail = dto.AssigneeEmail;
+            this.dto = dto;
         }
 
         /// <summary>
