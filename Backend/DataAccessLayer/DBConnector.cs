@@ -88,7 +88,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "userEmail VARCHAR(200)," +
                 "boardID INTEGER," +
                 "PRIMARY KEY (userEmail,boardID)," +
-                //"FOREIGN KEY (userEmail) REFERENCES Users(id)," +
+                "FOREIGN KEY (userEmail) REFERENCES Users(id)," +
                 "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
                 ")";
 
@@ -110,9 +110,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "taskID INTEGER," +
                 "PRIMARY KEY (boardID, taskID)," +
                 "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE," +
-                // Don't forget commas when removing these comment lines
-                "FOREIGN KEY (columnOrdinal) REFERENCES Columns(columnOrdinal) ON DELETE CASCADE" +
-                //"FOREIGN KEY (taskID) REFERENCES Tasks(id) ON DELETE CASCADE" +
+                "FOREIGN KEY (columnOrdinal) REFERENCES Columns(columnOrdinal) ON DELETE CASCADE," +
+                "FOREIGN KEY (taskID) REFERENCES Tasks(id) ON DELETE CASCADE" +
                 ")";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
@@ -129,10 +128,10 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "id INTEGER," +
                 "title STRING," +
                 "description STRING," +
-                "dueDate DATETIME" +
-                "assignee STRING" +
-                "PRIMARY KEY (id, assignee)," +
-                "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
+                "dueDate DATETIME," +
+                "assignee STRING," +
+                "PRIMARY KEY (id, assignee)" +
+                //"FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
                 ")";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();

@@ -166,7 +166,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 if(board.name == boardName)
                 {
-
                     MyBoards.Remove(board);
                     CommonBoards.Add(board);
                     return board;
