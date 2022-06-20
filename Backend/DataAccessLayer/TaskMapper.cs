@@ -9,7 +9,11 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
     internal class TaskMapper
     {
-        public static HashSet<TaskDTO> LoadData()
+        public TaskMapper()
+        {
+
+        }
+        public HashSet<TaskDTO> LoadData()
         {
             string query = $"SELECT * FROM Tasks";
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery(query);
