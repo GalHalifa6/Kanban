@@ -10,6 +10,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
     internal class ColumnMapper
     {
+        public TaskMapper TaskMapper { get; private set; }
+        public ColumnMapper() { }
         public Dictionary<int, HashSet<Column>> LoadData()
         {
             HashSet<TaskDTO> tasks = TaskMapper.LoadData();
