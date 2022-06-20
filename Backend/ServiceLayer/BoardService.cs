@@ -117,8 +117,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 bc.AddTask(email, boardName, title, description, dueDate);
-                Response response = new Response("{}");
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return "{}";    
             }
             catch (Exception e)
             {

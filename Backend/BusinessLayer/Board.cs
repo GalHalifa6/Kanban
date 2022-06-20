@@ -46,10 +46,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.dto = boardDTO;
             this.name = boardDTO.name;
             this.owner = boardDTO.owner;
-            this.backlog = new Column(boardDTO.backlog);
+/*            this.backlog = new Column(boardDTO.backlog);
             this.inProgress = new Column(boardDTO.inProgress);
             this.done = new Column(boardDTO.done);
-            this.usernames = boardDTO.users;
+            this.usernames = boardDTO.users;*/
             this.nextTaskID = boardDTO.nextTaskID;
             this.id = boardDTO.id;
         }
