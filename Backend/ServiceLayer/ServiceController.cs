@@ -223,12 +223,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string LoadData()
         {
-            throw new NotImplementedException();
+            return US.LoadData();
         }
 
         internal string DeleteData()
         {
-            throw new NotImplementedException();
+            return US.DeleteData();
         }
 
 

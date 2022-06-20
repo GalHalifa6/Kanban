@@ -45,14 +45,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         //switch mode of the field
         public void logIn()
         {
-            logger.Info($"User {this.email} loged in");
             this.isLoggedIn = true;
         }
 
         //switch mode of the field
         public void logOut()
         {
-            logger.Info($"User {this.email} loged out");
+            
             this.isLoggedIn = false;
         }
 
