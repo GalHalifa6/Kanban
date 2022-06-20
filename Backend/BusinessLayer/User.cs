@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class User
@@ -18,6 +19,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         private HashSet<Board> CommonBoards;
         // CommonBoards is a set with int key
         private UserDTO dto;
+
+        log4net.ILog logger = Utility.Logger.GetLogger();
 
         public User(string email, string password)
         {
@@ -35,18 +38,21 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email"> the new email to set </param>
         public void setEmail(string email)
         {
+            logger.Info($"User {this.email} changed the email to {email}");
             this.email = email;
         }
 
         //switch mode of the field
         public void logIn()
         {
+            logger.Info($"User {this.email} loged in");
             this.isLoggedIn = true;
         }
 
         //switch mode of the field
         public void logOut()
         {
+            logger.Info($"User {this.email} loged out");
             this.isLoggedIn = false;
         }
 
@@ -56,6 +62,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="password"> new password to be set</param>
         public void setPassword(string password)
         {
+            logger.Info($"User {this.email} changed the password");
             this.password = password;
         }
 
@@ -79,9 +86,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (MyBoards.Contains(board))
             {
+                logger.Warn($"User {this.email} can't the the ownership of '{board.name}'");
                 return false;
             }
             MyBoards.Add(board);
+            logger.Info($"User {this.email} now is the owner of '{board.name}'");
             return true;
         }
 
@@ -98,9 +107,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 if(board.name == name)
                 {
                     MyBoards.Remove(board);
+                    logger.Info($"User {this.email} is not the owner of '{board.name}'");
                     return true;
                 }
             }
+            logger.Warn($"User {this.email} can't remove board called '{name}', this board is not exist");
             return false;
         }
 
@@ -123,8 +134,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 if(board.id == boardID)
                 {
                     CommonBoards.Remove(board);
+                    logger.Info($"User {this.email} is not taking apart of board called: '{board.name}'");
                 }
             }
+            logger.Warn($"User {this.email} can't leave board with id '{boardID}'");
         }
 
         /// <summary>
@@ -167,18 +180,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="board"> board that sent from renounceOwnership </param>
         /// <param name="currentUser"> New owner of the board</param>
-        public Response takeOwnership(Board board, string currentUser)  {
-            /*Response r = board.ChangeOwner(currentUser, this.email);
+        public void takeOwnership(Board board, string currentUser)  {
+            board.ChangeOwner(currentUser, this.email);
             if (!MyBoards.Contains(board))
             {
-                if (r.ErrorOccured() ==  false)
-                {
-                    MyBoards.Add(board);
+                    MyBoards.Add(board);                  
 
-                }             
             }
-            return r; */
-            return null;
+
         }
 
         /// <summary>
