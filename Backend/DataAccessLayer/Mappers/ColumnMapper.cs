@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Data.SQLite;
 using IntroSE.Kanban.Backend.BusinessLayer;
 
-namespace IntroSE.Kanban.Backend.DataAccessLayer
+namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 {
     internal class ColumnMapper
     {

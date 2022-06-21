@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SQLite;
 using Newtonsoft.Json;
+using IntroSE.Kanban.Backend.DataAccessLayer.Mappers;
 
 namespace IntroSE.Kanban.Backend.BusinessLayer
 {
