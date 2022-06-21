@@ -9,11 +9,33 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
     public class ColumnDTO
     {
-        public string name { get; set; }
-        public int boardID { get; }
-        public int ordinal{ get; }
-        public int maxTasks { get; private set; }
-        public HashSet<TaskDTO> tasks { get; private set; }
+        private string name;
+        public string Name
+        {
+            get => name;
+        }
+        private int boardID;
+        public int BoardID
+        {
+            get => boardID;
+        }
+        private int ordinal;
+        public int Ordinal
+        {
+            get => ordinal;
+        }
+        private int maxTasks;
+        public int MaxTasks
+        {
+            get => maxTasks;
+            set => maxTasks = value;
+        }
+        private HashSet<TaskDTO> tasks;
+        public HashSet<TaskDTO> Tasks
+        {
+            get => tasks;
+            set => tasks = value;
+        }
 
         public ColumnDTO(int boardID, string name, HashSet<TaskDTO> tasks)
         {
@@ -33,6 +55,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 ordinal = 2;
             }
             this.tasks = tasks;
+            tasks = new HashSet<TaskDTO>();
         }
 
         public ColumnDTO(Column column)
@@ -88,7 +111,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="taskDTO">The task</param>
         internal void AddTask(TaskDTO taskDTO)
         {
-            string query = $"INSERT INTO Tasks(boardID, columnOrdinal,id, title, description, dueDate, assignee) VALUES({taskDTO.boardID},{taskDTO.columnOrdinal},{taskDTO.Id},'{taskDTO.Title}','{taskDTO.Description}','{taskDTO.DueDate}', 'null')";
+            string query = $"INSERT INTO Tasks(boardID, columnOrdinal,id, title, description, dueDate, assignee) VALUES({taskDTO.BoardID},{taskDTO.ColumnOrdinal},{taskDTO.Id},'{taskDTO.Title}','{taskDTO.Description}','{taskDTO.DueDate}', 'null')";
             GeneralNonQuery(query, "A task with this id already exists");
         }
         /// <summary>

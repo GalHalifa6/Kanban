@@ -10,11 +10,13 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 {
     internal class ColumnMapper
     {
-        private TaskMapper taskMapper;
-        public ColumnMapper()
+        public TaskMapper taskMapper;
+        public TaskMapper TaskMapper
         {
-            taskMapper = new TaskMapper();
+            get => taskMapper;
+            set => taskMapper = value;
         }
+        public ColumnMapper() { }
         public Dictionary<int, HashSet<Column>> LoadData()
         {
             HashSet<TaskDTO> tasks = taskMapper.LoadData();
@@ -43,7 +45,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
                 HashSet<TaskDTO> filteredTasks = new HashSet<TaskDTO>();
                 foreach (TaskDTO task in tasks)
                 {
-                    if (task.boardID == boardID && task.columnOrdinal == columnOrdinal)
+                    if (task.BoardID == boardID && task.ColumnOrdinal == columnOrdinal)
                     {
                         filteredTasks.Add(task);
                     }

@@ -9,40 +9,79 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
     public class TaskDTO
     {
-        public int Id { get; private set; }
-        public DateTime CreationTime { get; private set; }
-        public string Title { get; private set; }
-        public string Description { get; private set; }
+        private int boardID;
+        public int BoardID
+        {
+            get => boardID;
+        }
 
-        public DateTime DueDate { get; private set; }
+        private int columnOrdinal;
+        public int ColumnOrdinal
+        {
+            get => columnOrdinal;
+            set => columnOrdinal = value;
+        }
 
-        public String AssigneeEmail { get; set; }
-        public int boardID { get; private set; }
-        public int columnOrdinal { get; private set; }
+        private int id;
+        public int Id
+        {
+            get => id;
+        }
+
+        private DateTime creationTime;
+        public DateTime CreationTime
+        {
+            get => creationTime;
+        }
+
+        private string title;
+        public string Title
+        {
+            get => title;
+        }
+
+        private string description;
+        public string Description
+        {
+            get => description;
+            set => description = value;
+        }
+        private DateTime dueDate;
+        public DateTime DueDate
+        {
+            get => dueDate;
+            set => dueDate = value;
+        }
+
+        private string assigneeEmail;
+        public string AssigneeEmail
+        {
+            get => assigneeEmail;
+            set => assigneeEmail = value;
+        }
 
         public TaskDTO(int boardID, int columnOrdinal, int ID, string name, string description, DateTime dueDate)
         {
             this.boardID = boardID;
             this.columnOrdinal = columnOrdinal;
-            this.Id = ID;
-            this.Title = name;
-            this.Description = description;
-            CreationTime = DateTime.Now;
-            this.DueDate = dueDate;
-            AssigneeEmail = null;
-            //isDone = false;
+            this.id = ID;
+            this.title = name;
+            this.description = description;
+            this.creationTime = DateTime.Now;
+            this.dueDate = dueDate;
+            this.assigneeEmail = null;
         }
 
         public TaskDTO(BusinessLayer.Task task)
         {
-            this.boardID = task.boardID;
-            this.columnOrdinal = task.columnOrdinal;
-            this.Id = task.Id;
-            this.Title = task.Title;
-            this.Description = task.Description;
-            this.DueDate = task.DueDate;
-            CreationTime = task.CreationTime;
-            AssigneeEmail = null;
+            this.boardID = task.BoardID;
+            this.columnOrdinal = task.ColumnOrdinal;
+            this.id = task.Id;
+            this.title = task.Title;
+            this.description = task.Description;
+            this.dueDate = task.DueDate;
+            this.creationTime = task.CreationTime;
+            this.assigneeEmail = null;
         }
 
         private void GeneralNonQuery(string query, string badMsg)
@@ -60,7 +99,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         {
             string query = $"UPDATE Tasks SET newTitle = '{newTitle}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
-            Title = newTitle;
+            title = newTitle;
         }
         /// <summary>
         /// Update a task's description
@@ -70,7 +109,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         {
             string query = $"UPDATE Tasks SET description = '{newDesc}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
-            Description = newDesc;
+            description = newDesc;
         }
         /// <summary>
         /// Update a task's due date
@@ -80,7 +119,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         {
             string query = $"UPDATE Tasks SET dueDate = '{newDueDate}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
-            DueDate = newDueDate;
+            dueDate = newDueDate;
         }
         /// <summary>
         /// Assign a task to a user
@@ -91,13 +130,14 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         {
             string query = $"UPDATE Tasks SET assignee = '{assignee}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
-            AssigneeEmail = assignee;
+            assigneeEmail = assignee;
         }
         /// <summary>
         /// Unassign task from its' user
         /// </summary>
         internal void UnassignTask()
         {
+            assigneeEmail = null;
             string query = $"UPDATE Tasks SET assignee = 'null' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
         }

@@ -10,48 +10,90 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class Task
     {
-        public int Id { get; private set; }
-        public DateTime CreationTime { get; private set; }
-        public string Title { get; private set; }
-        public string Description { get; private set; }
-       
-        public DateTime DueDate { get; private set; }
 
-        public TaskDTO dto { get; private set; } 
+        private int boardID;
+        public int BoardID
+        {
+            get => boardID;
+        }
 
-        public String AssigneeEmail { get; private set; }
+        private int columnOrdinal;
+        public int ColumnOrdinal
+        {
+            get => columnOrdinal;
+            set => columnOrdinal = value;
+        }
+
+        private int id;
+        public int Id
+        {
+            get => id;
+        }
+
+        private DateTime creationTime;
+        public DateTime CreationTime
+        {
+            get => creationTime;
+        }
+
+        private string title;
+        public string Title
+        {
+            get => title;
+        }
+
+        private string description;
+        public string Description
+        {
+            get => description;
+            set => description = value;
+        }
+        private DateTime dueDate;
+        public DateTime DueDate
+        {
+            get => dueDate;
+            set => dueDate = value;
+        }
+
+        private string assigneeEmail;
+        public string AssigneeEmail
+        {
+            get => assigneeEmail;
+            set => assigneeEmail = value;
+        }
+        private TaskDTO dto;
+        public TaskDTO DTO
+        {
+            get => dto;
+            set => dto = value;
+        }
 
         private log4net.ILog logger = Utility.Logger.GetLogger();
-        public int boardID { get; private set; }
-        public int columnOrdinal { get; private set; }
-
-        //private Boolean isDone;
 
 
         public Task(int boardID, int columnOrdinal, int ID, string title, string description, DateTime dueDate)
         {
             this.boardID = boardID;
             this.columnOrdinal = columnOrdinal;
-            this.Id = ID;
-            this.Title = title;
-            this.Description = description;
-            CreationTime = DateTime.Now;
-            this.DueDate = dueDate;
-            AssigneeEmail = null;
-            //isDone = false;
+            this.id = ID;
+            this.title = title;
+            this.description = description;
+            this.creationTime = DateTime.Now;
+            this.dueDate = dueDate;
+            this.assigneeEmail = null;
             dto = new TaskDTO(boardID, columnOrdinal, ID, title, description, dueDate);
         }
 
         public Task(TaskDTO dto) 
         {
-            this.boardID = dto.boardID;
-            this.columnOrdinal = dto.columnOrdinal;
-            this.Id = dto.Id;
-            this.Title = dto.Title;
-            this.Description = dto.Description;
-            CreationTime = dto.CreationTime;
-            this.DueDate = dto.DueDate;
-            this.AssigneeEmail = dto.AssigneeEmail;
+            this.boardID = dto.BoardID;
+            this.columnOrdinal = dto.ColumnOrdinal;
+            this.id = dto.Id;
+            this.title = dto.Title;
+            this.description = dto.Description;
+            this.creationTime = dto.CreationTime;
+            this.dueDate = dto.DueDate;
+            this.assigneeEmail = dto.AssigneeEmail;
             this.dto = dto;
         }
 
@@ -61,7 +103,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="newTitle">The new title</param>
         public void UpdateTaskTitle(string newTitle)
         {
-            Title = newTitle;
+            title = newTitle;
             dto.UpdateTaskTitle(newTitle);
         }
         /// <summary>
@@ -70,7 +112,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="newDescription">The new description</param>
         public void UpdateTaskDescription(string newDescription)
         {
-            Description = newDescription;
+            description = newDescription;
             dto.UpdateTaskDescription(newDescription);
         }
         /// <summary>
@@ -79,7 +121,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="newDueDate">The new due date</param>
         public void UpdateTaskDueDate(DateTime newDueDate)
         {
-            DueDate = newDueDate;
+            dueDate = newDueDate;
             dto.UpdateTaskDueDate(newDueDate);
         }
         /// <summary>
@@ -95,7 +137,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("Failed to assign task because the assigner doesn't have permissions");
                 throw new Exception("User can't assign to this task");
             }
-            AssigneeEmail = assignee;
+            assigneeEmail = assignee;
             logger.Info("Assigned " + assignee + " to the task: " + Id);
             dto.AssignTask(assigner, assignee);
         }
@@ -106,7 +148,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns></returns>
         internal bool IsAssigned(string email)
         {
-            if (email != null && email == AssigneeEmail)
+            if (email != null && email == assigneeEmail)
             {
                 return true;
             }
@@ -117,20 +159,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         internal void UnassignTask()
         {
-            AssigneeEmail = null;
+            assigneeEmail = null;
             dto.UnassignTask();
         }
-
-        /*public string toString()
-        {
-            *//*string output = "{";
-            output = output + string.Format("{0}: {1}", "Id", Id) + ",\n";
-            output = output + string.Format("{0}: {1}", "CreationTime", CreationTime) + ",\n";
-            output = output + string.Format("{0}: {1}", "Title", Title) + ",\n";
-            output = output + string.Format("{0}: {1}", "Description", Description) + ",\n";
-            output = output + string.Format("{0}: {1}", "DueDate", DueDate);
-            return output + "}";*//*
-            return JsonSerializer.Serialize(this);
-        }*/
     }
 }
