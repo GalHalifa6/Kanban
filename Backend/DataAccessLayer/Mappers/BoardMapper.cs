@@ -12,6 +12,10 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
         public BoardMapper() {
         }
 
+        /// <summary>
+        /// load all the board related data to the system from the DB
+        /// </summary>
+        /// <returns>a set of all the boards in the system</returns>
         public HashSet<BoardDTO> LoadData()
         {
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery("SELECT * FROM Boards");

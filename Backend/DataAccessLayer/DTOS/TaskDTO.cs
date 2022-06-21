@@ -111,6 +111,12 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             GeneralNonQuery(query, "Something went wrong");
             description = newDesc;
         }
+
+        internal void AdvanceTask()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Update a task's due date
         /// </summary>

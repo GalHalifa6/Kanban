@@ -60,6 +60,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         public ColumnDTO(Column column)
         {
+            boardID = column.BoardID;
             name = column.name;
             maxTasks = column.maxTasks;
             if (column.name == "backlog")
