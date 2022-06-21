@@ -4,12 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Data.SQLite;
 using IntroSE.Kanban.Backend.BusinessLayer;
+using System.Globalization;
 
 namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
     internal class TaskMapper
     {
-        public static HashSet<TaskDTO> LoadData()
+        public TaskMapper() { }
+        public HashSet<TaskDTO> LoadData()
         {
             string query = $"SELECT * FROM Tasks";
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery(query);
@@ -21,13 +23,14 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 int id = res.GetInt32(res.GetOrdinal("id"));
                 string title = res.GetString(res.GetOrdinal("title"));
                 string description = res.GetString(res.GetOrdinal("description"));
-                DateTime dueDate = res.GetDateTime(res.GetOrdinal("dueDate"));
+                DateTime dueDate = Convert.ToDateTime(res.GetString(res.GetOrdinal("dueDate")));
                 string assignee = res.GetString(res.GetOrdinal("assignee"));
                 TaskDTO taskDTO = new TaskDTO(boardID, columnOrdinal, id, title, description, dueDate);
                 taskDTO.AssigneeEmail = assignee;
                 Task task = new Task(taskDTO);
                 result.Add(taskDTO);
             }
+            DBConnector.GetInstance().close();
             return result;
         }
     }

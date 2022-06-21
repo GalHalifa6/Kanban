@@ -157,9 +157,18 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return InvokeMethod(new Action<string, string, int, int>(bc.LimitColumnTasks), "{}", email, boardName, columnNumber, newLimit);
         }
 
-        internal Response LoadData()
+        internal string LoadData()
         {
-            throw new NotImplementedException();
+            try
+            {
+                bc.LoadData();
+                return "{}";
+            }
+            catch (Exception e)
+            {
+                Response response = new Response(e.Message, true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
         }
 
 

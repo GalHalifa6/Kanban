@@ -30,6 +30,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             name = column.name;
             maxTasks = column.maxTasks;
             dto = column;
+            tasks = new List<Task>();
             foreach (TaskDTO task in column.tasks)
             {
                 Task t = new Task(task.boardID, task.columnOrdinal, task.Id, task.Title, task.Description, task.DueDate);
@@ -99,6 +100,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Info("Added task: " + newTask.Title);
             dto.AddTask(newTask.dto);
         }
+
+        internal void AddColumnToDB()
+        {
+            dto.AddColumnToDB();
+        }
+
         /// <summary>
         /// Remove a task from this column
         /// </summary>
