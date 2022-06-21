@@ -149,6 +149,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
             try
             {
+                //Console.WriteLine(nq);
                 conn.Open();
                 SQLiteCommand cmd = conn.CreateCommand();
                 cmd.CommandText = nq;
@@ -166,6 +167,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 catch (Exception e2) { 
                     //TODO DELETE THIS PRINT
                     Console.WriteLine(e.Message);
+                    Console.WriteLine(e2.Message);
                     return false; 
                 }
             }

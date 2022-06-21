@@ -112,11 +112,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (MyBoards.Contains(board))
             {
-                logger.Warn($"User {this.email} can't the the ownership of '{board.name}'");
+                logger.Warn($"User {this.email} can't the the ownership of '{board.Name}'");
                 return false;
             }
             MyBoards.Add(board);
-            logger.Info($"User {this.email} now is the owner of '{board.name}'");
+            logger.Info($"User {this.email} now is the owner of '{board.Name}'");
             return true;
         }
 
@@ -130,10 +130,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             foreach(Board board in MyBoards)
             {
-                if(board.name == name)
+                if(board.Name == name)
                 {
                     MyBoards.Remove(board);
-                    logger.Info($"User {this.email} is not the owner of '{board.name}'");
+                    logger.Info($"User {this.email} is not the owner of '{board.Name}'");
                     return true;
                 }
             }
@@ -157,10 +157,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             foreach(Board board in CommonBoards)
             {
-                if(board.id == boardID)
+                if(board.Id == boardID)
                 {
                     CommonBoards.Remove(board);
-                    logger.Info($"User {this.email} is not taking apart of board called: '{board.name}'");
+                    logger.Info($"User {this.email} is not taking apart of board called: '{board.Name}'");
                 }
             }
             logger.Warn($"User {this.email} can't leave board with id '{boardID}'");
@@ -176,7 +176,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             List<int> boards = new List<int>();
             foreach(Board board in MyBoards)
             {
-                boards.Add(board.id);
+                boards.Add(board.Id);
             }
             Response r = new Response(boards);
             return r;
@@ -190,11 +190,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public Board renounceOwnership(string boardName) {
             foreach(Board board in MyBoards)
             {
-                if(board.name == boardName)
+                if(board.Name == boardName)
                 {
                     MyBoards.Remove(board);
                     CommonBoards.Add(board);
-                    logger.Info($"User {this.email} gave up the ownership of the board '{board.name}'");
+                    logger.Info($"User {this.email} gave up the ownership of the board '{board.Name}'");
                     return board;
                 }
             }
@@ -211,7 +211,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (!MyBoards.Contains(board))
             {
                     MyBoards.Add(board);
-                    logger.Info($"User {currentUser} took the ownership of the board '{board.name}'");
+                    logger.Info($"User {currentUser} took the ownership of the board '{board.Name}'");
 
             }
 
@@ -226,7 +226,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             foreach(Board board in MyBoards)
             {
-                if(board.name == boardName)
+                if(board.Name == boardName)
                 {
                     return false;
                 }
@@ -242,13 +242,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             foreach(Board board in CommonBoards)
             {
-                if(b.name == board.name)
+                if(b.Name == board.Name)
                 {
-                    logger.Warn($"User {this.email} can not join to {b.name} ");
+                    logger.Warn($"User {this.email} can not join to {b.Name} ");
                     return false;
                 }
             }
-            logger.Info($"User {this.email} joined to '{b.name}'");
+            logger.Info($"User {this.email} joined to '{b.Name}'");
             CommonBoards.Add(b);
             return true;
         }
