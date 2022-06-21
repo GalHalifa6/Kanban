@@ -221,7 +221,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             usm.DeleteData();
         }
 
-        internal void LoadDate()
+        internal void LoadData()
         {
             HashSet<UserDTO> userDTOs = usm.LoadData();
             foreach (UserDTO userDTO in userDTOs)
