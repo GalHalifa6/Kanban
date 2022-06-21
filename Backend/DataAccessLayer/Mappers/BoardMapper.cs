@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IntroSE.Kanban.Backend.DataAccessLayer
+namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 {
     public class BoardMapper
     {
@@ -16,7 +16,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         {
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery("SELECT * FROM Boards");
             HashSet<BoardDTO> data = new HashSet<BoardDTO>();
-            while(res.Read())
+            while (res.Read())
             {
                 int id = res.GetInt32(res.GetOrdinal("id"));
                 string name = res.GetString(res.GetOrdinal("name"));
