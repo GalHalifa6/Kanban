@@ -9,7 +9,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 {
     public class BoardMapper
     {
-        public BoardMapper() { }
+        public BoardMapper() {
+        }
 
         public HashSet<BoardDTO> LoadData()
         {
@@ -23,6 +24,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
                 string owner = res.GetString(res.GetOrdinal("owner"));
                 data.Add(new BoardDTO(id, name, owner, nextTaskID));
             }
+            DBConnector.GetInstance().close();
             return data;
         }
     }

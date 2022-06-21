@@ -13,6 +13,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public Dictionary<string, HashSet<Board>> boards;
         public BoardMapper boardMapper;
         //HashSet<Board> boards;
+        private ColumnMapper columnMapper;
         log4net.ILog logger = Utility.Logger.GetLogger();
         public int nextBoardID { get; private set; }
 
@@ -21,6 +22,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             //DBConnector.GetInstance(); // to initialize db
             boards = new Dictionary<string, HashSet<Board>>();
             nextBoardID = 0;
+            columnMapper = new ColumnMapper();
             boardMapper = new BoardMapper();
         }
     
@@ -208,14 +210,23 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public void LoadData()
         {
             HashSet<BoardDTO> dtos = boardMapper.LoadData();
-            foreach (BoardDTO b in dtos)
+            Dictionary<int, HashSet<Column>> columns = columnMapper.LoadData();
+            foreach (BoardDTO dto in dtos)
             {
-                if (!boards.ContainsKey(b.owner))
+                if (!boards.ContainsKey(dto.owner))
                 {
-                    boards.Add(b.owner, new HashSet<Board>());
+                    boards.Add(dto.owner, new HashSet<Board>());
                 }
-                boards[b.owner].Add(new Board(b));
+                Board board = new Board(dto);
+                if (!columns.ContainsKey(dto.id))
+                {
+                    throw new Exception("Error loading columns for board with id: " + board.id);
+                }
+                board.FillColumns(columns[dto.id]);
+                boards[dto.owner].Add(board);
+                
             }
+
         }
 
         internal void JoinBoard(string email, int boardID, UserController uc)

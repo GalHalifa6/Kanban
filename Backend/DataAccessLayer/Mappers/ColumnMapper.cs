@@ -10,9 +10,14 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 {
     internal class ColumnMapper
     {
+        private TaskMapper taskMapper;
+        public ColumnMapper()
+        {
+            taskMapper = new TaskMapper();
+        }
         public Dictionary<int, HashSet<Column>> LoadData()
         {
-            HashSet<TaskDTO> tasks = TaskMapper.LoadData();
+            HashSet<TaskDTO> tasks = taskMapper.LoadData();
             string query = $"SELECT * FROM Columns";
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery(query);
             HashSet<TaskDTO> result = new HashSet<TaskDTO>();
@@ -52,6 +57,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
                 }
                 output[boardID].Add(column);
             }
+            DBConnector.GetInstance().close();
             return output;
         }
     }

@@ -223,7 +223,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string LoadData()
         {
-            return US.LoadData();
+            return BS.LoadData();
         }
 
         internal string DeleteData()

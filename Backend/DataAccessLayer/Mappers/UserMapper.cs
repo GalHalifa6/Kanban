@@ -29,6 +29,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
                 string password = dbReader.GetString(1);
                 UserData.Add(new UserDTO(email, password));
             }
+            DBConnector.GetInstance().close();
             return UserData;
 
         }
