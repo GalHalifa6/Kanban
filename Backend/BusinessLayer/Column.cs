@@ -49,6 +49,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.name = column.Name;
             this.maxTasks = column.MaxTasks;
             this.dto = column;
+            tasks = new List<Task>();
             foreach (TaskDTO task in column.Tasks)
             {
                 Task t = new Task(task.BoardID, task.ColumnOrdinal, task.Id, task.Title, task.Description, task.DueDate);

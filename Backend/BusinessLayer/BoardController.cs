@@ -10,7 +10,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
     public class BoardController
     {
-        public Dictionary<string, HashSet<Board>> boards;
+        public static Dictionary<string, HashSet<Board>> boards = new Dictionary<string, HashSet<Board>>();
         public BoardMapper boardMapper;
         //HashSet<Board> boards;
         private ColumnMapper columnMapper;
@@ -20,7 +20,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public BoardController()
         {
             //DBConnector.GetInstance(); // to initialize db
-            boards = new Dictionary<string, HashSet<Board>>();
+//            boards = 
             nextBoardID = 0;
             columnMapper = new ColumnMapper();
             boardMapper = new BoardMapper();
