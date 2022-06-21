@@ -74,8 +74,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         public TaskDTO(BusinessLayer.Task task)
         {
-            this.boardID = task.boardID;
-            this.columnOrdinal = task.columnOrdinal;
+            this.boardID = task.BoardID;
+            this.columnOrdinal = task.ColumnOrdinal;
             this.id = task.Id;
             this.title = task.Title;
             this.description = task.Description;

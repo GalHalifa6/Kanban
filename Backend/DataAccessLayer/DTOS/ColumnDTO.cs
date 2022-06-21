@@ -55,6 +55,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 ordinal = 2;
             }
             this.tasks = tasks;
+            tasks = new HashSet<TaskDTO>();
         }
 
         public ColumnDTO(Column column)
@@ -110,7 +111,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="taskDTO">The task</param>
         internal void AddTask(TaskDTO taskDTO)
         {
-            string query = $"INSERT INTO Tasks(boardID, columnOrdinal,id, title, description, dueDate, assignee) VALUES({taskDTO.boardID},{taskDTO.columnOrdinal},{taskDTO.Id},'{taskDTO.Title}','{taskDTO.Description}','{taskDTO.DueDate}', 'null')";
+            string query = $"INSERT INTO Tasks(boardID, columnOrdinal,id, title, description, dueDate, assignee) VALUES({taskDTO.BoardID},{taskDTO.ColumnOrdinal},{taskDTO.Id},'{taskDTO.Title}','{taskDTO.Description}','{taskDTO.DueDate}', 'null')";
             GeneralNonQuery(query, "A task with this id already exists");
         }
         /// <summary>
