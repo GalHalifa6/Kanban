@@ -17,16 +17,17 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         public string owner { get; private set; }
 /*        public ColumnDTO backlog { get; private set; }
         public ColumnDTO inProgress { get; private set; }
-        public ColumnDTO done { get; private set; }
-        public HashSet<string> users { get; private set; }*/
+        public ColumnDTO done { get; private set; }*/
+        public HashSet<string> users { get; private set; }
 
-        public BoardDTO(int id, string name, string owner, int nextTaskID)
+        public BoardDTO(int id, string name, string owner, int nextTaskID, HashSet<string> users)
         {
             this.id = id;
             this.name = name;
             this.owner = owner;
             this.nextTaskID = nextTaskID;
-            HashSet<TaskDTO> tasks = new HashSet<TaskDTO>();
+            //HashSet<TaskDTO> tasks = new HashSet<TaskDTO>();
+            this.users = users;
 /*            backlog = new ColumnDTO("backlog", tasks);
             inProgress = new ColumnDTO("inProgress", tasks);
             done = new ColumnDTO("done", tasks);

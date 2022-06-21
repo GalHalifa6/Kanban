@@ -3,6 +3,7 @@ using System.Globalization;
 using IntroSE.Kanban.Backend.ServiceLayer;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using System.Text.Json;
+using IntroSE.Kanban.Backend.DataAccessLayer;
 
 namespace IntroSE.Kanban.Backend
 {
@@ -15,12 +16,15 @@ namespace IntroSE.Kanban.Backend
         }
         public void RunTests()
         {
+            DBConnector.GetInstance().ResetDB();
             addTaskTest();
+            DBConnector.GetInstance().ResetDB();
             removeBoardTest();
+            DBConnector.GetInstance().ResetDB();
             addBoardTest();
+            DBConnector.GetInstance().ResetDB();
             advanceTaskPhaseTest("task1");
-
-
+            DBConnector.GetInstance().ResetDB();
         }
 
 

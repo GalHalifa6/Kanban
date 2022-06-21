@@ -9,9 +9,9 @@ class Program
         UserServiceTest userServiceTest = new UserServiceTest();
         BoardServiceTest boardServiceTest = new BoardServiceTest();
         TaskServiceTest taskServiceTest = new TaskServiceTest();
-        //boardServiceTest.RunTests();
+        boardServiceTest.RunTests();
         userServiceTest.RunTests();
-        //taskServiceTest.runTests();
+        taskServiceTest.runTests();
 
     }
 }
