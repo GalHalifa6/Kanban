@@ -14,18 +14,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         //UserEmail, User//
         private Dictionary<string, User> users;
-        public Dictionary<string, User> Users
-        {
-            get => users;
-            set => users = value;
-        }
-
 
         private UserMapper usm;
 
         public UserController()
         {
             users = new Dictionary<string, User>();
+            usm = new UserMapper();
         }
 
         /// <summary>
@@ -222,7 +217,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
-        internal void DeleteDate()
+        internal void DeleteData()
         {
             usm.DeleteData();
         }
@@ -234,8 +229,27 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
 
                 users.Add(userDTO.Email ,new User(userDTO.Email, userDTO.Password));
+
             }
 
+            Dictionary<string, HashSet<Board>> boards = BoardController.boards;
+            foreach (string email in users.Keys)
+            {
+                if (boards.ContainsKey(email))
+                {
+                    foreach (Board board in boards[email])
+                    {
+                        if (board.owner == email)
+                        {
+                            GetUser(email).MyBoards.Add(board);
+                        }
+                        else
+                        {
+                            GetUser(email).CommonBoards.Add(board);
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>

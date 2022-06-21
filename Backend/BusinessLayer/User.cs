@@ -30,9 +30,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             set => password = value;
         }
 
-        private HashSet<Board> MyBoards;
+        private HashSet<Board> myBoards;
+        public HashSet<Board> MyBoards
+        {
+            get => myBoards;
+            set => myBoards = value;
+        }
+
         // MyBoards is a set with string key
-        private HashSet<Board> CommonBoards;
+        private HashSet<Board> commonBoards;
+        public HashSet<Board> CommonBoards
+        {
+            get => commonBoards;
+            set => commonBoards = value;
+        }
         // CommonBoards is a set with int key
         private UserDTO dto;
 

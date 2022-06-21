@@ -205,7 +205,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             try
             {
-                uc.DeleteDate();
+                uc.DeleteData();
                 return "{}";
             }
             catch(Exception e)
