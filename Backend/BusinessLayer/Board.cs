@@ -116,6 +116,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         internal void AddBoard() { 
             dto.AddBoard(owner, id, name);
+            backlog.AddColumnToDB();
+            inProgress.AddColumnToDB();
+            done.AddColumnToDB();
         }
 
         /// <summary>
@@ -154,7 +157,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (IsInBoard(email))
             {
-                backlog.AddTask(nextTaskID, title, description, dueDate);
+                backlog.AddTask(id, 0,nextTaskID, title, description, dueDate);
                 nextTaskID++;
                 logger.Info("Task was successfully added");
             }
@@ -220,6 +223,33 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 logger.Warn("Failed to advance task because the task is already done");
                 throw new Exception("Failed to advance task because the task is already done");
+            }
+        }
+
+        /// <summary>
+        /// fill the columns of the boards with the given hash set
+        /// </summary>
+        /// <param name="columns">hsould have 3 columns - one for each column of the board</param>
+        internal void FillColumns(HashSet<Column> columns)
+        {
+            foreach (Column c in columns)
+            {
+                if(c == null)
+                {
+                    throw new Exception("Error in assigning columns to board");
+                }
+                else if (c.name == "backlog")
+                {
+                    backlog = c;
+                }
+                else if (c.name == "in progress")
+                {
+                    inProgress = c;
+                }
+                else if (c.name == "done")
+                {
+                    done = c;
+                }
             }
         }
 

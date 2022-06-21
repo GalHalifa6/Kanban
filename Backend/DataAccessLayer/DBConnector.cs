@@ -36,6 +36,11 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             return instance;
         }
 
+        internal void close()
+        {
+            conn.Close();
+        }
+
         /// <summary>
         /// used for testing purposes
         /// </summary>
@@ -106,14 +111,14 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
             query = "CREATE TABLE IF NOT EXISTS Tasks(" +
-                "boardID INTEGER" +
-                "columnOrdinal INTEGER" +
+                "boardID INTEGER," +
+                "columnOrdinal INTEGER," +
                 "id INTEGER," +
                 "title STRING," +
                 "description STRING," +
-                "dueDate DATETIME" +
-                "assignee STRING" +
-                "PRIMARY KEY (boardId, id)," +
+                "dueDate DATETIME," +
+                "assignee STRING," +
+                "PRIMARY KEY (boardID,id)," +
                 "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
                 ")";
             cmd.CommandText = query;
@@ -137,10 +142,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 Console.WriteLine(e.Message);
                 return null;
             }
-            finally
-            {
-                conn.Close();
-            }
+            
         }
 
         public bool ExecuteNonQuery(string nq){
@@ -155,14 +157,22 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
             catch (Exception e)
             {
-                //TODO DELETE THIS PRINT
-                Console.WriteLine(e.Message);
-                return false;
+                try {
+                    SQLiteCommand cmd = conn.CreateCommand();
+                    cmd.CommandText = nq;
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+                catch (Exception e2) { 
+                    //TODO DELETE THIS PRINT
+                    Console.WriteLine(e.Message);
+                    return false; 
+                }
             }
-            finally
+/*            finally
             {
                 conn.Close();
-            }
+            }*/
         }
 
 

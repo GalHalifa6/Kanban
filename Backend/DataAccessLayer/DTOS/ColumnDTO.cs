@@ -24,7 +24,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             {
                 ordinal = 0;
             }
-            else if (name == "inProgress")
+            else if (name == "in progress")
             {
                 ordinal = 1;
             }
@@ -32,6 +32,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             {
                 ordinal = 2;
             }
+            this.tasks = tasks;
         }
 
         public ColumnDTO(Column column)
@@ -42,7 +43,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             {
                 ordinal = 0;
             }
-            else if (column.name == "inProgress")
+            else if (column.name == "in progress")
             {
                 ordinal = 1;
             }
@@ -87,7 +88,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="taskDTO">The task</param>
         internal void AddTask(TaskDTO taskDTO)
         {
-            string query = $"INSERT INTO Tasks(id, title, description, dueDate, assignee) VALUES({taskDTO.Id},'{taskDTO.Title}','{taskDTO.Description}','{taskDTO.DueDate}', 'null')";
+            string query = $"INSERT INTO Tasks(boardID, columnOrdinal,id, title, description, dueDate, assignee) VALUES({taskDTO.boardID},{taskDTO.columnOrdinal},{taskDTO.Id},'{taskDTO.Title}','{taskDTO.Description}','{taskDTO.DueDate}', 'null')";
             GeneralNonQuery(query, "A task with this id already exists");
         }
         /// <summary>
@@ -98,6 +99,12 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         {
             string query = $"UPDATE Columns SET maxTasks = '{newLimit}' WHERE columnOrdinal = {ordinal} AND boardID = {boardID}";
             maxTasks = newLimit;
+            GeneralNonQuery(query, "Something went wrong");
+        }
+
+        internal void AddColumnToDB()
+        {
+            string query = $"INSERT INTO Columns(boardID,columnOrdinal,maxTasks) VALUES({boardID},{ordinal},{maxTasks})";
             GeneralNonQuery(query, "Something went wrong");
         }
     }
