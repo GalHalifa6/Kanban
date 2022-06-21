@@ -58,9 +58,6 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             query = "DELETE FROM Boards";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
-/*            query = "DELETE FROM TasksColumnsBoards";
-            cmd.CommandText = query;
-            cmd.ExecuteNonQuery();*/
             query = "DELETE FROM Columns";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();

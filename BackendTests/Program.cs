@@ -1,7 +1,9 @@
 ﻿using IntroSE.Kanban.Backend;
 using IntroSE.Kanban.Backend.DataAccessLayer;
 using System;
-
+using IntroSE.Kanban.Backend.ServiceLayer;
+using IntroSE.Kanban.Backend.BusinessLayer;
+using IntroSE.Kanban.Backend.DataAccessLayer;
 
 class Program
 {
@@ -14,6 +16,5 @@ class Program
         boardServiceTest.RunTests();
         userServiceTest.RunTests();
         taskServiceTest.runTests();
-
     }
 }
