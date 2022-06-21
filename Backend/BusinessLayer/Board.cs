@@ -208,14 +208,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (c == backlog)
             {
                 inProgress.AddTask(t);
-                dto.AdvanceTask(c.dto, inProgress.dto, t.dto);
+                dto.AdvanceTask(c.dto, inProgress.dto, t.DTO);
                 backlog.RemoveTask(t);
                 logger.Info("Task " + t.Title + " advanced");
             }
             else if (c == inProgress)
             {
                 done.AddTask(t);
-                dto.AdvanceTask(c.dto, done.dto, t.dto);
+                dto.AdvanceTask(c.dto, done.dto, t.DTO);
                 inProgress.RemoveTask(t);
                 logger.Info("Task " + t.Title + " advanced");
             }

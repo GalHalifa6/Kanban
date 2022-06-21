@@ -9,38 +9,56 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class Column
     {
-        public string name { get; private set; }
-        public int maxTasks { get; private set; }
-        public List<Task> tasks { get; private set; }
+        public string name;
+        public string Name
+        {
+            get => name;
+        }
+        public int maxTasks;
+        public int MaxTasks
+        {
+            get => maxTasks;
+            set => maxTasks = value;
+        }
+        public List<Task> tasks;
+        public List<Task> Tasks
+        {
+            get => tasks;
+            set => tasks = value;
+        }
 
-        public ColumnDTO dto { get; private set; }
+        public ColumnDTO dto;
+        public ColumnDTO DTO
+        {
+            get => dto;
+            set => dto = value;
+        }
 
         private log4net.ILog logger = Utility.Logger.GetLogger();
 
         public Column(string name)
         {
             this.name = name;
-            tasks = new List<Task>();
-            maxTasks = int.MaxValue; //If there's no limit on number of tasks, the value is the maximum value of int
-            dto = new ColumnDTO(this);
+            this.tasks = new List<Task>();
+            this.maxTasks = int.MaxValue; //If there's no limit on number of tasks, the value is the maximum value of int
+            this.dto = new ColumnDTO(this);
         }
 
         public Column(ColumnDTO column)
         {
-            name = column.name;
-            maxTasks = column.maxTasks;
-            dto = column;
-            tasks = new List<Task>();
-            foreach (TaskDTO task in column.tasks)
+            this.name = column.Name;
+            this.maxTasks = column.MaxTasks;
+            this.dto = column;
+            foreach (TaskDTO task in column.Tasks)
             {
-                Task t = new Task(task.boardID, task.columnOrdinal, task.Id, task.Title, task.Description, task.DueDate);
-                tasks.Add(t);
+                Task t = new Task(task.BoardID, task.ColumnOrdinal, task.Id, task.Title, task.Description, task.DueDate);
+                this.tasks.Add(t);
             }
         }
 
         public int GetBoardID()
         {
-            return dto.boardID;
+            return dto.BoardID;
         }
 
         /// <summary>
@@ -70,7 +88,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             tasks.Add(task);
             logger.Info("Added task: " + task.Title);
-            dto.AddTask(task.dto);
+            dto.AddTask(task.DTO);
         }
         /// <summary>
         /// Add a task to this column
@@ -98,7 +116,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Task newTask = new Task(boardID, columnOrdinal, ID, title, description, dueDate);
             tasks.Add(newTask);
             logger.Info("Added task: " + newTask.Title);
-            dto.AddTask(newTask.dto);
+            dto.AddTask(newTask.DTO);
         }
 
         internal void AddColumnToDB()
@@ -222,21 +240,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns></returns>
         public List<Task> GetTasksList()
         {
-            /*string output = "";
-            if (tasks.Count > 0)
-            {
-                for (int i = 0; i < tasks.Count; i++) {
-                    if (i != tasks.Count - 1)
-                    {
-                        output = output + tasks[i].toString() + ",\n";
-                    }
-                    else
-                    {
-                        output = output + tasks[i].toString();
-                    }
-                }
-            }
-            return output;*/
             return tasks;
         }
         /// <summary>
