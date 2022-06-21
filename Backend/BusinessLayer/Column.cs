@@ -27,6 +27,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             set => tasks = value;
         }
 
+        private int boardID;
+        public int BoardID { get => boardID; }
+
         public ColumnDTO dto;
         public ColumnDTO DTO
         {
@@ -36,12 +39,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         private log4net.ILog logger = Utility.Logger.GetLogger();
 
-        public Column(string name)
+        public Column(string name, int boardID)
         {
             this.name = name;
             this.tasks = new List<Task>();
             this.maxTasks = int.MaxValue; //If there's no limit on number of tasks, the value is the maximum value of int
             this.dto = new ColumnDTO(this);
+            this.boardID = boardID;
         }
 
         public Column(ColumnDTO column)
@@ -49,6 +53,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.name = column.Name;
             this.maxTasks = column.MaxTasks;
             this.dto = column;
+            tasks = new List<Task>();
+            this.dto = column;
+            this.boardID = column.BoardID;
             foreach (TaskDTO task in column.Tasks)
             {
                 Task t = new Task(task.BoardID, task.ColumnOrdinal, task.Id, task.Title, task.Description, task.DueDate);

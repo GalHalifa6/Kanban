@@ -15,8 +15,14 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
     public class UserService
     {
         private string currentEmail;
+        public string CurrentEmail
+        {
+            get => currentEmail;
+            set => currentEmail = value;
+        }
 
-        public UserController uc { get; }
+        private UserController uc;
+        public UserController Uc { get => uc; }
 
         public UserService()
         {
@@ -186,7 +192,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             try
             {
-                uc.LoadDate();
+                uc.LoadData();
                 return "{}";
             }
             catch (Exception e)
@@ -200,7 +206,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             try
             {
-                uc.DeleteDate();
+                uc.DeleteData();
                 return "{}";
             }
             catch(Exception e)

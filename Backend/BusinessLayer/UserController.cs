@@ -13,13 +13,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         log4net.ILog logger = Utility.Logger.GetLogger();
 
         //UserEmail, User//
-        private Dictionary<string, User> users { get; set; }
+        private Dictionary<string, User> users;
 
         private UserMapper usm;
 
         public UserController()
         {
             users = new Dictionary<string, User>();
+            usm = new UserMapper();
         }
 
         /// <summary>
@@ -35,7 +36,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 return false;
             }
             User user = users[email];
-            if (user.isLoggedIn)
+            if (user.IsLoggedIn)
             {
                 return true;
             }
@@ -106,9 +107,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (GetUser(email) != null)
             {
-                if (GetUser(email).password == password)
+                if (GetUser(email).Password == password)
                 {
-                    if (GetUser(email).isLoggedIn == true)
+                    if (GetUser(email).IsLoggedIn == true)
                     {
                         users.Remove(email);
                         logger.Info("User: " + email + ", deleted successfully");
@@ -134,7 +135,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (GetUser(email) != null)
             {
-                if (GetUser(email).password == password)
+                if (GetUser(email).Password == password)
                 {
                     GetUser(email).logIn();
                     logger.Info("The user " + email + " logged in successfully");
@@ -161,7 +162,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (GetUser(email) != null)
             {
-                if (GetUser(email).isLoggedIn == true)
+                if (GetUser(email).IsLoggedIn == true)
                 {
                     GetUser(email).logOut();
                     logger.Info("The user " + email + " logged out successfully");
@@ -190,9 +191,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             if (GetUser(email) != null)
             {
-                if (GetUser(email).isLoggedIn == true)
+                if (GetUser(email).IsLoggedIn == true)
                 {
-                    if (users[email].password == oldPassword)
+                    if (users[email].Password == oldPassword)
                     {
                         GetUser(email).setPassword(newPassword);
                         logger.Info("The password of the user " + email + " changed successfully");
@@ -216,20 +217,39 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
-        internal void DeleteDate()
+        internal void DeleteData()
         {
             usm.DeleteData();
         }
 
-        internal void LoadDate()
+        internal void LoadData()
         {
             HashSet<UserDTO> userDTOs = usm.LoadData();
             foreach (UserDTO userDTO in userDTOs)
             {
 
-                users.Add(userDTO.email ,new User(userDTO.email, userDTO.password));
+                users.Add(userDTO.Email ,new User(userDTO.Email, userDTO.Password));
+
             }
 
+            Dictionary<string, HashSet<Board>> boards = BoardController.Boards;
+            foreach (string email in users.Keys)
+            {
+                if (boards.ContainsKey(email))
+                {
+                    foreach (Board board in boards[email])
+                    {
+                        if (board.Owner == email)
+                        {
+                            GetUser(email).MyBoards.Add(board);
+                        }
+                        else
+                        {
+                            GetUser(email).CommonBoards.Add(board);
+                        }
+                    }
+                }
+            }
         }
 
         /// <summary>

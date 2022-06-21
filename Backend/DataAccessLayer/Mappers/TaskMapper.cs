@@ -6,7 +6,7 @@ using System.Data.SQLite;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using System.Globalization;
 
-namespace IntroSE.Kanban.Backend.DataAccessLayer
+namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 {
     internal class TaskMapper
     {

@@ -13,8 +13,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 {
     public class BoardService
     {
-        public BoardController bc { get; }
-        public ILog logger = Logger.GetLogger();
+        private BoardController bc;
+        public BoardController Bc { get => bc; }
+        private ILog logger = Logger.GetLogger();
         private static int MAX_TASK_DESC_LENGTH = 300;
         private static int MAX_TASK_TITLE_LENGTH = 50;
         public BoardService()
@@ -66,7 +67,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
 
             try {
-                bc.AddBoard(email, name, US.uc);
+                bc.AddBoard(email, name, US.Uc);
                 return new Response("Board was added successfully");
             }
             catch (Exception e)
@@ -233,7 +234,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string JoinBoard(string email, int boardID, UserService US)
         {
-            return InvokeMethod(new Action<string, int, UserController>(bc.JoinBoard), "{}", email, boardID, US.uc);
+            return InvokeMethod(new Action<string, int, UserController>(bc.JoinBoard), "{}", email, boardID, US.Uc);
         }
 
 

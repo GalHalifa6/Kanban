@@ -3,6 +3,7 @@ using System.Globalization;
 using IntroSE.Kanban.Backend.ServiceLayer;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using System.Text.Json;
+using IntroSE.Kanban.Backend.DataAccessLayer;
 
 namespace IntroSE.Kanban.Backend
 {
@@ -15,12 +16,15 @@ namespace IntroSE.Kanban.Backend
         }
         public void RunTests()
         {
+            DBConnector.GetInstance().ResetDB();
             addTaskTest();
+            DBConnector.GetInstance().ResetDB();
             removeBoardTest();
+            DBConnector.GetInstance().ResetDB();
             addBoardTest();
+            DBConnector.GetInstance().ResetDB();
             advanceTaskPhaseTest("task1");
-
-
+            DBConnector.GetInstance().ResetDB();
         }
 
 
@@ -35,7 +39,9 @@ namespace IntroSE.Kanban.Backend
             gradingService.Login("gal@gmail.com", "123456Ab");
             gradingService.AddBoard("gal@gmail.com", "Board1");
             string res = gradingService.AddTask("gal@gmail.com", "Board1", "Task1", "Testing task1", new DateTime());
+            gradingService.Logout("gal@gmail.com");
             Console.WriteLine(res);
+            
 
             Console.WriteLine("-----------------------");
             Console.WriteLine("Adding task to a user, title- up to 50. Should fail");//fix this. should return error
@@ -43,6 +49,7 @@ namespace IntroSE.Kanban.Backend
             gradingService.Login("tomer@gmail.com", "123456Aa");
             gradingService.AddBoard("tomer@gmail.com", "Board3");
             res = gradingService.AddTask("tomer@gmail.com", "Board3", "zzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaaddddddddddd", "testing task", new DateTime());
+            gradingService.Logout("tomeR@gmail.com");
             Console.WriteLine(res);
 
             Console.WriteLine("-----------------------");//fix this. should return error
@@ -51,6 +58,7 @@ namespace IntroSE.Kanban.Backend
             gradingService.Login("Omer@gmail.ac.il", "123456Aa");
             gradingService.AddBoard("Omer@gmail.ac.il", "Board8");
             res = gradingService.AddTask("Omer@gmail.ac.il", "Board8", "zzzzzzzzzzxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssxssaaaaaaaaaaddddddddddd", "testing task", new DateTime());
+            gradingService.Logout("omer@gmail.com");
             Console.WriteLine(res);
 
             Console.WriteLine("-----------------------");//fix this. should return error
@@ -64,6 +72,7 @@ namespace IntroSE.Kanban.Backend
             gradingService.Login("itay@gmail.com", "123456Aa");
             gradingService.AddBoard("itay@gmail.com", "Board1");
             res = gradingService.AddTask("itay@gmail.com", "Board1", "Task1", "Testing task1", new DateTime());
+            gradingService.Logout("itay@gmail.com");
             Console.WriteLine(res);
 
             Console.WriteLine("-----------------------");
