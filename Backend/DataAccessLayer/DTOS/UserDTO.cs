@@ -9,8 +9,18 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
     internal class UserDTO
     {
-        public string email { get; set; }
-        public string password { get; private set; }
+        private string email;
+        public string Email
+        {
+            get => email;
+            set => email = value;
+        }
+        private string password;
+        public string Password
+        {
+            get => password;
+            set => password = value;
+        }
 
         public UserDTO(string email, string password)
         {

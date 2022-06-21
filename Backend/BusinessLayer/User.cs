@@ -10,9 +10,25 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class User
     {
-        public bool isLoggedIn { get; set; }
-        private string email { get; set; }
-        public string password { get; private set; }
+        private bool isLoggedIn;
+        public bool IsLoggedIn
+        {
+            get => isLoggedIn;
+            set => isLoggedIn = value;
+        }
+
+        private string email;
+        public string Email
+        {
+            get => email;
+            set => email = value;
+        }
+
+        private string password;
+        public string Password {
+            get => password;
+            set => password = value;
+        }
 
         private HashSet<Board> MyBoards;
         // MyBoards is a set with string key

@@ -15,6 +15,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
     public class UserService
     {
         private string currentEmail;
+        public string CurrentEmail
+        {
+            get => currentEmail;
+            set => currentEmail = value;
+        }
 
         public UserController uc { get; }
 
