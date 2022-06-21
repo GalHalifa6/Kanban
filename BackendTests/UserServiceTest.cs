@@ -2,6 +2,7 @@ using System;
 using IntroSE.Kanban.Backend.ServiceLayer;
 using IntroSE.Kanban.Backend.BusinessLayer;
 using System.Text.Json;
+using IntroSE.Kanban.Backend.DataAccessLayer;
 
 class UserServiceTest
 {
@@ -11,9 +12,13 @@ class UserServiceTest
     }
     public void RunTests()
     {
-        //RegisterTest();
-        //LoginTest();
-        //LogOutTest();
+        DBConnector.GetInstance().ResetDB();
+        RegisterTest();
+        DBConnector.GetInstance().ResetDB();
+        LoginTest();
+        DBConnector.GetInstance().ResetDB();
+        LogOutTest();
+        DBConnector.GetInstance().ResetDB();
         GetUserBoardsTest();
 
     }

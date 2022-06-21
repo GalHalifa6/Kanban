@@ -13,7 +13,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             DBConnector db = DBConnector.GetInstance();
             ServiceController sc = new ServiceController();
-          Console.WriteLine(sc.Register("itay@gmail.com", "Aa123456"));
+            Console.WriteLine(sc.Register("itay@gmail.com", "Aa123456"));
             Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
             Console.WriteLine(sc.AddBoard("itay@gmail.com", "B1"));
             Console.WriteLine(sc.Logout("itay@gmail.com"));

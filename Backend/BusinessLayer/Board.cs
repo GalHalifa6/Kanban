@@ -38,7 +38,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             nextTaskID = 0;
             usernames = new HashSet<string>();
             owner = creatorName;
-            dto = new BoardDTO(id, name, creatorName, nextTaskID);
+            dto = new BoardDTO(id, name, creatorName, nextTaskID, usernames);
         }
 
         public Board(BoardDTO boardDTO)

@@ -16,14 +16,17 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
         {
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery("SELECT * FROM Boards");
             HashSet<BoardDTO> data = new HashSet<BoardDTO>();
+            Dictionary<int, HashSet<string>> users = new UsersBoardsDTO().LoadData();
             while (res.Read())
             {
                 int id = res.GetInt32(res.GetOrdinal("id"));
                 string name = res.GetString(res.GetOrdinal("name"));
                 int nextTaskID = res.GetInt32(res.GetOrdinal("nextTaskID"));
                 string owner = res.GetString(res.GetOrdinal("owner"));
-                data.Add(new BoardDTO(id, name, owner, nextTaskID));
+                data.Add(new BoardDTO(id, name, owner, nextTaskID, users[id]));
+
             }
+
             DBConnector.GetInstance().close();
             return data;
         }
