@@ -49,22 +49,19 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             
             conn.Open();
             SQLiteCommand cmd = conn.CreateCommand();
-            string query = "DROP TABLE IF EXISTS Users";
+            string query = "DELETE FROM Users";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
-            query = "DROP TABLE IF EXISTS UsersBoards";
+            query = "DELETE FROM UsersBoards";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
-            query = "DROP TABLE IF EXISTS Boards";
+            query = "DELETE FROM Boards";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
-            query = "DROP TABLE IF EXISTS TasksColumnsBoards";
+            query = "DELETE FROM Columns";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
-            query = "DROP TABLE IF EXISTS Columns";
-            cmd.CommandText = query;
-            cmd.ExecuteNonQuery();
-            query = "DROP TABLE IF EXISTS Tasks";
+            query = "DELETE FROM Tasks";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
             conn.Close();
