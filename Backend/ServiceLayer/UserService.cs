@@ -263,7 +263,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>boolean indicating the validity of the password</returns>
         public bool IsValidPassword(string pass)
         {
-            if (string.IsNullOrWhiteSpace(pass) || !(pass.Length >= 6 && pass.Length <= 20) || !(pass.Any(char.IsUpper)) || !(pass.Any(char.IsLower)) || !(pass.Any(char.IsDigit)))
+            if (string.IsNullOrWhiteSpace(pass) || !(pass.Length >= 6 && pass.Length <= 20) || !(pass.Any(char.IsUpper)) || !(pass.Any(char.IsLower)) || !(pass.Any(char.IsNumber)))
             {
                 return false;
             }
@@ -314,7 +314,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 {
                     atLeastOneLower = true;
                 }
-                if (char.IsDigit(c))
+                if (char.IsNumber(c))
                 {
                     atLeastOneNumber = true;
                 }
