@@ -162,5 +162,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             assigneeEmail = null;
             dto.UnassignTask();
         }
+
+        internal void AdvanceTask()
+        {
+            dto.AdvanceTask();
+        }
     }
 }
