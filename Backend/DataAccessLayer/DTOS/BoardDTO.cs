@@ -98,5 +98,11 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             //currentColDTO.RemoveTask(taskDTO.Id);
             taskDTO.AdvanceTask();
         }
+
+        public void nextTaskIdPlusPlus()
+        {
+            string query = $"UPDATE Boards SET nextTaskID = nextTaskID + 1 WHERE id = {id}";
+            GeneralNonQuery(query, "Something went wrong");
+        }
     }
 }

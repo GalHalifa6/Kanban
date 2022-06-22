@@ -192,6 +192,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 boards.Add(board.Id);
             }
+            foreach (Board board in CommonBoards)
+            {
+                boards.Add(board.Id);
+            }
             Response r = new Response(boards);
             return r;
         }

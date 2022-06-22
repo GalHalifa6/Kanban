@@ -168,6 +168,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 backlog.AddTask(id, 0,nextTaskID, title, description, dueDate);
                 nextTaskID++;
+                dto.nextTaskIdPlusPlus();
                 logger.Info("Task was successfully added");
             }
             else
@@ -274,7 +275,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             dto.AddUser(email);
             logger.Info(email + " added to board " + name);
             usernames.Add(email);
-            Console.WriteLine("user added " + email);
         }
 
         public void RemoveUser(string email)
@@ -313,7 +313,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("Attempt to change owner of board failed due to incorrect currentOwner name");
                 throw new Exception("Failed to change owner because " + currentOwner + " is not the owner of the board");
             }
-            Console.WriteLine(usernames);
             if (!usernames.Contains(newOwner))
             {
                 logger.Warn("Attempt to change owner of board failed due to newOwner not in the board");
