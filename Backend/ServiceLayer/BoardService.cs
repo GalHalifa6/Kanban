@@ -71,7 +71,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 logger.Warn(email + " tried to create a board with invalid name");
                 throw new Exception("Cannot have an empty board name");
             }*/
-            if (name == null)
+            if (name == null || IsEmptyOrWhiteSpace(name))
             {
                 logger.Warn(email + " tried to create a board with invalid name");
                 throw new Exception("Cannot have an empty board name");
@@ -172,6 +172,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             //return InvokeMethod(new Action<string, string, int ,int>(bc.AdvanceTask), "{}", email, boardName, columnOrdinal, taskId);
+        }
+
+        internal void DeleteData()
+        {
+            bc.DeleteData();
         }
 
         /// <summary>
