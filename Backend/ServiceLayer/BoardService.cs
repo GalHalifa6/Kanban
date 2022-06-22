@@ -58,21 +58,21 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email">email of the user to add the board to</param>
         /// <param name="name"> name of the board that is being added</param>
         /// <returns>Response indicating the outcome of the procedure</returns>
-        public Response AddBoard(string email, string name, UserService US)
+        public string AddBoard(string email, string name, UserService US)
         {
             if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
             {
                 logger.Warn(email + " tried to create a board with invalid name");
-                return new Response("Cannot have an empty board name", true);
+                throw new Exception("Cannot have an empty board name");
             }
 
             try {
                 bc.AddBoard(email, name, US.Uc);
-                return new Response("Board was added successfully");
+                return "{}";
             }
             catch (Exception e)
             {
-                return new Response(e.Message, true);
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
         }
 
