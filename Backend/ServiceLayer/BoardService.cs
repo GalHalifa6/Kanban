@@ -71,7 +71,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 logger.Warn(email + " tried to create a board with invalid name");
                 throw new Exception("Cannot have an empty board name");
             }*/
-            if (name == null || IsEmptyOrWhiteSpace(name))
+            if (name == null || IsEmptyOrWhiteSpace(name) || string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
             {
                 logger.Warn(email + " tried to create a board with invalid name");
                 throw new Exception("Cannot have an empty board name");
