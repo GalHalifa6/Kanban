@@ -52,12 +52,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             bc.Register(email);
         }
 
-
-        public bool IsEmptyOrWhiteSpace(string value)
-        {
-            return value.All(char.IsWhiteSpace);
-        }
-
         /// <summary>
         /// Add a new board to a user
         /// </summary>
@@ -71,10 +65,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 logger.Warn(email + " tried to create a board with invalid name");
                 throw new Exception("Cannot have an empty board name");
             }*/
-            if (name == null || IsEmptyOrWhiteSpace(name) || string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
+            if (name == null || string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
             {
                 logger.Warn(email + " tried to create a board with invalid name");
-                throw new Exception("Cannot have an empty board name");
+                return JsonConvert.SerializeObject(new Response("Cannot have an empty board name", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             try {
                 bc.AddBoard(email, name, US.Uc);
