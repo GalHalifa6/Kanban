@@ -99,10 +99,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             email = email.ToLower();
-            /*if (newDesc == null)
-            {
-                newDesc = "";
-            }*/
             if (newDesc != null && newDesc.Length > MAX_TASK_DESC_LENGTH)
             {
                 Response response = new Response("Description is too long. Max number of characters is 300", true);
