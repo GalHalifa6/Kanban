@@ -216,16 +216,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             if (c == backlog)
             {
-                inProgress.AddTask(t);
-                dto.AdvanceTask(c.dto, inProgress.dto, t.DTO);
-                backlog.RemoveTask(t);
+                inProgress.takeAdvancingTask(t);
+                //dto.AdvanceTask(c.dto, inProgress.dto, t.DTO);
+                backlog.removeAdvancingTask(t);
+                t.AdvanceTask();
                 logger.Info("Task " + t.Title + " advanced");
             }
             else if (c == inProgress)
             {
-                done.AddTask(t);
-                dto.AdvanceTask(c.dto, done.dto, t.DTO);
-                inProgress.RemoveTask(t);
+                done.takeAdvancingTask(t);
+                //dto.AdvanceTask(c.dto, done.dto, t.DTO);
+                inProgress.removeAdvancingTask(t);
+                t.AdvanceTask();
                 logger.Info("Task " + t.Title + " advanced");
             }
             else // (c == done)
