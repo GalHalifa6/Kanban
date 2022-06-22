@@ -65,7 +65,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 logger.Warn(email + " tried to create a board with invalid name");
                 return new Response("Cannot have an empty board name", true);
             }
-
             try {
                 bc.AddBoard(email, name, US.Uc);
                 return new Response("Board was added successfully");

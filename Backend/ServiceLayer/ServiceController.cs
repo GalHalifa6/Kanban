@@ -68,7 +68,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
-
             return BS.LimitColumn(email, boardName, columnOrdinal, limit);
         }
 
