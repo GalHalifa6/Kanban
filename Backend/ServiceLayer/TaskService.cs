@@ -43,9 +43,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Json response with the result of the procedure</returns>
         public string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string newTitle)
         {
-            if (email == null)
+            if (email == null || boardName == null)
             {
-                Response response = new Response("Email cannot be null", true);
+                Response response = new Response("Email & board name cannot be null", true);
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             email = email.ToLower();

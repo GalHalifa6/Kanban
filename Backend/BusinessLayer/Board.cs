@@ -384,6 +384,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("Cannot edit tasks that are done.");
             }
             Task task = GetTask(columnOrdinal, taskId);
+            if (task == null)
+            {
+                throw new Exception("Column or task doesn't exist.");
+            }
             column.UpdateTaskTitle(email, task, newTitle);
         }
 
@@ -399,6 +403,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("Cannot edit tasks that are done.");
             }
             Task task = GetTask(columnOrdinal, taskId);
+            if (task == null)
+            {
+                throw new Exception("Column or task doesn't exist.");
+            }
             column.UpdateTaskDescription(email, task, newDesc);
         }
 
@@ -414,6 +422,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("Cannot edit tasks that are done.");
             }
             Task task = GetTask(columnOrdinal, taskId);
+            if (task == null)
+            {
+                throw new Exception("Column or task doesn't exist.");
+            }
             column.UpdateTaskDueDate(email, task, newDueDate);
         }
     }
