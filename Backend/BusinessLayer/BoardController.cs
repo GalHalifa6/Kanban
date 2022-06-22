@@ -94,7 +94,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email">newly registered user</param>
         internal void Register(string email)
         {
-            boards.Add(email, new HashSet<Board>());
+            if (!boards.ContainsKey(email))
+            {
+                boards.Add(email, new HashSet<Board>());
+            }
         }
 
         /// <summary>

@@ -44,8 +44,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.name = name;
             this.tasks = new List<Task>();
             this.maxTasks = int.MaxValue; //If there's no limit on number of tasks, the value is the maximum value of int
-            this.dto = new ColumnDTO(this);
             this.boardID = boardID;
+            this.dto = new ColumnDTO(this);
+
         }
 
         public Column(ColumnDTO column)
