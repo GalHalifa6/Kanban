@@ -179,7 +179,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         private bool IsInBoard(string email)
         {
-            return usernames.Contains(email) || owner == email;
+            return owner == email || usernames.Contains(email);
         }
 
 
