@@ -97,7 +97,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="newTitle">The new title</param>
         internal void UpdateTaskTitle(string newTitle)
         {
-            string query = $"UPDATE Tasks SET newTitle = '{newTitle}' WHERE id = {Id} AND boardId = {boardID}";
+            string query = $"UPDATE Tasks SET title = '{newTitle}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
             title = newTitle;
         }
