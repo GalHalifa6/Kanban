@@ -9,27 +9,40 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class Column
     {
+        /// <summary>
+        /// The name of the column - 'backlog' / 'in progress' / 'done'
+        /// </summary>
         public string name;
         public string Name
         {
             get => name;
         }
+        /// <summary>
+        /// The limit on the maximum tasks available in this column
+        /// </summary>
         public int maxTasks;
         public int MaxTasks
         {
             get => maxTasks;
             set => maxTasks = value;
         }
+        /// <summary>
+        /// List of tasks in this column
+        /// </summary>
         public List<Task> tasks;
         public List<Task> Tasks
         {
             get => tasks;
             set => tasks = value;
         }
-
+        /// <summary>
+        /// The id of the board the task is in
+        /// </summary>
         private int boardID;
         public int BoardID { get => boardID; }
-
+        /// <summary>
+        /// The dto of the column
+        /// </summary>
         public ColumnDTO dto;
         public ColumnDTO DTO
         {
@@ -62,11 +75,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 Task t = new Task(task.BoardID, task.ColumnOrdinal, task.Id, task.Title, task.Description, task.DueDate);
                 this.tasks.Add(t);
             }
-        }
-
-        public int GetBoardID()
-        {
-            return dto.BoardID;
         }
 
         /// <summary>
@@ -126,7 +134,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Info("Added task: " + newTask.Title);
             dto.AddTask(newTask.DTO);
         }
-
+        /// <summary>
+        /// Add the column to the db
+        /// </summary>
         internal void AddColumnToDB()
         {
             dto.AddColumnToDB();
@@ -146,28 +156,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             logger.Info("Task: " + task.Title + " is removed.");
             tasks.Remove(task);
-            //dto.RemoveTask(task.Id);
         }
 
-        /*internal void RemoveTask(int id)
-        {
-            Boolean found = false;
-            for (int i = 0; i < tasks.Count & !found; i++)
-            {
-                if (tasks[i].Id == id)
-                {
-                    tasks.RemoveAt(i);
-                    found = true;
-                }
-            }
-            if (!found)
-            {
-                logger.Warn("Cannot remove task because it doesn't exist.");
-                throw new Exception("The task doesn't exist.");
-            }
-            logger.Info("Task: " + id + " is removed.");
-            dto.RemoveTask(id);
-        }*/
         /// <summary>
         /// Update a task's title
         /// </summary>
@@ -216,7 +206,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             task.UpdateTaskDueDate(email, newDueDate);
             logger.Info("Task due date changed to: " + newDueDate);
         }
-
+        /// <summary>
+        /// Adding a task to this column after getting advanced from the previous column
+        /// </summary>
+        /// <param name="t">The task</param>
+        /// <exception cref="Exception"></exception>
         internal void takeAdvancingTask(Task t)
         {
             if (tasks.Count == maxTasks)
