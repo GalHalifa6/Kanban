@@ -49,6 +49,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             try {
                 uc.createUser(email, password);
+                uc.login(email, password);
                 return "{}";
             }
             catch(Exception e)
