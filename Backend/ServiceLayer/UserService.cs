@@ -115,7 +115,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             catch(Exception e)
             {
-                return JsonConvert.SerializeObject(e.Message, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
         }
 

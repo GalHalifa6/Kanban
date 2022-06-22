@@ -169,7 +169,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
                 else
                 {
-                    logger.Warn("Faild to logout the user " + email + ", because the user is not connected");
+                    logger.Warn("Failed to logout the user " + email + ", because the user is not connected");
                     throw new Exception("The user logged out unsuccesssfully");
                 }
             }
