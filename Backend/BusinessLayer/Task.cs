@@ -152,6 +152,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 return true;
             }
+            if (assigneeEmail == null)
+            {
+                return true;
+            }
             return false;
         }
         /// <summary>
@@ -161,6 +165,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             assigneeEmail = null;
             dto.UnassignTask();
+        }
+
+        internal void AdvanceTask()
+        {
+            dto.AdvanceTask();
         }
     }
 }

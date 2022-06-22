@@ -17,12 +17,12 @@ namespace IntroSE.Kanban.Backend
         public void RunTests()
         {
             DBConnector.GetInstance().ResetDB();
-            addTaskTest();
-            DBConnector.GetInstance().ResetDB();
-            removeBoardTest();
-            DBConnector.GetInstance().ResetDB();
-            addBoardTest();
-            DBConnector.GetInstance().ResetDB();
+            //addTaskTest();
+            //DBConnector.GetInstance().ResetDB();
+            //removeBoardTest();
+            //DBConnector.GetInstance().ResetDB();
+            //addBoardTest();
+            //DBConnector.GetInstance().ResetDB();
             advanceTaskPhaseTest("task1");
             DBConnector.GetInstance().ResetDB();
         }
@@ -57,7 +57,7 @@ namespace IntroSE.Kanban.Backend
             gradingService.Register("Omer@gmail.ac.il", "123456Aa");
             gradingService.Login("Omer@gmail.ac.il", "123456Aa");
             gradingService.AddBoard("Omer@gmail.ac.il", "Board8");
-            res = gradingService.AddTask("Omer@gmail.ac.il", "Board8", "zzzzzzzzzzxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssxssaaaaaaaaaaddddddddddd", "testing task", new DateTime());
+            res = gradingService.AddTask("Omer@gmail.ac.il", "Board8","testing task", "zzzzzzzzzzxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssxssaaaaaaaaaaddddddddddd", new DateTime());
             gradingService.Logout("omer@gmail.com");
             Console.WriteLine(res);
 
@@ -110,21 +110,23 @@ namespace IntroSE.Kanban.Backend
             Console.WriteLine("add two boards with the same name. should fail");
             gradingService.Register("gal@gmail.com", "123456Aa");
             gradingService.Login("gal@gmail.com", "123456Aa");
+            gradingService.AddBoard("gal@gmail.com", "Board1");
+            gradingService.AddTask("gal@gmail.com", "Board1", "task", "testing task", new DateTime());
+            //Console.WriteLine(res);
             string res = gradingService.AddBoard("gal@gmail.com", "Board1");
-            res = gradingService.AddTask("gal@gmail.com", "Board1", "task", "testing task", new DateTime());
-            Console.WriteLine(res);
-            res = gradingService.AddBoard("gal@gmail.com", "Board1");
             Console.WriteLine(res);
 
             Console.WriteLine("-----------------------");
             Console.WriteLine("adding boards with the same name to a different users. should succeed");
             gradingService.Register("gal@gmail.com", "123456Aa");
             gradingService.Login("gal@gmail.com", "123456Aa");
-            gradingService.Register("itay@gmail.com", "123456Aa");
-            gradingService.Login("itay@gmail.com", "123456Aa");
             res = gradingService.AddBoard("gal@gmail.com", "Board2");
             Console.WriteLine(res);
+            gradingService.Logout("gal@gmail.com");
+            gradingService.Register("itay@gmail.com", "123456Aa");
+            gradingService.Login("itay@gmail.com", "123456Aa");
             res = gradingService.AddBoard("itay@gmail.com", "Board2");
+            gradingService.Logout("itay@gmail.com");
             Console.WriteLine(res);
 
             Console.WriteLine("-----------------------");
@@ -137,6 +139,7 @@ namespace IntroSE.Kanban.Backend
             Console.WriteLine("-----------------------");
             Console.WriteLine("adding an empty board name. should fail");
             res = gradingService.AddBoard("omer@gmail.com", "");
+            gradingService.Logout("omer@gmail.com");
             Console.WriteLine(res);
         }
 
@@ -158,6 +161,7 @@ namespace IntroSE.Kanban.Backend
             Console.WriteLine(res);
             gradingService.RemoveBoard("gal@gmail.com", "Board4");
             Console.WriteLine(res);
+            gradingService.Logout("gal@gmail.com");
 
             Console.WriteLine("-----------------------");
             Console.WriteLine("Remove board from a user that not logged in. nshould fail");
@@ -181,35 +185,42 @@ namespace IntroSE.Kanban.Backend
         ///</summary>
         public void advanceTaskPhaseTest(string Title)
         {
+            Console.WriteLine("----------------");
             GradingService gradingService = new GradingService();
             Console.WriteLine("advace task twice. should succeed");
             gradingService.Register("gal@gmail.com", "123456Aa");
             gradingService.Login("gal@gmail.com", "123456Aa");
             gradingService.AddBoard("gal@gmail.com", "Board1");
             gradingService.AddTask("gal@gmail.com", "Board1", Title, "testing task1", new DateTime());
-            string res = gradingService.AdvanceTask("gal@gmail.com", "Board1", 0, 1);
-            Console.Write(res);
-            res = gradingService.AdvanceTask("gal@gmail.com", "Board1", 1, 1);
-            Console.Write(res + "\n");
+            gradingService.AssignTask("gal@gmail.com", "Board1", 0, 0, "gal@gmail.com");
+            string res = gradingService.AdvanceTask("gal@gmail.com", "Board1", 0, 0);
+            Console.WriteLine(res);
+            res = gradingService.AdvanceTask("gal@gmail.com", "Board1", 1, 0);
+            gradingService.Logout("gal@gmail.com");
+            Console.WriteLine(res);
 
             Console.WriteLine("-----------------------");
             Console.WriteLine("advace task three times. should fail");
             gradingService.Register("itay@gmail.com", "123456Aa");
             gradingService.Login("itay@gmail.com", "123456Aa");
-            gradingService.AddBoard("itay@gmail.com", "Board1");
-            gradingService.AddTask("itay@gmail.com", "Board1", Title, "testing task1", new DateTime());
-            res = gradingService.AdvanceTask("itay@gmail.com", "Board1", 0, 2);
+            gradingService.AddBoard("itay@gmail.com", "Board2");
+            gradingService.AddTask("itay@gmail.com", "Board2", Title, "testing task1", new DateTime());
+            res = gradingService.AdvanceTask("itay@gmail.com", "Board2", 0, 0);
             Console.Write(res);
-            res = gradingService.AdvanceTask("itay@gmail.com", "Board1", 1, 2);
+            res = gradingService.AdvanceTask("itay@gmail.com", "Board2", 1, 0);
             Console.Write(res);
-            res = gradingService.AdvanceTask("itay@gmail.com", "Board1", 2, 2);
+            res = gradingService.AdvanceTask("itay@gmail.com", "Board2", 2, 0);
             Console.Write(res);
 
             Console.WriteLine("-----------------------");
             Console.WriteLine("advace unexist task. should fail");
+            gradingService.Register("gal@gmail.com", "123456Aa");
+            gradingService.Login("gal@gmail.com", "123456Aa");
             gradingService.AddBoard("gal@gmail.com", "Board2");
             gradingService.AddTask("gal@gmail.com", "Board2", Title, "testing task9", new DateTime());
             res = gradingService.AdvanceTask("gal@gmail.com", "Board2", 0, 4);
+            gradingService.Logout("gal@gmail.com");
+
             Console.Write(res);
         }
     }
