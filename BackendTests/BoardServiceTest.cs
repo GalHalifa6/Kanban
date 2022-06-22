@@ -194,28 +194,33 @@ namespace IntroSE.Kanban.Backend
             gradingService.AddTask("gal@gmail.com", "Board1", Title, "testing task1", new DateTime());
             gradingService.AssignTask("gal@gmail.com", "Board1", 0, 0, "gal@gmail.com");
             string res = gradingService.AdvanceTask("gal@gmail.com", "Board1", 0, 0);
-            Console.Write(res);
+            Console.WriteLine(res);
             res = gradingService.AdvanceTask("gal@gmail.com", "Board1", 1, 0);
-            Console.Write(res + "\n");
+            gradingService.Logout("gal@gmail.com");
+            Console.WriteLine(res);
 
             Console.WriteLine("-----------------------");
             Console.WriteLine("advace task three times. should fail");
             gradingService.Register("itay@gmail.com", "123456Aa");
             gradingService.Login("itay@gmail.com", "123456Aa");
-            gradingService.AddBoard("itay@gmail.com", "Board1");
-            gradingService.AddTask("itay@gmail.com", "Board1", Title, "testing task1", new DateTime());
-            res = gradingService.AdvanceTask("itay@gmail.com", "Board1", 0, 2);
+            gradingService.AddBoard("itay@gmail.com", "Board2");
+            gradingService.AddTask("itay@gmail.com", "Board2", Title, "testing task1", new DateTime());
+            res = gradingService.AdvanceTask("itay@gmail.com", "Board2", 0, 0);
             Console.Write(res);
-            res = gradingService.AdvanceTask("itay@gmail.com", "Board1", 1, 2);
+            res = gradingService.AdvanceTask("itay@gmail.com", "Board2", 1, 0);
             Console.Write(res);
-            res = gradingService.AdvanceTask("itay@gmail.com", "Board1", 2, 2);
+            res = gradingService.AdvanceTask("itay@gmail.com", "Board2", 2, 0);
             Console.Write(res);
 
             Console.WriteLine("-----------------------");
             Console.WriteLine("advace unexist task. should fail");
+            gradingService.Register("gal@gmail.com", "123456Aa");
+            gradingService.Login("gal@gmail.com", "123456Aa");
             gradingService.AddBoard("gal@gmail.com", "Board2");
             gradingService.AddTask("gal@gmail.com", "Board2", Title, "testing task9", new DateTime());
             res = gradingService.AdvanceTask("gal@gmail.com", "Board2", 0, 4);
+            gradingService.Logout("gal@gmail.com");
+
             Console.Write(res);
         }
     }

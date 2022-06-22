@@ -113,22 +113,22 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             foreach (Board board in CommonBoards)
             {
-                if (b.name == board.name)
+                if (b.Name == board.Name)
                 {
-                    logger.Warn($"User {this.email} can not join to {b.name} ");
+                    logger.Warn($"User {this.email} can not join to {b.Name} ");
                     return false;
                 }
             }
             foreach (Board board in MyBoards)
             {
-                if (b.name == board.name)
+                if (b.Name == board.Name)
                 {
-                    logger.Warn($"User {this.email} can not join to {b.name} ");
+                    logger.Warn($"User {this.email} can not join to {b.Name} ");
                     return false;
                 }
             }
 
-            logger.Info($"User {this.email} joined to '{b.name}'");
+            logger.Info($"User {this.email} joined to '{b.Name}'");
             MyBoards.Add(b);
             return true;
 
@@ -265,14 +265,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             foreach (Board board in MyBoards)
             {
-                if (b.name == board.name)
+                if (b.Name == board.Name)
                 {
-                    logger.Warn($"User {this.email} can not join to {b.name} ");
+                    logger.Warn($"User {this.email} can not join to {b.Name} ");
                     return false;
                 }
             }
            
-            logger.Info($"User {this.email} joined to '{b.name}'");
+            logger.Info($"User {this.email} joined to '{b.Name}'");
             CommonBoards.Add(b);
             return true;
             

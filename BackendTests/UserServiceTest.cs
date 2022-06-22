@@ -135,38 +135,15 @@ class UserServiceTest
         res = gradinService.Login("email@123.123.123.123", "123456Aa");
         Console.WriteLine(res);
 
-        Console.WriteLine("-----------------------");
-        Console.WriteLine("registerd with incorrect email. should fail");
-        gradinService.Register("____@gmail.com", "123456Aa");
-        res = gradinService.Login("____@gmail.com", "123456Aa");
-        Console.WriteLine(res);
-
-        Console.WriteLine("-----------------------");
-        Console.WriteLine("registerd with incorrect email. should fail");
-        gradinService.Register("miki-dan@example.com", "123456Aa");
-        res = gradinService.Login("miki-dan@example.com", "123456Aa");
-        Console.WriteLine(res);
-
-        Console.WriteLine("-----------------------");
-        Console.WriteLine("registerd with incorrect email. should fail");
-        gradinService.Register("email@subdomain.example.com", "123456Aa");
-        res = gradinService.Login("email@subdomain.example.com", "123456Aa");
-        Console.WriteLine(res);
 
         Console.WriteLine("\n---------- TESTS FOR PASSWORDS ----------\n");
-        Console.WriteLine("registerd with incorrect password. should succeed");
-        gradinService.Register("omer@gmail.com", "123456Gg");
-        res = gradinService.Login("omer@gmail.com", "123456Gg");
-        Console.WriteLine(res);
-
-        Console.WriteLine("\n---------- TESTS FOR PASSWORDS ----------\n");
-        Console.WriteLine("registerd with incorrect password. should succeed");
+        Console.WriteLine("registerd with correct password. should succeed");
         gradinService.Register("omer@gmail.com", "123456Gg");
         res = gradinService.Login("omer@gmail.com", "123456Gg");
         Console.WriteLine(res);
 
         Console.WriteLine("registerd with incorrect password. should fail");
-        gradinService.Register("check@gmail.com", " 123456Gg");
+        gradinService.Register("check@gmail.com", " 123456Gg"); // space in the begining of the password
         res = gradinService.Login("check@gmail.com", " 123456Gg");
         Console.WriteLine(res);
 
