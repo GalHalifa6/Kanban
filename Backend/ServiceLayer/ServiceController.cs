@@ -225,6 +225,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string DeleteData()
         {
+            BS.DeleteData();
             return US.DeleteData();
         }
 
