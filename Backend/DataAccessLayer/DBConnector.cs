@@ -46,8 +46,15 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// </summary>
         public void ResetDB()
         {
+            try
+            {
+                conn.Open();
+            }
+            catch (Exception)
+            {
+
+            }
             
-            conn.Open();
             SQLiteCommand cmd = conn.CreateCommand();
             string query = "DELETE FROM Users";
             cmd.CommandText = query;

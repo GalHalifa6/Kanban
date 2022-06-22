@@ -110,10 +110,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns> Bool- if the procedure succeed or not </returns>
         internal bool AddBoard(Board board)
         {
-            if (MyBoards.Contains(board))
+            foreach (Board b in myBoards)
             {
-                logger.Warn($"User {this.email} can't the the ownership of '{board.Name}'");
-                return false;
+                if (board.Name == b.Name)
+                {
+                    logger.Warn($"User {this.email} already has a board with the name '{board.Name}'");
+                    return false;
+                }
             }
             MyBoards.Add(board);
             logger.Info($"User {this.email} now is the owner of '{board.Name}'");

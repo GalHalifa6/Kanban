@@ -17,10 +17,10 @@ namespace IntroSE.Kanban.Backend
         public void RunTests()
         {
             DBConnector.GetInstance().ResetDB();
-            addTaskTest();
-            DBConnector.GetInstance().ResetDB();
-            removeBoardTest();
-            DBConnector.GetInstance().ResetDB();
+            //addTaskTest();
+            //DBConnector.GetInstance().ResetDB();
+            //removeBoardTest();
+            //DBConnector.GetInstance().ResetDB();
             addBoardTest();
             DBConnector.GetInstance().ResetDB();
             advanceTaskPhaseTest("task1");
@@ -57,7 +57,7 @@ namespace IntroSE.Kanban.Backend
             gradingService.Register("Omer@gmail.ac.il", "123456Aa");
             gradingService.Login("Omer@gmail.ac.il", "123456Aa");
             gradingService.AddBoard("Omer@gmail.ac.il", "Board8");
-            res = gradingService.AddTask("Omer@gmail.ac.il", "Board8", "zzzzzzzzzzxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssxssaaaaaaaaaaddddddddddd", "testing task", new DateTime());
+            res = gradingService.AddTask("Omer@gmail.ac.il", "Board8","testing task", "zzzzzzzzzzxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssssaaaaaaaaaadddddddddddzzzzzzzzzzxxxxxxxxxxssssssssxssaaaaaaaaaaddddddddddd", new DateTime());
             gradingService.Logout("omer@gmail.com");
             Console.WriteLine(res);
 
@@ -110,10 +110,10 @@ namespace IntroSE.Kanban.Backend
             Console.WriteLine("add two boards with the same name. should fail");
             gradingService.Register("gal@gmail.com", "123456Aa");
             gradingService.Login("gal@gmail.com", "123456Aa");
+            gradingService.AddBoard("gal@gmail.com", "Board1");
+            gradingService.AddTask("gal@gmail.com", "Board1", "task", "testing task", new DateTime());
+            //Console.WriteLine(res);
             string res = gradingService.AddBoard("gal@gmail.com", "Board1");
-            res = gradingService.AddTask("gal@gmail.com", "Board1", "task", "testing task", new DateTime());
-            Console.WriteLine(res);
-            res = gradingService.AddBoard("gal@gmail.com", "Board1");
             Console.WriteLine(res);
 
             Console.WriteLine("-----------------------");
@@ -158,6 +158,7 @@ namespace IntroSE.Kanban.Backend
             Console.WriteLine(res);
             gradingService.RemoveBoard("gal@gmail.com", "Board4");
             Console.WriteLine(res);
+            gradingService.Logout("gal@gmail.com");
 
             Console.WriteLine("-----------------------");
             Console.WriteLine("Remove board from a user that not logged in. nshould fail");
