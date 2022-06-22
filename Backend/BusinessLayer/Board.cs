@@ -91,6 +91,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
+        /// <summary>
+        /// limit the maximum number of tasks in a specified column
+        /// </summary>
+        /// <param name="columnNumber">column ordinal. 0 = backlog, 1 = in progress, 2 = done</param>
+        /// <param name="newLimit">new limit of the max number of tasks</param>
+        /// <exception cref="Exception">throws exception if the new limit is an invalid number</exception>
         internal void LimitColumnTasks(int columnNumber, int newLimit)
         {
             if (newLimit < -1)
@@ -118,11 +124,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Info("Max tasks limited to " + newLimit);
         }
 
-        internal void SetOwner(string email)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// handles adding a board to the database
+        /// </summary>
         internal void AddBoard() { 
             dto.AddBoard(owner, id, name);
             backlog.AddColumnToDB();
@@ -145,6 +149,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             dto.RemoveBoard();
         }
 
+
+        /// <summary>
+        /// gets the limit of tasks of the specified column
+        /// </summary>
+        /// <param name="boardName">name of the board that owns the task</param>
+        /// <param name="columnNumber">column ordinal</param>
+        /// <returns></returns>
+        /// <exception cref="Exception">throws exception if column number is invalid</exception>
         internal int GetColumnLimit(string boardName, int columnNumber)
         {
             Column col = GetColumn(columnNumber);
@@ -178,6 +190,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
+        /// <summary>
+        /// checks if a user is a member of the board (either owner or just a member)
+        /// </summary>
+        /// <param name="email">email of the user to be checked</param>
+        /// <returns>true if the user is in the board</returns>
         private bool IsInBoard(string email)
         {
             return owner == email || usernames.Contains(email);
@@ -195,6 +212,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Info("Task was removed successfully");
             return new Response("Task was removed successfully");
         }*/
+
+        /// <summary>
+        /// advance a task to the next column. cannot adnvace past "done" column
+        /// </summary>
+        /// <param name="email">email of the user that is assigned to the task</param>
+        /// <param name="columnOrdinal">column number</param>
+        /// <param name="taskId">id of the task to be advanced</param>
+        /// <exception cref="Exception">throws exception if the column number is invallid, if the user is not assigned to the task, or if the task doesn't exist</exception>
         internal void AdvanceTask(string email, int columnOrdinal, int taskId)
         {
             
@@ -265,6 +290,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
+        /// <summary>
+        /// add a user to the members of the board
+        /// </summary>
+        /// <param name="email">email of the user to be added</param>
+        /// <exception cref="Exception">throws exception if the user is already in the board</exception>
         public void AddUser(string email)
         {
             if (usernames.Contains(email) || owner == email)
@@ -277,6 +307,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             usernames.Add(email);
         }
 
+        /// <summary>
+        /// remove user from the board
+        /// </summary>
+        /// <param name="email">email of the user to be removed</param>
+        /// <exception cref="Exception">throws exception if the user is not in the board, or if the user is the owner</exception>
         public void RemoveUser(string email)
         {
             if (usernames.Contains(email))
@@ -300,12 +335,22 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
 
 
+        /// <summary>
+        /// unassign all tasks of the user
+        /// </summary>
+        /// <param name="email">user to be unassinged</param>
         private void UnassignTasks(string email)
         {
             backlog.UnassignTasks(email);
             inProgress.UnassignTasks(email);
         }
 
+        /// <summary>
+        /// change board owner
+        /// </summary>
+        /// <param name="currentOwner"></param>
+        /// <param name="newOwner"></param>
+        /// <exception cref="Exception">throws exception if the owner email deosn't match the actual owner, or if the new owner is not in the board</exception>
         public void ChangeOwner(string currentOwner, string newOwner)
         {
             if (currentOwner != owner)
@@ -313,7 +358,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 logger.Warn("Attempt to change owner of board failed due to incorrect currentOwner name");
                 throw new Exception("Failed to change owner because " + currentOwner + " is not the owner of the board");
             }
-            if (!usernames.Contains(newOwner))
+            if (!usernames.Contains(newOwner) && owner != newOwner)
             {
                 logger.Warn("Attempt to change owner of board failed due to newOwner not in the board");
                 throw new Exception("Failed to change owner because " + newOwner + " is not the in the board");
@@ -326,6 +371,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             logger.Info("Owner changed successfully");
         }
 
+        /// <summary>
+        /// get a task by the task id and column ordinal
+        /// </summary>
+        /// <param name="columnOrdinal"></param>
+        /// <param name="taskId"></param>
+        /// <returns></returns>
         internal Task GetTask(int columnOrdinal, int taskId)
         {
             try
@@ -345,6 +396,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         }
 
+        /// <summary>
+        /// gets all the assigned tasks of the user
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>list of tasks that are assigned to the user</returns>
         public List<Task> GetAllAssignedTasks(string email)
         {
             if (!IsInBoard(email))
@@ -357,6 +413,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
 
+        /// <summary>
+        /// assign a task to a specific user
+        /// </summary>
+        /// <param name="assigner"></param>
+        /// <param name="columnOrdinal"></param>
+        /// <param name="taskID"></param>
+        /// <param name="assignee"></param>
+        /// <exception cref="Exception">thrwos excpetion if the user is not in the board, or if the task doesn't exist</exception>
         public void AssignTask(string assigner, int columnOrdinal, int taskID, string assignee)
         {   
             Task t = GetTask(columnOrdinal, taskID);
@@ -372,6 +436,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             t.AssignTask(assigner, assignee);
         }
 
+        /// <summary>
+        /// update the title of a specified task
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="columnOrdinal"></param>
+        /// <param name="taskId"></param>
+        /// <param name="newTitle"></param>
+        /// <exception cref="Exception">thrwos exception if the task doesn't exist</exception>
         public void UpdateTaskTitle(string email, int columnOrdinal, int taskId, string newTitle)
         {
             Column column = GetColumn(columnOrdinal);
@@ -387,6 +459,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             column.UpdateTaskTitle(email, task, newTitle);
         }
 
+        /// <summary>
+        /// update the description of a specified task
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="columnOrdinal"></param>
+        /// <param name="taskId"></param>
+        /// <param name="newTitle"></param>
+        /// <exception cref="Exception">thrwos exception if the task doesn't exist</exception>
         public void UpdateTaskDescription(string email, int columnOrdinal, int taskId, string newDesc)
         {
             Column column = GetColumn(columnOrdinal);
@@ -402,6 +482,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             column.UpdateTaskDescription(email, task, newDesc);
         }
 
+        /// <summary>
+        /// update the due date of a specified task
+        /// </summary>
+        /// <param name="email"></param>
+        /// <param name="columnOrdinal"></param>
+        /// <param name="taskId"></param>
+        /// <param name="newTitle"></param>
+        /// <exception cref="Exception">thrwos exception if the task doesn't exist</exception>
         public void UpdateTaskDueDate(string email, int columnOrdinal, int taskId, DateTime newDueDate)
         {
             Column column = GetColumn(columnOrdinal);

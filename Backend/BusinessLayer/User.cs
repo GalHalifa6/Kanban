@@ -228,9 +228,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             board.ChangeOwner(currentUser, this.email);
             if (!MyBoards.Contains(board))
             {
-                    MyBoards.Add(board);
-                    logger.Info($"User {currentUser} took the ownership of the board '{board.Name}'");
-
+                MyBoards.Add(board);
+                logger.Info($"User {currentUser} took the ownership of the board '{board.Name}'");
             }
 
         }

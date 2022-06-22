@@ -321,7 +321,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 User currentOwner = users[currentOwnerEmail];
                 User newOwner = users[newOwnerEmail];
-                if (newOwner.CheckIfCanAddBoard(boardName))
+                if (newOwner.CheckIfCanAddBoard(boardName) || currentOwnerEmail == newOwnerEmail)
                 {
                     Board board = currentOwner.renounceOwnership(boardName);
                     if (board != null)
@@ -333,6 +333,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                         throw new Exception($"{currentOwnerEmail} has no board called '{boardName}' ");
                     }
                 }
+                
                 else
                 {
                     throw new Exception($"{newOwnerEmail} already has a board called {boardName}");

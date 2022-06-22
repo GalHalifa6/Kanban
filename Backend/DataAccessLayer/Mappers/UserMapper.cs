@@ -17,6 +17,10 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 
         }
 
+        /// <summary>
+        /// load all user related data to the system from the database
+        /// </summary>
+        /// <returns>set of user DTOs</returns>
         public HashSet<UserDTO> LoadData()
         {
             HashSet<UserDTO> UserData = new HashSet<UserDTO>();
@@ -34,6 +38,9 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 
         }
 
+        /// <summary>
+        /// delete all data from the database
+        /// </summary>
         public void DeleteData()
         {
                 DBConnector db = DBConnector.GetInstance();
