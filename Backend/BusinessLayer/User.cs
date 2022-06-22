@@ -197,7 +197,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
         
         /// <summary>
-        /// renounce new ownership of board, move the board from the owner list boards to the common list boards
+        /// renounce ownership of board, move the board from the owner list boards to the common list boards
         /// </summary>
         /// <param name="boardName"> name of the candidate board</param>
         /// <returns> Board </returns>

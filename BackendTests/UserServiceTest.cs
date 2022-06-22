@@ -20,6 +20,8 @@ class UserServiceTest
         LogOutTest();
         DBConnector.GetInstance().ResetDB();
         GetUserBoardsTest();
+        DBConnector.GetInstance().ResetDB();
+        TransferOwnershipTest();
 
     }
 
@@ -248,36 +250,47 @@ class UserServiceTest
         string res = gradinService.GetUserBoards("gal@gmail.com");
         Console.WriteLine(res);
 
-        Console.WriteLine("return all user's boards- empty board. should return null");
+        Console.WriteLine("return all user's boards- empty board. should return empty list");
         gradinService.Register("itay@gmail.com", "123456Aa");
         gradinService.Login("itay@gmail.com", "123456Aa");
         res = gradinService.GetUserBoards("itay@gmail.com");
         Console.WriteLine(res);
 
         Console.WriteLine("return all user's boards- not registered. should fail");
-        gradinService.Login("itay@gmail.com", "123456Aa");
-        res = gradinService.GetUserBoards("itay@gmail.com");
+        gradinService.Login("gal@gmail.com", "123456Aa");
+        res = gradinService.GetUserBoards("itay1@gmail.com");
         Console.WriteLine(res);
 
         Console.WriteLine("return all user's boards- not loging. should fail");
+        gradinService.Logout("itay@gmail.com");
         gradinService.Register("itay@gmail.com", "123456Aa");
         res = gradinService.GetUserBoards("itay@gmail.com");
         Console.WriteLine(res);
 
     }
 
-    public void TransferOwnership()
+    public void TransferOwnershipTest()
     {
 
         GradingService gradinService = new GradingService();
-        Console.WriteLine("transfer ownership of a board. should succeed");
+        Console.WriteLine("transfer ownership. should succeed");
+        Console.WriteLine(gradinService.Register("oldOwner@gmail.com", "Aa123456"));
+        Console.WriteLine(gradinService.Login("oldOwner@gmail.com", "Aa123456"));
+        Console.WriteLine(gradinService.Register("newOwner@gmail.com", "Aa123456"));
+        Console.WriteLine(gradinService.Login("newOwner@gmail.com", "Aa123456"));
+        Console.WriteLine(gradinService.AddBoard("oldOwner@gmail.com", "TransferOwnershipTestBoard1"));
+        Console.WriteLine(gradinService.JoinBoard("newOwner@gmail.com", 0));
+        string res = gradinService.TransferOwnership("oldOwner@gmail.com", "newOwner@gmail.com", "TransferOwnershipTestBoard1");
+        Console.WriteLine(res);
+
+        /*
+
+        Console.WriteLine("transfer ownership of a board to a user that is not in the board. should fail");
         gradinService.Register("gal@gmail.com", "123456Aa");
         gradinService.Login("gal@gmail.com", "123456Aa");
         gradinService.AddBoard("gal@gmail.com", "board1");
         gradinService.Register("itay@gmail.com", "123456Aa");
-        gradinService.TransferOwnership("gal@gmail.com", "itay@gmail.com", "board1");
-        gradinService.Login("itay@gmail.com", "123456Aa");
-        string res = gradinService.GetUserBoards("itay@gmail.com");
+        res = gradinService.TransferOwnership("gal@gmail.com", "itay@gmail.com", "board1");
         Console.WriteLine(res);
 
         Console.WriteLine("transfer ownership of a board- user did not register. should fail");
@@ -305,7 +318,7 @@ class UserServiceTest
         gradinService.AddBoard("tomer@gmail.com", "board1");
         gradinService.TransferOwnership("tomer@gmail.com", "itay@gmail.com", "board1");
         res = gradinService.GetUserBoards("itay@gmail.com");
-        Console.WriteLine(res);
+        Console.WriteLine(res);*/
 
     }
 }
