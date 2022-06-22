@@ -108,19 +108,30 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email"> Email of a user </param>
         /// <param name="board"> Board the the user will be the owner </param>
         /// <returns> Bool- if the procedure succeed or not </returns>
-        internal bool AddBoard(Board board)
+        internal bool AddBoard(Board b)
         {
-            foreach (Board b in myBoards)
+
+            foreach (Board board in CommonBoards)
             {
-                if (board.Name == b.Name)
+                if (b.Name == board.Name)
                 {
-                    logger.Warn($"User {this.email} already has a board with the name '{board.Name}'");
+                    logger.Warn($"User {this.email} can not join to {b.Name} ");
                     return false;
                 }
             }
-            MyBoards.Add(board);
-            logger.Info($"User {this.email} now is the owner of '{board.Name}'");
+            foreach (Board board in MyBoards)
+            {
+                if (b.Name == board.Name)
+                {
+                    logger.Warn($"User {this.email} can not join to {b.Name} ");
+                    return false;
+                }
+            }
+
+            logger.Info($"User {this.email} joined to '{b.Name}'");
+            MyBoards.Add(b);
             return true;
+
         }
 
         /// <summary>
@@ -251,9 +262,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                     return false;
                 }
             }
+
+            foreach (Board board in MyBoards)
+            {
+                if (b.Name == board.Name)
+                {
+                    logger.Warn($"User {this.email} can not join to {b.Name} ");
+                    return false;
+                }
+            }
+           
             logger.Info($"User {this.email} joined to '{b.Name}'");
             CommonBoards.Add(b);
             return true;
+            
         }
     }
 } 
