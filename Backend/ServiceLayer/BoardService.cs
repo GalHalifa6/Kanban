@@ -66,11 +66,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Response indicating the outcome of the procedure</returns>
         public string AddBoard(string email, string name, UserService US)
         {
-            if (name != null && IsEmptyOrWhiteSpace(name))
+/*            if (name != null && IsEmptyOrWhiteSpace(name))
             {
                 logger.Warn(email + " tried to create a board with invalid name");
                 throw new Exception("Cannot have an empty board name");
-            }
+            }*/
             if (name == null)
             {
                 logger.Warn(email + " tried to create a board with invalid name");
