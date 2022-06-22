@@ -112,11 +112,6 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             description = newDesc;
         }
 
-        internal void AdvanceTask()
-        {
-            throw new NotImplementedException();
-        }
-
         /// <summary>
         /// Update a task's due date
         /// </summary>

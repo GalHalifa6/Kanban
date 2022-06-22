@@ -184,7 +184,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs</returns>
         internal string AssignTask(string email, string boardName, int columnOrdinal, int taskID, string emailAssignee)
         {
-            return InvokeMethod(new Action<string, string, int, int, string>(bc.AssignTask), "{}", email, boardName, columnOrdinal, taskID, email);
+            return InvokeMethod(new Action<string, string, int, int, string>(bc.AssignTask), "{}", email, boardName, columnOrdinal, taskID, emailAssignee);
 
         }
 
