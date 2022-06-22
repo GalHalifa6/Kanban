@@ -152,6 +152,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 return true;
             }
+            if (assigneeEmail == null)
+            {
+                return true;
+            }
             return false;
         }
         /// <summary>

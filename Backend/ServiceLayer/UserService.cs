@@ -65,12 +65,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns> json of the procedure </returns>
         public string Login(string email, string password)
         {
-            if (currentEmail != null)
+/*            if (currentEmail != null)
             {
                 Response r = new Response("Cannot log in while another user is logged in", true);
                 return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
-            }
+            }*/
             if (IsValidEmail(email) == false)
             {
                 Response r = new Response("Invalid email", true);

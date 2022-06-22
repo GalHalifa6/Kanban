@@ -13,8 +13,8 @@ class Program
         BoardServiceTest boardServiceTest = new BoardServiceTest();
         TaskServiceTest taskServiceTest = new TaskServiceTest();
         DBConnector.GetInstance().ResetDB();
-        boardServiceTest.RunTests();
+        //boardServiceTest.RunTests();
         userServiceTest.RunTests();
-        taskServiceTest.runTests();
+        //taskServiceTest.runTests();
     }
 }
