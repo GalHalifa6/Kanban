@@ -101,8 +101,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Update a task's title
         /// </summary>
         /// <param name="newTitle">The new title</param>
-        public void UpdateTaskTitle(string newTitle)
+        public void UpdateTaskTitle(string email, string newTitle)
         {
+            if (assigneeEmail != email)
+            {
+                throw new Exception("The user that's trying to change the title is not the assignee.");
+            }
             title = newTitle;
             dto.UpdateTaskTitle(newTitle);
         }
@@ -110,8 +114,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Update a task's description
         /// </summary>
         /// <param name="newDescription">The new description</param>
-        public void UpdateTaskDescription(string newDescription)
+        public void UpdateTaskDescription(string email, string newDescription)
         {
+            if (assigneeEmail != email)
+            {
+                throw new Exception("The user that's trying to change the description is not the assignee.");
+            }
             description = newDescription;
             dto.UpdateTaskDescription(newDescription);
         }
@@ -119,8 +127,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Update a task's due date
         /// </summary>
         /// <param name="newDueDate">The new due date</param>
-        public void UpdateTaskDueDate(DateTime newDueDate)
+        public void UpdateTaskDueDate(string email, DateTime newDueDate)
         {
+            if (assigneeEmail != email)
+            {
+                throw new Exception("The user that's trying to change the due date is not the assignee.");
+            }
             dueDate = newDueDate;
             dto.UpdateTaskDueDate(newDueDate);
         }

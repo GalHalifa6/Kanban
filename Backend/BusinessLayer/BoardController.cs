@@ -397,7 +397,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("The specified board does not exist.");
             }
-            board.UpdateTaskTitle(columnOrdinal, taskId, newTitle);
+            board.UpdateTaskTitle(email, columnOrdinal, taskId, newTitle);
         }
 
         /// <summary>
@@ -420,7 +420,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("The specified board does not exist.");
             }
-            board.UpdateTaskDescription(columnOrdinal, taskId, newDesc);
+            board.UpdateTaskDescription(email, columnOrdinal, taskId, newDesc);
         }
 
 
@@ -444,7 +444,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("The specified board does not exist.");
             }
-            board.UpdateTaskDueDate(columnOrdinal, taskId, newDueDate);
+            board.UpdateTaskDueDate(email, columnOrdinal, taskId, newDueDate);
         }
     }
 }

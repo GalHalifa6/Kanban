@@ -51,7 +51,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             email = email.ToLower();
             if (string.IsNullOrEmpty(newTitle) || string.IsNullOrWhiteSpace(newTitle))
             {
-                Response response = new Response("Cannot have an empy title.", true);
+                Response response = new Response("Cannot have an empty title.", true);
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             if (newTitle.Length > MAX_TASK_TITLE_LENGTH)
@@ -101,8 +101,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             email = email.ToLower();
             if (newDesc == null)
             {
-                Response response = new Response("Description cannot be null");
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                newDesc = "";
             }
             if (newDesc.Length > MAX_TASK_DESC_LENGTH)
             {
