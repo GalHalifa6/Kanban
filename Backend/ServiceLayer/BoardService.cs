@@ -13,8 +13,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 {
     public class BoardService
     {
-        public BoardController bc { get; }
-        public ILog logger = Logger.GetLogger();
+        private BoardController bc;
+        public BoardController Bc { get => bc; }
+        private ILog logger = Logger.GetLogger();
         private static int MAX_TASK_DESC_LENGTH = 300;
         private static int MAX_TASK_TITLE_LENGTH = 50;
         public BoardService()
@@ -66,7 +67,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
 
             try {
-                bc.AddBoard(email, name, US.uc);
+                bc.AddBoard(email, name, US.Uc);
                 return new Response("Board was added successfully");
             }
             catch (Exception e)
@@ -82,7 +83,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="boardName">board to be removed</param>
         /// <returns>Reponse with the outcome of the procedure</returns>
         public string RemoveBoard(string email, string name) {
-            return InvokeMethod(new Action<string, string>(bc.RemoveBoard), "{}", email, name);
+            try
+            {
+                bc.RemoveBoard(email, name);
+                return "{}";
+            }
+            catch(Exception e)
+            {
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            //return InvokeMethod(new Action<string, string>(bc.RemoveBoard), "{}", email, name);
         }
 
 
@@ -142,7 +152,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>The string "{}", unless an error occurs.</returns>
         public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
-            return InvokeMethod(new Action<string, string, int ,int>(bc.AdvanceTask), "{}", email, boardName, columnOrdinal, taskId);
+            try
+            {
+                bc.AdvanceTask(email, boardName,columnOrdinal, taskId);
+                return "{}";
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            //return InvokeMethod(new Action<string, string, int ,int>(bc.AdvanceTask), "{}", email, boardName, columnOrdinal, taskId);
         }
 
         /// <summary>
@@ -154,7 +173,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="limit">The new limit value. A value of -1 indicates no limit.</param>
         /// <returns>Response with the result of the procedure</returns>
         public string LimitColumn(string email, string boardName, int columnNumber, int newLimit) {
-            return InvokeMethod(new Action<string, string, int, int>(bc.LimitColumnTasks), "{}", email, boardName, columnNumber, newLimit);
+            try
+            {
+                bc.LimitColumnTasks(email, boardName, columnNumber, newLimit);
+                return "{}";
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            //return InvokeMethod(new Action<string, string, int, int>(bc.LimitColumnTasks), "{}", email, boardName, columnNumber, newLimit);
         }
 
         internal string LoadData()
@@ -183,7 +211,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs</returns>
         internal string AssignTask(string email, string boardName, int columnOrdinal, int taskID, string emailAssignee)
         {
-            return InvokeMethod(new Action<string, string, int, int, string>(bc.AssignTask), "{}", email, boardName, columnOrdinal, taskID, email);
+            try
+            {
+                bc.AssignTask(email, boardName, columnOrdinal, taskID, emailAssignee);
+                return "{}";
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            //return InvokeMethod(new Action<string, string, int, int, string>(bc.AssignTask), "{}", email, boardName, columnOrdinal, taskID, emailAssignee);
 
         }
 
@@ -233,7 +270,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
         internal string JoinBoard(string email, int boardID, UserService US)
         {
-            return InvokeMethod(new Action<string, int, UserController>(bc.JoinBoard), "{}", email, boardID, US.uc);
+            try
+            {
+                bc.JoinBoard(email, boardID, US.Uc);
+                return "{}";
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            //return InvokeMethod(new Action<string, int, UserController>(bc.JoinBoard), "{}", email, boardID, US.Uc);
         }
 
 
@@ -289,7 +335,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs</returns>
         internal string LeaveBoard(string email, int boardID)
         {
-            return InvokeMethod(new Action<string, int>(bc.LeaveBoard), "{}", email, boardID);
+            try
+            {
+                bc.LeaveBoard(email, boardID);
+                return "{}";
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            //return InvokeMethod(new Action<string, int>(bc.LeaveBoard), "{}", email, boardID);
         }
 
         /// <summary>
@@ -301,7 +356,16 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>An empty response, unless an error occurs</returns>
         internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
-            return InvokeMethod(new Action<string, string, string> (bc.TransferOwnership), "{}", currentOwnerEmail, newOwnerEmail, boardName);
+            try
+            {
+                bc.TransferOwnership(currentOwnerEmail, newOwnerEmail, boardName);
+                return "{}";
+            }
+            catch (Exception e)
+            {
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            // return InvokeMethod(new Action<string, string, string> (bc.TransferOwnership), "{}", currentOwnerEmail, newOwnerEmail, boardName);
         }
     }
 }

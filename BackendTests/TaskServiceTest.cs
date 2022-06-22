@@ -1,4 +1,5 @@
-﻿using IntroSE.Kanban.Backend.ServiceLayer;
+﻿using IntroSE.Kanban.Backend.DataAccessLayer;
+using IntroSE.Kanban.Backend.ServiceLayer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,11 @@ internal class TaskServiceTest
 
     public void runTests()
     {
+        DBConnector.GetInstance().ResetDB();
         editTaskDescriptionTest();
+        DBConnector.GetInstance().ResetDB();
         editTaskTitleTest();
+        DBConnector.GetInstance().ResetDB();
     }
 
     ///<summary>

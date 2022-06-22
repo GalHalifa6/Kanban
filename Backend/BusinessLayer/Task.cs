@@ -132,7 +132,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <exception cref="Exception">The user can't assign this task</exception>
         internal void AssignTask(string assigner, string assignee)
         {
-            if (assignee != null && assignee != assigner)
+            if (assigneeEmail != null && assigneeEmail != assigner)
             {
                 logger.Warn("Failed to assign task because the assigner doesn't have permissions");
                 throw new Exception("User can't assign to this task");
@@ -152,6 +152,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 return true;
             }
+            if (assigneeEmail == null)
+            {
+                return true;
+            }
             return false;
         }
         /// <summary>
@@ -161,6 +165,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             assigneeEmail = null;
             dto.UnassignTask();
+        }
+
+        internal void AdvanceTask()
+        {
+            dto.AdvanceTask();
         }
     }
 }

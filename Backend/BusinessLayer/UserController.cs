@@ -232,14 +232,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             }
 
-            Dictionary<string, HashSet<Board>> boards = BoardController.boards;
+            Dictionary<string, HashSet<Board>> boards = BoardController.Boards;
             foreach (string email in users.Keys)
             {
                 if (boards.ContainsKey(email))
                 {
                     foreach (Board board in boards[email])
                     {
-                        if (board.owner == email)
+                        if (board.Owner == email)
                         {
                             GetUser(email).MyBoards.Add(board);
                         }

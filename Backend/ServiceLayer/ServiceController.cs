@@ -23,7 +23,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
             US = new UserService();
             BS = new BoardService();
-            TS = new TaskService(US.uc, BS.bc);
+            TS = new TaskService(US.Uc, BS.Bc);
         }
 
         private string InitialValidation(ref string email)
