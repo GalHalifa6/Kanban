@@ -141,10 +141,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
-            Response r = BS.AddBoard(email, name, US);
-            if (r.ErrorOccured())
-                return GenerateBadResponseString(r.ErrorMessage);
-            return "{}";
+            return BS.AddBoard(email, name, US);
         }
 
         internal string RemoveBoard(string email, string name)
