@@ -142,7 +142,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
                 else
                 {
-                    logger.Warn("Faild to login the user " + email + ", because there is no match between the email and password");
+                    logger.Warn("Failed to login the user " + email + ", because there is no match between the email and password");
                     throw new Exception("Incorrect password");
                 }
             }
