@@ -10,9 +10,12 @@ class Program
     {
         Console.WriteLine("Adding task to a user. Should succeed");
         GradingService gradingService = new GradingService();
+        BoardServiceTest boardServiceTest = new BoardServiceTest();
+        UserServiceTest userServiceTest = new UserServiceTest();
+        TaskServiceTest taskServiceTest = new TaskServiceTest();
         DBConnector.GetInstance().ResetDB();
-        //boardServiceTest.RunTests();
+        boardServiceTest.RunTests();
         userServiceTest.RunTests();
-        //taskServiceTest.runTests();
+        taskServiceTest.runTests();
     }
 }

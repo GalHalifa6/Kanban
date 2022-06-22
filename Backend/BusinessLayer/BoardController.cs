@@ -79,7 +79,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (uc.AddBoard(email, b)) {
                 b.AddBoard();
                 boards[email].Add(b);
-
                 logger.Info("board " + name + " created for user " + email);
                 nextBoardID++;
             }
