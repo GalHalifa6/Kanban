@@ -46,25 +46,29 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// </summary>
         public void ResetDB()
         {
+            try
+            {
+                conn.Open();
+            }
+            catch (Exception)
+            {
+
+            }
             
-            conn.Open();
             SQLiteCommand cmd = conn.CreateCommand();
-            string query = "DROP TABLE IF EXISTS Users";
+            string query = "DELETE FROM Users";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
-            query = "DROP TABLE IF EXISTS UsersBoards";
+            query = "DELETE FROM UsersBoards";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
-            query = "DROP TABLE IF EXISTS Boards";
+            query = "DELETE FROM Boards";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
-            query = "DROP TABLE IF EXISTS TasksColumnsBoards";
+            query = "DELETE FROM Columns";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
-            query = "DROP TABLE IF EXISTS Columns";
-            cmd.CommandText = query;
-            cmd.ExecuteNonQuery();
-            query = "DROP TABLE IF EXISTS Tasks";
+            query = "DELETE FROM Tasks";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
             conn.Close();
@@ -149,6 +153,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
             try
             {
+                //Console.WriteLine(nq);
                 conn.Open();
                 SQLiteCommand cmd = conn.CreateCommand();
                 cmd.CommandText = nq;
@@ -166,6 +171,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 catch (Exception e2) { 
                     //TODO DELETE THIS PRINT
                     Console.WriteLine(e.Message);
+                    Console.WriteLine(e2.Message);
                     return false; 
                 }
             }

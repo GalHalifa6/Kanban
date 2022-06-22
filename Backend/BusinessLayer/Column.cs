@@ -27,6 +27,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             set => tasks = value;
         }
 
+        private int boardID;
+        public int BoardID { get => boardID; }
+
         public ColumnDTO dto;
         public ColumnDTO DTO
         {
@@ -36,12 +39,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         private log4net.ILog logger = Utility.Logger.GetLogger();
 
-        public Column(string name)
+        public Column(string name, int boardID)
         {
             this.name = name;
             this.tasks = new List<Task>();
             this.maxTasks = int.MaxValue; //If there's no limit on number of tasks, the value is the maximum value of int
+            this.boardID = boardID;
             this.dto = new ColumnDTO(this);
+
         }
 
         public Column(ColumnDTO column)
@@ -50,6 +55,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.maxTasks = column.MaxTasks;
             this.dto = column;
             tasks = new List<Task>();
+            this.dto = column;
+            this.boardID = column.BoardID;
             foreach (TaskDTO task in column.Tasks)
             {
                 Task t = new Task(task.BoardID, task.ColumnOrdinal, task.Id, task.Title, task.Description, task.DueDate);
@@ -130,7 +137,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="task">The task we need to remove</param>
         /// <exception cref="Exception"></exception>
-        internal void RemoveTask(Task task)
+        internal void removeAdvancingTask(Task task)
         {
             if (!tasks.Contains(task))
             {
@@ -139,7 +146,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             logger.Info("Task: " + task.Title + " is removed.");
             tasks.Remove(task);
-            dto.RemoveTask(task.Id);
+            //dto.RemoveTask(task.Id);
         }
 
         /*internal void RemoveTask(int id)
@@ -209,6 +216,17 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             task.UpdateTaskDueDate(newDueDate);
             logger.Info("Task due date changed to: " + newDueDate);
         }
+
+        internal void takeAdvancingTask(Task t)
+        {
+            if (tasks.Count == maxTasks)
+            {
+                logger.Warn("Cannot add task because there are maximum tasks in this column.");
+                throw new Exception("The maximum capacity of tasks in this column is full.");
+            }
+            tasks.Add(t);
+        }
+
         /// <summary>
         /// Set a limit of the column's tasks
         /// </summary>

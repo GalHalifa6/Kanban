@@ -11,27 +11,24 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
     // it holds both the access to the db and the info about the object, and each dto is owned by a bo
     public class BoardDTO
     {
-        public int id { get; private set; }
-        public string name { get; private set; }
-        public int nextTaskID { get; private set; }
-        public string owner { get; private set; }
-/*        public ColumnDTO backlog { get; private set; }
-        public ColumnDTO inProgress { get; private set; }
-        public ColumnDTO done { get; private set; }
-        public HashSet<string> users { get; private set; }*/
+        private int id;
+        public int Id { get => id; }
+        private string name;
+        public string Name { get => name; }
+        private int nextTaskID;
+        public int NextTaskID { get => nextTaskID; }
+        private string owner;
+        public string Owner { get => owner; }
+        private HashSet<string> users;
+        public HashSet<string> Users { get => users; }
 
-        public BoardDTO(int id, string name, string owner, int nextTaskID)
+        public BoardDTO(int id, string name, string owner, int nextTaskID, HashSet<string> users)
         {
             this.id = id;
             this.name = name;
             this.owner = owner;
             this.nextTaskID = nextTaskID;
-            HashSet<TaskDTO> tasks = new HashSet<TaskDTO>();
-/*            backlog = new ColumnDTO("backlog", tasks);
-            inProgress = new ColumnDTO("inProgress", tasks);
-            done = new ColumnDTO("done", tasks);
-
-            users = new HashSet<string>();*/
+            this.users = users;
         }
 
 
@@ -48,7 +45,12 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
             this.users = users;*/
         }
-
+        /// <summary>
+        /// a recurring pattern that was extracted to a function
+        /// </summary>
+        /// <param name="query"></param>
+        /// <param name="badMsg"></param>
+        /// <exception cref="Exception"></exception>
         private void GeneralNonQuery(string query, string badMsg)
         {
             if (!DBConnector.GetInstance().ExecuteNonQuery(query))
@@ -92,9 +94,9 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         internal void AdvanceTask(ColumnDTO currentColDTO, ColumnDTO nextColDTO, TaskDTO taskDTO)
         {
-            nextColDTO.AddTask(taskDTO);
-            currentColDTO.RemoveTask(taskDTO.Id);
-            new TasksColumnsBoardsDTO().AdvanceTask(id, currentColDTO.Ordinal, nextColDTO.Ordinal, taskDTO.Id);
+            //nextColDTO.AddTask(taskDTO);
+            //currentColDTO.RemoveTask(taskDTO.Id);
+            taskDTO.AdvanceTask();
         }
     }
 }

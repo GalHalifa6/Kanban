@@ -111,6 +111,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             GeneralNonQuery(query, "Something went wrong");
             description = newDesc;
         }
+
         /// <summary>
         /// Update a task's due date
         /// </summary>
@@ -120,6 +121,14 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             string query = $"UPDATE Tasks SET dueDate = '{newDueDate}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
             dueDate = newDueDate;
+        }
+
+        internal void AdvanceTask()
+        {
+            columnOrdinal = columnOrdinal + 1;
+            string query = $"UPDATE Tasks SET columnOrdinal = {columnOrdinal} WHERE boardID = {boardID} " +
+                $"AND id = {id}";
+            GeneralNonQuery(query, "Something went wrong");
         }
         /// <summary>
         /// Assign a task to a user

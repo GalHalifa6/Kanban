@@ -10,16 +10,28 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 {
     public class Board
     {
-        public string name { get; private set; }
-        public Column backlog { get; private set; }
-        public Column inProgress { get; private set; }
-        public Column done { get; private set; }
+        private string name;
+        public string Name
+        {
+            get => name;
+            set => name = value;
+        }
+        private Column backlog;
+        public Column Backlog { get => backlog;}
+
+        private Column inProgress;
+        public Column InProgress { get => inProgress;}
+        private Column done;
+        public Column Done { get => done; }
 
         private int nextTaskID;
 
-        public readonly int id;
+        private int id;
+        public int Id { get => id; }
 
-        public string owner { get; private set;}
+        private string owner;
+        public string Owner { get => owner; }
+        
 
         private HashSet<string> usernames;
 
@@ -31,27 +43,24 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         public Board(string boardName, int id, string creatorName)
         {
             name = boardName;
-            backlog = new Column("backlog");
-            inProgress = new Column("in progress");
-            done = new Column("done");
+            backlog = new Column("backlog", id);
+            inProgress = new Column("in progress", id);
+            done = new Column("done", id);
             this.id = id;
             nextTaskID = 0;
             usernames = new HashSet<string>();
             owner = creatorName;
-            dto = new BoardDTO(id, name, creatorName, nextTaskID);
+            dto = new BoardDTO(id, name, creatorName, nextTaskID, usernames);
         }
 
         public Board(BoardDTO boardDTO)
         {
             this.dto = boardDTO;
-            this.name = boardDTO.name;
-            this.owner = boardDTO.owner;
-/*            this.backlog = new Column(boardDTO.backlog);
-            this.inProgress = new Column(boardDTO.inProgress);
-            this.done = new Column(boardDTO.done);
-            this.usernames = boardDTO.users;*/
-            this.nextTaskID = boardDTO.nextTaskID;
-            this.id = boardDTO.id;
+            this.name = boardDTO.Name;
+            this.owner = boardDTO.Owner;
+            this.usernames = boardDTO.Users;
+            this.nextTaskID = boardDTO.NextTaskID;
+            this.id = boardDTO.Id;
         }
 
         public List<Task> getInProgressTasks()
@@ -207,16 +216,18 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
             if (c == backlog)
             {
-                inProgress.AddTask(t);
-                dto.AdvanceTask(c.dto, inProgress.dto, t.DTO);
-                backlog.RemoveTask(t);
+                inProgress.takeAdvancingTask(t);
+                //dto.AdvanceTask(c.dto, inProgress.dto, t.DTO);
+                backlog.removeAdvancingTask(t);
+                t.AdvanceTask();
                 logger.Info("Task " + t.Title + " advanced");
             }
             else if (c == inProgress)
             {
-                done.AddTask(t);
-                dto.AdvanceTask(c.dto, done.dto, t.DTO);
-                inProgress.RemoveTask(t);
+                done.takeAdvancingTask(t);
+                //dto.AdvanceTask(c.dto, done.dto, t.DTO);
+                inProgress.removeAdvancingTask(t);
+                t.AdvanceTask();
                 logger.Info("Task " + t.Title + " advanced");
             }
             else // (c == done)
@@ -352,6 +363,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 logger.Warn(assigner + " attempted to reassign a task that doesn't exist");
                 throw new Exception("Task does not exist");
+            }
+            if (!IsInBoard(assignee) || !IsInBoard(assigner))
+            {
+                throw new Exception("Assigner or assignee not in board");
             }
             t.AssignTask(assigner, assignee);
         }
