@@ -72,10 +72,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         //switch mode of the field
         public void logIn()
         {
-            if (isLoggedIn)
-            {
-                throw new Exception("User is already logged in");
-            }
             this.isLoggedIn = true;
         }
 

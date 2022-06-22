@@ -9,27 +9,43 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
     public class ColumnDTO
     {
+        /// <summary>
+        /// The name of the column - 'backlog' / 'in progress' / 'done'
+        /// </summary>
         private string name;
         public string Name
         {
             get => name;
         }
+        /// <summary>
+        /// The id of the board the task is in
+        /// </summary>
         private int boardID;
         public int BoardID
         {
             get => boardID;
         }
+        /// <summary>
+        /// The number of the column -
+        /// 0 for 'backlog', 1 for 'in progress', 2 for 'done'
+        /// </summary>
         private int ordinal;
         public int Ordinal
         {
             get => ordinal;
         }
+        /// <summary>
+        /// The limit on the maximum tasks available in this column
+        /// </summary>
         private int maxTasks;
         public int MaxTasks
         {
             get => maxTasks;
             set => maxTasks = value;
         }
+        /// <summary>
+        /// The tasks in this column
+        /// </summary>
         private HashSet<TaskDTO> tasks;
         public HashSet<TaskDTO> Tasks
         {
@@ -125,7 +141,9 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             maxTasks = newLimit;
             GeneralNonQuery(query, "Something went wrong");
         }
-
+        /// <summary>
+        /// Adds the column to the db
+        /// </summary>
         internal void AddColumnToDB()
         {
             string query = $"INSERT INTO Columns(boardID,columnOrdinal,maxTasks) VALUES({boardID},{ordinal},{maxTasks})";
