@@ -142,6 +142,17 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
             catch (Exception e)
             {
+                try
+                {
+                    SQLiteCommand cmd = conn.CreateCommand();
+                    cmd.CommandText = nq;
+                    SQLiteDataReader res = cmd.ExecuteReader();
+                    return res;
+                }
+                catch(Exception e1)
+                {
+                    return null;
+                }
                 //TODO DELETE THIS PRINT
                 Console.WriteLine(e.Message);
                 return null;

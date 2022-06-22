@@ -174,6 +174,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("Invalid column");
             return column.name;
         }
+
+        internal void DeleteData()
+        {
+            boards.Clear();
+            nextBoardID = 0;
+        }
+
         /// <summary>
         /// gets a specific column, and all of its tasks
         /// </summary>

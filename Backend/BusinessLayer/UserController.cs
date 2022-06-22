@@ -219,6 +219,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         internal void DeleteData()
         {
+            users.Clear();
             usm.DeleteData();
         }
 
