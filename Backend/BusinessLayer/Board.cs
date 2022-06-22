@@ -372,7 +372,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             t.AssignTask(assigner, assignee);
         }
 
-        public void UpdateTaskTitle(int columnOrdinal, int taskId, string newTitle)
+        public void UpdateTaskTitle(string email, int columnOrdinal, int taskId, string newTitle)
         {
             Column column = GetColumn(columnOrdinal);
             if (column == null)
@@ -384,10 +384,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("Cannot edit tasks that are done.");
             }
             Task task = GetTask(columnOrdinal, taskId);
-            column.UpdateTaskTitle(task, newTitle);
+            column.UpdateTaskTitle(email, task, newTitle);
         }
 
-        public void UpdateTaskDescription(int columnOrdinal, int taskId, string newDesc)
+        public void UpdateTaskDescription(string email, int columnOrdinal, int taskId, string newDesc)
         {
             Column column = GetColumn(columnOrdinal);
             if (column == null)
@@ -399,10 +399,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("Cannot edit tasks that are done.");
             }
             Task task = GetTask(columnOrdinal, taskId);
-            column.UpdateTaskDescription(task, newDesc);
+            column.UpdateTaskDescription(email, task, newDesc);
         }
 
-        public void UpdateTaskDueDate(int columnOrdinal, int taskId, DateTime newDueDate)
+        public void UpdateTaskDueDate(string email, int columnOrdinal, int taskId, DateTime newDueDate)
         {
             Column column = GetColumn(columnOrdinal);
             if (column == null)
@@ -414,7 +414,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("Cannot edit tasks that are done.");
             }
             Task task = GetTask(columnOrdinal, taskId);
-            column.UpdateTaskDueDate(task, newDueDate);
+            column.UpdateTaskDueDate(email, task, newDueDate);
         }
     }
 }

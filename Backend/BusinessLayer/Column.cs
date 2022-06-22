@@ -174,14 +174,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="task">The task</param>
         /// <param name="newTitle">The new title</param>
         /// <exception cref="Exception"></exception>
-        internal void UpdateTaskTitle(Task task, string newTitle)
+        internal void UpdateTaskTitle(string email, Task task, string newTitle)
         {
             if (!tasks.Contains(task))
             {
                 logger.Warn("Cannot edit task because it doesn't exist.");
                 throw new Exception("The task doesn't exist in this column");
             }
-            task.UpdateTaskTitle(newTitle);
+            task.UpdateTaskTitle(email, newTitle);
             logger.Info("Task Title changed to: " + newTitle);
         }
         /// <summary>
@@ -190,14 +190,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="task">The task</param>
         /// <param name="newDescription">The new description</param>
         /// <exception cref="Exception"></exception>
-        internal void UpdateTaskDescription(Task task, string newDescription)
+        internal void UpdateTaskDescription(string email, Task task, string newDescription)
         {
             if (!tasks.Contains(task))
             {
                 logger.Warn("Cannot edit task because it doesn't exist.");
                 throw new Exception("That task doesn't exist in this column.");
             }
-            task.UpdateTaskDescription(newDescription);
+            task.UpdateTaskDescription(email, newDescription);
             logger.Info("Task Description changed to: " + newDescription);
         }
         /// <summary>
@@ -206,14 +206,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="task">The task</param>
         /// <param name="newDueDate">The new due date</param>
         /// <exception cref="Exception"></exception>
-        internal void UpdateTaskDueDate(Task task, DateTime newDueDate)
+        internal void UpdateTaskDueDate(string email, Task task, DateTime newDueDate)
         {
             if (!tasks.Contains(task))
             {
                 logger.Warn("Cannot edit task because it doesn't exist.");
                 throw new Exception("That task doesn't exist in this column.");
             }
-            task.UpdateTaskDueDate(newDueDate);
+            task.UpdateTaskDueDate(email, newDueDate);
             logger.Info("Task due date changed to: " + newDueDate);
         }
 
