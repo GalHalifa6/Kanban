@@ -11,30 +11,42 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
     {
         static void Main(String[] args)
         {
-            DBConnector db = DBConnector.GetInstance();
+/*            DBConnector db = DBConnector.GetInstance();
             ServiceController sc = new ServiceController();
 
             db.ResetDB();
             Console.WriteLine(sc.Register("itay@gmail.com", "Aa123456"));
+            Console.WriteLine(sc.Register("itay1@gmail.com", "Aa123456"));
             Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.Logout("itay@gmail.com"));
-            Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.AddBoard("itay@gmail.com", "B0"));
             Console.WriteLine(sc.Register("gal@gmail.com", "Aa123456"));
-            //Console.WriteLine(sc.AddBoard("itay@gmail.com", "B0"));
-            Console.WriteLine(sc.AddBoard("gal@gmail.com", "B1"));
-            Console.WriteLine(sc.JoinBoard("itay@gmail.com", 1));
-            Console.WriteLine(sc.LimitColumn("itay@gmail.com", "B1", 0, 9));
-            Console.WriteLine(sc.GetColumnLimit("itay@gmail.com", "B1", 0));
-            Console.WriteLine(sc.AddBoard("itay@gmail.com", "B1"));
-            Console.WriteLine(sc.LeaveBoard("itay@gmail.com", 1));
-            Console.WriteLine(sc.JoinBoard("itay@gmail.com", 1));
-            Console.WriteLine(sc.AddBoard("itay@gmail.com", "B1"));
-            Console.WriteLine(sc.DeleteData());
-            Console.WriteLine(sc.Register("itay@gmail.com", "Aa123456"));
             Console.WriteLine(sc.AddBoard("itay@gmail.com", "B0"));
-            Console.WriteLine(sc.LeaveBoard("itay@gmail.com", 0));
+            Console.WriteLine(sc.AddTask("itay@gmail.com", "B0", "test", "test1", new DateTime()));
+            Console.WriteLine(sc.AssignTask("itay@gmail.com", "B0", 0,0,"itay@gmail.com"));
+            Console.WriteLine(sc.JoinBoard("gal@gmail.com", 0));
+            Console.WriteLine(sc.TransferOwnership("itay1@gmail.com","itay1@gmail.com", "B0"));*/
+/*            Console.WriteLine(sc.LeaveBoard("itay@gmail.com", 0));
+            Console.WriteLine(sc.AddBoard("itay@gmail.com", "B0"));
+            Console.WriteLine(sc.AddBoard("itay@gmail.com", "B1"));
+            Console.WriteLine(sc.AddBoard("gal@gmail.com", "B1"));
+            Console.WriteLine(sc.JoinBoard("itay@gmail.com", 3));*/
+            /*            Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
+                        Console.WriteLine(sc.Logout("itay@gmail.com"));
+                        Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
+                        Console.WriteLine(sc.AddBoard("itay@gmail.com", "B0"));
+                        Console.WriteLine(sc.Register("gal@gmail.com", "Aa123456"));
+                        //Console.WriteLine(sc.AddBoard("itay@gmail.com", "B0"));
+                        Console.WriteLine(sc.AddBoard("gal@gmail.com", "B1"));
+                        Console.WriteLine(sc.JoinBoard("itay@gmail.com", 1));
+                        Console.WriteLine(sc.LimitColumn("itay@gmail.com", "B1", 0, 9));
+                        Console.WriteLine(sc.GetColumnLimit("itay@gmail.com", "B1", 0));
+                        Console.WriteLine(sc.AddBoard("itay@gmail.com", "B1"));
+                        Console.WriteLine(sc.LeaveBoard("itay@gmail.com", 1));
+                        Console.WriteLine(sc.JoinBoard("itay@gmail.com", 1));
+                        Console.WriteLine(sc.AddBoard("itay@gmail.com", "B1"));
+                        Console.WriteLine(sc.DeleteData());
+                        Console.WriteLine(sc.Register("itay@gmail.com", "Aa123456"));
+                        Console.WriteLine(sc.AddBoard("itay@gmail.com", "B0"));
+                        Console.WriteLine(sc.LeaveBoard("itay@gmail.com", 0));*/
 
 
 
