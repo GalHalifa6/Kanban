@@ -151,7 +151,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (col == null)
                 throw new Exception("Invalid column");
             if (col.maxTasks == int.MaxValue)
-                return 1;
+                return -1;
             return col.maxTasks;
         }
         /// <summary>
