@@ -87,9 +87,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             try
             {
-                uc.login(email, password);
+                uc.login(email.ToLower(), password);
                 currentEmail = email;
-                return "{}";
+                return JsonConvert.SerializeObject(new Response(email), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
             }
             catch (Exception e)
             {
@@ -118,6 +119,23 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             catch(Exception e)
             {
                 return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+        }
+
+
+
+        internal string InProgressTasks(string email)
+        {
+            try
+            {
+                List<BusinessLayer.Task> output = uc.InProgressTasks(email);
+                Response response = new Response(output);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            catch (Exception e)
+            {
+                Response response = new Response(e.Message, true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
         }
 
@@ -305,6 +323,36 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return true;
         }
 
+
+        public bool ValidateEmailUsingRegex(string email)
+        {
+            string s = email.Substring(0, email.IndexOf("@"));
+            string s1 = email.Substring(email.IndexOf("@") + 1);
+            Regex validateEmailRegex = new Regex(@"^[\w!#$%&'+\-/=?\^_`{|}~]+(\.[\w!#$%&'+\-/=?\^_`{|}~]+)*@" + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$");
+            Regex validateEmailRegex2 = new Regex(@"^[^@\s]+@[^@\s]+\.[^@\s]+$");
+            Regex validateEmailRegex3 = new Regex(@"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$");
+            Regex validateEmailRegex4 = new Regex(@"[^\x00-\x80]+");
+            string[] lst = s1.Split(".");
+            bool test_regex2 = true;
+            for (int i = 0; i < lst.Length; i++)
+            {
+                if (!Regex.IsMatch(lst[i], @"^[a-zA-Z]+$"))
+                {
+                    test_regex2 = false;
+                }
+            }
+
+            bool test_regex = validateEmailRegex4.IsMatch(s);
+            if (!(validateEmailRegex.IsMatch(email) || validateEmailRegex2.IsMatch(email) || validateEmailRegex3.IsMatch(email)) || s.Count() > 64 || s1.Contains("_") ||  test_regex || !test_regex2 || email.Count() == 0)
+                throw new Exception("Email isn't valid");
+            return validateEmailRegex.IsMatch(email);
+        }
+
+
+
+
+
+
         /// <summary>
         /// validates email address
         /// </summary>
@@ -324,7 +372,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                     Regex emailAttribute = new Regex(@"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$");
                     if (emailAttribute.IsMatch(emailaddress))
                     {
-                        return test1(emailaddress) & test2(emailaddress) & test3(emailaddress);
+                        return test1(emailaddress) && test2(emailaddress) && test3(emailaddress) && ValidateEmailUsingRegex(emailaddress);
                     }
                 }
                 return false;

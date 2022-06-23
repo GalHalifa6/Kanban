@@ -212,6 +212,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return null;
         }
 
+        internal List<Task> InProgressTasks()
+        {
+            List<Task> res = new List<Task>();
+            foreach (Board b in MyBoards)
+            {
+                res.AddRange(b.GetAllAssignedTasks(email));
+            }
+            foreach (Board b in CommonBoards)
+            {
+                res.AddRange(b.GetAllAssignedTasks(email));
+            }
+            return res;
+        }
+
         /// <summary>
         /// user take ownership of a board
         /// </summary>
