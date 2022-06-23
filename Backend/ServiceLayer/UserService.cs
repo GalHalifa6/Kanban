@@ -67,14 +67,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns> json of the procedure </returns>
         internal string Login(string email, string password)
         {
-            /*
-            if (currentEmail != null)
-            {
-                Response r = new Response("Cannot log in while another user is logged in", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-
-            }
-            */
             if (IsValidEmail(email) == false)
             {
                 Response r = new Response("Invalid email", true);
@@ -424,17 +416,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             email = email.ToLower();
             return uc.IsLoggedIn(email);
-        }
-
-        /// <summary>
-        /// Add board to a users board list- the list of boards that the user is the owner of them
-        /// </summary>
-        /// <param name="email"> Email of a user </param>
-        /// <param name="board"> Board the the user will be the owner </param>
-        /// <returns> Bool- if the procedure succeed or not </returns>
-        internal bool AddBoard(string email, Board board)
-        {
-            return uc.AddBoard(email, board);
         }
 
 
