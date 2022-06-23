@@ -51,7 +51,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             if (email == null)
                 return GenerateBadResponseString("Email cannot be null");
-            email = email.ToLower();
+            //email = email.ToLower();
             return US.Login(email, password);
         }
 
