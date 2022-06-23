@@ -12,24 +12,23 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         }
 
 
-        private Response GeneralNonQuery(string query, string goodMsg, string badMsg)
+        private void GeneralNonQuery(string query, string badMsg)
         {
             if (!DBConnector.GetInstance().ExecuteNonQuery(query))
             {
-                return new Response(badMsg, true);
+                throw new Exception(badMsg);
             }
-            return new Response(goodMsg);
         }
-        internal Response AddUserToBoard(string email, int id)
+        internal void AddUserToBoard(string email, int id)
         {
             string query = $"INSERT INTO UsersBoards(boardID, userEmail) VALUES({id},'{email}')";
-            return GeneralNonQuery(query, "User added successfully", "Something went wrong");
+            GeneralNonQuery(query, "Something went wrong");
         }
 
-        internal Response RemoveUserFromBoard(string email, int id)
+        internal void RemoveUserFromBoard(string email, int id)
         {
             string query = $"DELETE FROM UsersBoards WHERE boardID = {id} AND userEmail = '{email}'";
-            return GeneralNonQuery(query, "User removed successfully", "Something went wrong");
+            GeneralNonQuery(query, "Something went wrong");
         }
 
         public Dictionary<int, HashSet<string>> LoadData()
