@@ -13,42 +13,37 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         {
             DBConnector db = DBConnector.GetInstance();
             ServiceController sc = new ServiceController();
-            /*
-          Console.WriteLine(sc.Register("itay@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.AddBoard("itay@gmail.com", "B1"));
-            Console.WriteLine(sc.Logout("itay@gmail.com"));
-            Console.WriteLine(sc.Register("gal@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.Login("gAl@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.JoinBoard("gal@gmail.com", 0));
-            Console.WriteLine(sc.Logout("gal@gmail.com"));
-            Console.WriteLine(sc.Register("Tomer@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.Login("tomer@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.JoinBoard("tomER@gmail.com", 0));
-            Console.WriteLine(sc.Logout("tomer@gmail.com"));
-            Console.WriteLine(sc.Login("gAl@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.LeaveBoard("gal@gmail.com", 0));
-            Console.WriteLine(sc.Logout("gal@gmail.com"));
-            Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.AddTask("itay@gmail.com", "B1", "Test", "test", new DateTime()));
-            Console.WriteLine(sc.TransferOwnership("itay@gmail.com", "tomer@gmail.com", "B1"));
- 
-           /* Console.WriteLine(sc.LoadData());
-            Console.WriteLine(sc.Login("tomer@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.GetUserBoards("tomer@gmail.com"));
-           */
-
+            db.ResetDB();
             Console.WriteLine(sc.Register("itay@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.AddBoard("itay@gmail.com", "B1"));
-            Console.WriteLine(sc.Register("itay2@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.Login("itay2@gmail.com", "Aa123456"));
-            Console.WriteLine(sc.AddBoard("itay2@gmail.com", "B1"));
+            Console.WriteLine(sc.Register("gal@gmail.com", "Aa123456"));
+            Console.WriteLine(sc.AddBoard("itay@gmail.com", "B0"));
+            Console.WriteLine(sc.JoinBoard("itay@gmail.com", 0));
+            Console.WriteLine(sc.JoinBoard("gal@gmail.com", 0));
+            Console.WriteLine(sc.RemoveBoard("gal@gmail.com", "B0"));
+            Console.WriteLine(sc.RemoveBoard("itay@gmail.com", "B0"));
+            /*            db.ResetDB();
+                        Console.WriteLine(sc.Register("itay@gmail.com", "Aa123456"));
+                        Console.WriteLine(sc.Register("itay@gmail.com", "Aa123456"));
+                        Console.WriteLine(sc.Logout("itay@gmail.com"));
+                        Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
+                        Console.WriteLine(sc.Login("itay@gmail.com", "Aa12345"));
+                        Console.WriteLine(sc.Login("itay@gmail.com", "Aa1234565"));
+                        Console.WriteLine(sc.Login("itay@gmail.com", "45t46554"));
+                        Console.WriteLine(sc.Login("itay@gmail.com", null));
+                        Console.WriteLine(sc.Login(null, "Aa123456"));
+                        Console.WriteLine(sc.Login(null, null));*/
+            /*            Console.WriteLine(sc.Register("gal@gmail.com", "Aa123456"));
+                        Console.WriteLine(sc.Login("gal@gmail.com", "Aa123456"));*/
+            /*
+                        Console.WriteLine(sc.Register("itay@gmail.com", "Aa123456"));
+                        Console.WriteLine(sc.LoadData());
+                        Console.WriteLine(sc.Login("gal@gmail.com", "Aa123456"));
+                        Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
+                        Console.WriteLine(sc.DeleteData());
 
-            Console.WriteLine(sc.JoinBoard("itay2@gmail.com", 0));
-
-
-
+                        Console.WriteLine(sc.Login("itay@gmail.com", "Aa123456"));
+                        Console.WriteLine(sc.Logout("itay@gmail.com"));*/
+            // db.ResetDB();
         }
     }
 }

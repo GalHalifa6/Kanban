@@ -10,7 +10,12 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 {
     internal class TaskMapper
     {
+
         public TaskMapper() { }
+        /// <summary>
+        /// Loading the tasks and returns a HashSet of the taskDTO's
+        /// </summary>
+        /// <returns></returns>
         public HashSet<TaskDTO> LoadData()
         {
             string query = $"SELECT * FROM Tasks";

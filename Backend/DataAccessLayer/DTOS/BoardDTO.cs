@@ -77,7 +77,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         internal void RemoveBoard()
         {
-            string query = $"DELETE FROM Boards WHERE id = {id}";
+            string query = $"PRAGMA foreign_keys = 1; DELETE FROM Boards WHERE id = {id}";
             GeneralNonQuery(query, "Something went wrong");
 
         }
@@ -97,6 +97,12 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             //nextColDTO.AddTask(taskDTO);
             //currentColDTO.RemoveTask(taskDTO.Id);
             taskDTO.AdvanceTask();
+        }
+
+        public void nextTaskIdPlusPlus()
+        {
+            string query = $"UPDATE Boards SET nextTaskID = nextTaskID + 1 WHERE id = {id}";
+            GeneralNonQuery(query, "Something went wrong");
         }
     }
 }

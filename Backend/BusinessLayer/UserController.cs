@@ -169,7 +169,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
                 else
                 {
-                    logger.Warn("Faild to logout the user " + email + ", because the user is not connected");
+                    logger.Warn("Failed to logout the user " + email + ", because the user is not connected");
                     throw new Exception("The user logged out unsuccesssfully");
                 }
             }
@@ -219,6 +219,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
         internal void DeleteData()
         {
+            users.Clear();
             usm.DeleteData();
         }
 
@@ -227,8 +228,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             HashSet<UserDTO> userDTOs = usm.LoadData();
             foreach (UserDTO userDTO in userDTOs)
             {
-
-                users.Add(userDTO.Email ,new User(userDTO.Email, userDTO.Password));
+                if (!users.ContainsKey(userDTO.Email))
+                {
+                    users.Add(userDTO.Email, new User(userDTO.Email, userDTO.Password));
+                }
 
             }
 
@@ -320,7 +323,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 User currentOwner = users[currentOwnerEmail];
                 User newOwner = users[newOwnerEmail];
-                if (newOwner.CheckIfCanAddBoard(boardName))
+                if (newOwner.CheckIfCanAddBoard(boardName) || currentOwnerEmail == newOwnerEmail)
                 {
                     Board board = currentOwner.renounceOwnership(boardName);
                     if (board != null)
@@ -332,6 +335,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                         throw new Exception($"{currentOwnerEmail} has no board called '{boardName}' ");
                     }
                 }
+                
                 else
                 {
                     throw new Exception($"{newOwnerEmail} already has a board called {boardName}");

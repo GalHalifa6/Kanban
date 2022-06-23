@@ -192,12 +192,16 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 boards.Add(board.Id);
             }
+            foreach (Board board in CommonBoards)
+            {
+                boards.Add(board.Id);
+            }
             Response r = new Response(boards);
             return r;
         }
         
         /// <summary>
-        /// renounce new ownership of board, move the board from the owner list boards to the common list boards
+        /// renounce ownership of board, move the board from the owner list boards to the common list boards
         /// </summary>
         /// <param name="boardName"> name of the candidate board</param>
         /// <returns> Board </returns>
@@ -224,9 +228,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             board.ChangeOwner(currentUser, this.email);
             if (!MyBoards.Contains(board))
             {
-                    MyBoards.Add(board);
-                    logger.Info($"User {currentUser} took the ownership of the board '{board.Name}'");
-
+                MyBoards.Add(board);
+                logger.Info($"User {currentUser} took the ownership of the board '{board.Name}'");
             }
 
         }
@@ -256,7 +259,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             foreach(Board board in CommonBoards)
             {
-                if(b.Name == board.Name)
+                if(b.Name == board.Name && !b.IsInBoard(email))
                 {
                     logger.Warn($"User {this.email} can not join to {b.Name} ");
                     return false;
@@ -265,7 +268,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             foreach (Board board in MyBoards)
             {
-                if (b.Name == board.Name)
+                if (b.Name == board.Name && !b.IsInBoard(email))
                 {
                     logger.Warn($"User {this.email} can not join to {b.Name} ");
                     return false;

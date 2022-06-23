@@ -19,6 +19,10 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
         public ColumnMapper() {
             taskMapper = new TaskMapper();
         }
+        /// <summary>
+        /// Loading the specified column and the relevant tasks
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<int, HashSet<Column>> LoadData()
         {
             HashSet<TaskDTO> tasks = taskMapper.LoadData();

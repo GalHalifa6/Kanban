@@ -43,15 +43,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>Json response with the result of the procedure</returns>
         public string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string newTitle)
         {
-            if (email == null)
+            if (email == null || boardName == null)
             {
-                Response response = new Response("Email cannot be null", true);
+                Response response = new Response("Email & board name cannot be null", true);
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             email = email.ToLower();
             if (string.IsNullOrEmpty(newTitle) || string.IsNullOrWhiteSpace(newTitle))
             {
-                Response response = new Response("Cannot have an empy title.", true);
+                Response response = new Response("Cannot have an empty title.", true);
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             if (newTitle.Length > MAX_TASK_TITLE_LENGTH)
@@ -73,8 +73,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 bc.UpdateTaskTitle(email, boardName, columnOrdinal, taskId, newTitle);
-                Response response = new Response("{}");
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return "{}";
             }
             catch(Exception e)
             {
@@ -100,9 +99,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             email = email.ToLower();
-            if (newDesc == null)
-                newDesc = "";
-            if (newDesc.Length > MAX_TASK_DESC_LENGTH)
+            /*if (newDesc == null)
+            {
+                Response response = new Response("Description cannot be null", true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }*/
+            if (newDesc != null && newDesc.Length > MAX_TASK_DESC_LENGTH)
             {
                 Response response = new Response("Description is too long. Max number of characters is 300", true);
                 return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
@@ -120,8 +122,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 bc.UpdateTaskDescription(email, boardName, columnOrdinal, taskId, newDesc);
-                Response response = new Response("{}");
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return "{}";
             }
             catch (Exception e)
             {
@@ -167,8 +168,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 bc.UpdateTaskDueDate(email, boardName, columnOrdinal, taskId, newDueDate);
-                Response response = new Response("{}");
-                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return "{}";
             }
             catch (Exception e)
             {

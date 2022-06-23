@@ -58,21 +58,25 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email">email of the user to add the board to</param>
         /// <param name="name"> name of the board that is being added</param>
         /// <returns>Response indicating the outcome of the procedure</returns>
-        public Response AddBoard(string email, string name, UserService US)
+        public string AddBoard(string email, string name, UserService US)
         {
-            if (string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
+/*            if (name != null && IsEmptyOrWhiteSpace(name))
             {
                 logger.Warn(email + " tried to create a board with invalid name");
-                return new Response("Cannot have an empty board name", true);
+                throw new Exception("Cannot have an empty board name");
+            }*/
+            if (name == null || string.IsNullOrWhiteSpace(name) || string.IsNullOrEmpty(name))
+            {
+                logger.Warn(email + " tried to create a board with invalid name");
+                return JsonConvert.SerializeObject(new Response("Cannot have an empty board name", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
-
             try {
                 bc.AddBoard(email, name, US.Uc);
-                return new Response("Board was added successfully");
+                return "{}";
             }
             catch (Exception e)
             {
-                return new Response(e.Message, true);
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
         }
 
@@ -164,6 +168,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             //return InvokeMethod(new Action<string, string, int ,int>(bc.AdvanceTask), "{}", email, boardName, columnOrdinal, taskId);
         }
 
+        internal void DeleteData()
+        {
+            bc.DeleteData();
+        }
+
         /// <summary>
         /// This method limits the number of tasks in a specific column.
         /// </summary>
@@ -190,6 +199,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 bc.LoadData();
+                Logger.GetLogger().Info("board data loaded successfully");
                 return "{}";
             }
             catch (Exception e)
@@ -221,7 +231,6 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
             //return InvokeMethod(new Action<string, string, int, int, string>(bc.AssignTask), "{}", email, boardName, columnOrdinal, taskID, emailAssignee);
-
         }
 
         /// <summary>

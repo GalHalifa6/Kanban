@@ -79,7 +79,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             if (uc.AddBoard(email, b)) {
                 b.AddBoard();
                 boards[email].Add(b);
-
                 logger.Info("board " + name + " created for user " + email);
                 nextBoardID++;
             }
@@ -175,6 +174,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 throw new Exception("Invalid column");
             return column.name;
         }
+
+        internal void DeleteData()
+        {
+            boards.Clear();
+            nextBoardID = 0;
+        }
+
         /// <summary>
         /// gets a specific column, and all of its tasks
         /// </summary>
@@ -398,7 +404,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("The specified board does not exist.");
             }
-            board.UpdateTaskTitle(columnOrdinal, taskId, newTitle);
+            board.UpdateTaskTitle(email, columnOrdinal, taskId, newTitle);
         }
 
         /// <summary>
@@ -421,7 +427,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("The specified board does not exist.");
             }
-            board.UpdateTaskDescription(columnOrdinal, taskId, newDesc);
+            board.UpdateTaskDescription(email, columnOrdinal, taskId, newDesc);
         }
 
 
@@ -445,7 +451,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("The specified board does not exist.");
             }
-            board.UpdateTaskDueDate(columnOrdinal, taskId, newDueDate);
+            board.UpdateTaskDueDate(email, columnOrdinal, taskId, newDueDate);
         }
     }
 }

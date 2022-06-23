@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.BusinessLayer;
+using IntroSE.Kanban.Backend.Utility;
 using Newtonsoft.Json;
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
@@ -49,6 +50,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             try {
                 uc.createUser(email, password);
+                uc.login(email, password);
                 return "{}";
             }
             catch(Exception e)
@@ -115,7 +117,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             catch(Exception e)
             {
-                return JsonConvert.SerializeObject(e.Message, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
             }
         }
 
@@ -195,11 +197,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 uc.LoadData();
+                Logger.GetLogger().Info("user data loaded successfully");
                 return "{}";
             }
             catch (Exception e)
             {
-                return JsonConvert.SerializeObject(e.Message, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
             }
         }
@@ -262,7 +265,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <returns>boolean indicating the validity of the password</returns>
         public bool IsValidPassword(string pass)
         {
-            if (string.IsNullOrWhiteSpace(pass) || !(pass.Length >= 6 && pass.Length <= 20) || !(pass.Any(char.IsUpper)) || !(pass.Any(char.IsLower)) || !(pass.Any(char.IsDigit)))
+            if (string.IsNullOrWhiteSpace(pass) || !(pass.Length >= 6 && pass.Length <= 20) || !(pass.Any(char.IsUpper)) || !(pass.Any(char.IsLower)) || !(pass.Any(char.IsNumber)))
             {
                 return false;
             }
@@ -313,7 +316,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
                 {
                     atLeastOneLower = true;
                 }
-                if (char.IsDigit(c))
+                if (char.IsNumber(c))
                 {
                     atLeastOneNumber = true;
                 }
