@@ -157,7 +157,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             string res = InitialValidation(ref email);
             if (res != null)
                 return res;
-            return BS.InProgressTasks(email);
+            return US.InProgressTasks(email);
         }
 
         private string GenerateBadResponseString(string s)

@@ -423,6 +423,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <exception cref="Exception">thrwos excpetion if the user is not in the board, or if the task doesn't exist</exception>
         public void AssignTask(string assigner, int columnOrdinal, int taskID, string assignee)
         {   
+            if (columnOrdinal == 2)
+            {
+                logger.Warn(assigner + " attempted to assign a task that is done");
+                throw new Exception("Cannot change a task that is already done");
+            }
             Task t = GetTask(columnOrdinal, taskID);
             if (t == null)
             {

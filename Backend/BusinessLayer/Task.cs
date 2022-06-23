@@ -15,6 +15,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Id of the board the task is in
         /// </summary>
         private int boardID;
+        [Newtonsoft.Json.JsonIgnore]
         public int BoardID
         {
             get => boardID;
@@ -24,6 +25,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// 0 for 'backlog', 1 for 'in progress', 2 for 'done'
         /// </summary>
         private int columnOrdinal;
+        [Newtonsoft.Json.JsonIgnore]
         public int ColumnOrdinal
         {
             get => columnOrdinal;
@@ -33,6 +35,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// The id of the task
         /// </summary>
         private int id;
+
         public int Id
         {
             get => id;
@@ -75,6 +78,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// The task's assigned email - the owner of the task
         /// </summary>
         private string assigneeEmail;
+        [Newtonsoft.Json.JsonIgnore]
         public string AssigneeEmail
         {
             get => assigneeEmail;
@@ -84,6 +88,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// A dto of the task
         /// </summary>
         private TaskDTO dto;
+        [Newtonsoft.Json.JsonIgnore]
         public TaskDTO DTO
         {
             get => dto;
