@@ -87,9 +87,10 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             try
             {
-                uc.login(email, password);
+                uc.login(email.ToLower(), password);
                 currentEmail = email;
-                return "{}";
+                return JsonConvert.SerializeObject(new Response(email), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
             }
             catch (Exception e)
             {
