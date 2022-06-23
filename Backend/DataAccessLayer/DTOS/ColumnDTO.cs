@@ -77,13 +77,13 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         public ColumnDTO(Column column)
         {
             boardID = column.BoardID;
-            name = column.name;
-            maxTasks = column.maxTasks;
-            if (column.name == "backlog")
+            name = column.Name;
+            maxTasks = column.MaxTasks;
+            if (column.Name == "backlog")
             {
                 ordinal = 0;
             }
-            else if (column.name == "in progress")
+            else if (column.Name == "in progress")
             {
                 ordinal = 1;
             }
@@ -92,9 +92,9 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 ordinal = 2;
             }
             tasks = new HashSet<TaskDTO>();
-            for (int i = 0; i < column.tasks.Count; i++)
+            for (int i = 0; i < column.Tasks.Count; i++)
             {
-                TaskDTO t = new TaskDTO(column.tasks[i]);
+                TaskDTO t = new TaskDTO(column.Tasks[i]);
                 tasks.Add(t);
             }
         }
