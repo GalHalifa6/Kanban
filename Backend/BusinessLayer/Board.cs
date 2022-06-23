@@ -195,7 +195,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">email of the user to be checked</param>
         /// <returns>true if the user is in the board</returns>
-        private bool IsInBoard(string email)
+        public bool IsInBoard(string email)
         {
             return owner == email || usernames.Contains(email);
         }
@@ -297,11 +297,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <exception cref="Exception">throws exception if the user is already in the board</exception>
         public void AddUser(string email)
         {
-            if (usernames.Contains(email) || owner == email)
+/*            if (usernames.Contains(email) || owner == email)
             {
                 logger.Warn(email + " attempted to join a board that he's already in");
                 throw new Exception(email + " is already in " + name);
-            }
+            }*/
             dto.AddUser(email);
             logger.Info(email + " added to board " + name);
             usernames.Add(email);

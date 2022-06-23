@@ -77,7 +77,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         internal void RemoveBoard()
         {
-            string query = $"DELETE FROM Boards WHERE id = {id}";
+            string query = $"PRAGMA foreign_keys = 1; DELETE FROM Boards WHERE id = {id}";
             GeneralNonQuery(query, "Something went wrong");
 
         }
