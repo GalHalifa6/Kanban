@@ -23,8 +23,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 conn.Open();
                 CreateTables();
             }
-            catch (Exception ex)
-            { Console.WriteLine(ex.Message); }
+            catch (Exception ex) { }
+
             finally
             {
                 conn.Close();
@@ -153,8 +153,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 {
                     return null;
                 }
-                //TODO DELETE THIS PRINT
-                Console.WriteLine(e.Message);
+
                 return null;
             }
             
@@ -180,9 +179,6 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                     return true;
                 }
                 catch (Exception e2) { 
-                    //TODO DELETE THIS PRINT
-                    Console.WriteLine(e.Message);
-                    Console.WriteLine(e2.Message);
                     return false; 
                 }
             }

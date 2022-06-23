@@ -228,8 +228,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             HashSet<UserDTO> userDTOs = usm.LoadData();
             foreach (UserDTO userDTO in userDTOs)
             {
-
-                users.Add(userDTO.Email ,new User(userDTO.Email, userDTO.Password));
+                if (!users.ContainsKey(userDTO.Email))
+                {
+                    users.Add(userDTO.Email, new User(userDTO.Email, userDTO.Password));
+                }
 
             }
 

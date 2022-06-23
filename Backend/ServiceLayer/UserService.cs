@@ -8,6 +8,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using IntroSE.Kanban.Backend.BusinessLayer;
+using IntroSE.Kanban.Backend.Utility;
 using Newtonsoft.Json;
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
@@ -196,11 +197,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 uc.LoadData();
+                Logger.GetLogger().Info("user data loaded successfully");
                 return "{}";
             }
             catch (Exception e)
             {
-                return JsonConvert.SerializeObject(e.Message, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
             }
         }
