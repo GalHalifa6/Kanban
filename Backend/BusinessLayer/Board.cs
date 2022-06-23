@@ -63,7 +63,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             this.id = boardDTO.Id;
         }
 
-        public List<Task> getInProgressTasks()
+        internal List<Task> getInProgressTasks()
         {
             return inProgress.GetTasksList();
         }
@@ -73,7 +73,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="columnNumber"> 0 = backlog, 1 = in progress, 2 = done</param>
         /// <returns> column object based on the given ordinal </returns>
-        public Column GetColumn(int columnNumber)
+        internal Column GetColumn(int columnNumber)
         {
             if (columnNumber > 2 || columnNumber < 0)
                 return null;
@@ -195,23 +195,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">email of the user to be checked</param>
         /// <returns>true if the user is in the board</returns>
-        public bool IsInBoard(string email)
+        internal bool IsInBoard(string email)
         {
             return owner == email || usernames.Contains(email);
         }
-
-
-
-        /*internal Response RemoveTask(string Title)
-        {
-            if (!(backlog.removeTask(Title) || inProgress.removeTask(Title) || done.removeTask(Title)))
-            {
-                logger.Warn("An attempt to remove a non-existing task was made");
-                return new Response("The board " + boardName + " doesn't have a task named " + Title, true);
-            }
-            logger.Info("Task was removed successfully");
-            return new Response("Task was removed successfully");
-        }*/
 
         /// <summary>
         /// advance a task to the next column. cannot adnvace past "done" column
@@ -295,7 +282,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">email of the user to be added</param>
         /// <exception cref="Exception">throws exception if the user is already in the board</exception>
-        public void AddUser(string email)
+        internal void AddUser(string email)
         {
 /*            if (usernames.Contains(email) || owner == email)
             {
@@ -312,7 +299,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">email of the user to be removed</param>
         /// <exception cref="Exception">throws exception if the user is not in the board, or if the user is the owner</exception>
-        public void RemoveUser(string email)
+        internal void RemoveUser(string email)
         {
             if (usernames.Contains(email))
             {
@@ -351,7 +338,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="currentOwner"></param>
         /// <param name="newOwner"></param>
         /// <exception cref="Exception">throws exception if the owner email deosn't match the actual owner, or if the new owner is not in the board</exception>
-        public void ChangeOwner(string currentOwner, string newOwner)
+        internal void ChangeOwner(string currentOwner, string newOwner)
         {
             if (currentOwner != owner)
             {
@@ -401,7 +388,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email"></param>
         /// <returns>list of tasks that are assigned to the user</returns>
-        public List<Task> GetAllAssignedTasks(string email)
+        internal List<Task> GetAllAssignedTasks(string email)
         {
             if (!IsInBoard(email))
             {
@@ -421,7 +408,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="taskID"></param>
         /// <param name="assignee"></param>
         /// <exception cref="Exception">thrwos excpetion if the user is not in the board, or if the task doesn't exist</exception>
-        public void AssignTask(string assigner, int columnOrdinal, int taskID, string assignee)
+        internal void AssignTask(string assigner, int columnOrdinal, int taskID, string assignee)
         {   
             if (columnOrdinal == 2)
             {
@@ -449,7 +436,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="taskId"></param>
         /// <param name="newTitle"></param>
         /// <exception cref="Exception">thrwos exception if the task doesn't exist</exception>
-        public void UpdateTaskTitle(string email, int columnOrdinal, int taskId, string newTitle)
+        internal void UpdateTaskTitle(string email, int columnOrdinal, int taskId, string newTitle)
         {
             Column column = GetColumn(columnOrdinal);
             if (column == null)
@@ -472,7 +459,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="taskId"></param>
         /// <param name="newTitle"></param>
         /// <exception cref="Exception">thrwos exception if the task doesn't exist</exception>
-        public void UpdateTaskDescription(string email, int columnOrdinal, int taskId, string newDesc)
+        internal void UpdateTaskDescription(string email, int columnOrdinal, int taskId, string newDesc)
         {
             Column column = GetColumn(columnOrdinal);
             if (column == null)
@@ -495,7 +482,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="taskId"></param>
         /// <param name="newTitle"></param>
         /// <exception cref="Exception">thrwos exception if the task doesn't exist</exception>
-        public void UpdateTaskDueDate(string email, int columnOrdinal, int taskId, DateTime newDueDate)
+        internal void UpdateTaskDueDate(string email, int columnOrdinal, int taskId, DateTime newDueDate)
         {
             Column column = GetColumn(columnOrdinal);
             if (column == null)

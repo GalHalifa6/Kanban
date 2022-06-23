@@ -128,7 +128,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Update a task's title
         /// </summary>
         /// <param name="newTitle">The new title</param>
-        public void UpdateTaskTitle(string email, string newTitle)
+        internal void UpdateTaskTitle(string email, string newTitle)
         {
             if (assigneeEmail != "" && assigneeEmail != email)
             {
@@ -141,7 +141,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Update a task's description
         /// </summary>
         /// <param name="newDescription">The new description</param>
-        public void UpdateTaskDescription(string email, string newDescription)
+        internal void UpdateTaskDescription(string email, string newDescription)
         {
             if (assigneeEmail != "" && assigneeEmail != email)
             {
@@ -154,7 +154,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Update a task's due date
         /// </summary>
         /// <param name="newDueDate">The new due date</param>
-        public void UpdateTaskDueDate(string email, DateTime newDueDate)
+        internal void UpdateTaskDueDate(string email, DateTime newDueDate)
         {
             if (assigneeEmail != "" && assigneeEmail != email)
             {

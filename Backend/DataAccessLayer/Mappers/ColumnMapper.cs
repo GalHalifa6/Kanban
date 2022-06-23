@@ -23,7 +23,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
         /// Loading the specified column and the relevant tasks
         /// </summary>
         /// <returns></returns>
-        public Dictionary<int, HashSet<Column>> LoadData()
+        internal Dictionary<int, HashSet<Column>> LoadData()
         {
             HashSet<TaskDTO> tasks = taskMapper.LoadData();
             string query = $"SELECT * FROM Columns";

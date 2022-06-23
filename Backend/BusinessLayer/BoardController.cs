@@ -33,7 +33,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email"> user whose board will be returned</param>
         /// <param name="boardID">board to be returned</param>
         /// <returns>the board that was looked for, null if no such board exists</returns>
-        public Board GetBoard(string email, string boardName)
+        internal Board GetBoard(string email, string boardName)
         {
             HashSet<Board> userBoards = boards[email];
             foreach (Board b in userBoards)
@@ -51,7 +51,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="boardID">id of the desired board</param>
         /// <returns>Board if found, else null</returns>
-        public Board GetBoard(int boardID)
+        internal Board GetBoard(int boardID)
         {
             foreach (HashSet<Board> set in boards.Values)
             {
@@ -73,7 +73,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="name">name of the new board</param>
         /// <param name="uc">sent as arguement to be able to pass the board to the user object</param>
         /// <exception cref="Exception">throws exception if the user already has a board with that name</exception>
-        public void AddBoard(string email, string name, UserController uc)
+        internal void AddBoard(string email, string name, UserController uc)
         {
             Board b = new Board(name, nextBoardID, email);
             if (uc.AddBoard(email, b)) {
@@ -105,7 +105,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email">email of the user deleting the board. Must be the owner of the board</param>
         /// <param name="boardName">name of the baord to be deleted</param>
         /// <exception cref="Exception">throws exception if no such board exists</exception>
-        public void RemoveBoard(string email, string boardName)
+        internal void RemoveBoard(string email, string boardName)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
@@ -127,7 +127,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="columnNumber">column ordinal. 0 = backlog, 1 = in progress, 2 = done</param>
         /// <param name="newLimit">new limit of the max number of tasks</param>
         /// <exception cref="Exception">throws exception if no such board exists</exception>
-        public void LimitColumnTasks(string email, string boardName, int columnNumber, int newLimit)
+        internal void LimitColumnTasks(string email, string boardName, int columnNumber, int newLimit)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
@@ -146,7 +146,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="columnNumber">column ordinal. 0 = backlog, 1 = in progress, 2 = done</param>
         /// <returns>max number of tasks that the column can hold</returns>
         /// <exception cref="Exception">throws exception if no such board exists</exception>
-        public int GetColumnLimit(string email, string boardName, int columnNumber)
+        internal int GetColumnLimit(string email, string boardName, int columnNumber)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
@@ -164,7 +164,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="columnOrdinal">column ordinal. 0 = backlog, 1 = in progress, 2 = done</param>
         /// <returns>name of the column</returns>
         /// <exception cref="Exception">throws expection if no such board exists, or if the column ordinal is invalid</exception>
-        public string GetColumnName(string email, string boardName, int columnOrdinal)
+        internal string GetColumnName(string email, string boardName, int columnOrdinal)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
@@ -209,21 +209,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="description">description of the new task</param>
         /// <param name="dueDate">due date of the new task</param>
         /// <exception cref="Exception">throws exception if the board doesn't exist</exception>
-        public void AddTask(string email, string boardName, string title, string description, DateTime dueDate)
+        internal void AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
                 throw new Exception("The board '" + boardName + "' does not exist");
             board.AddTask(email, title, description, dueDate);
         }
-
-        /*public Response<string> RemoveTask(string email, string boardID, string Title)
-        {
-            Board board = GetBoard(email, boardID);
-            if (board == null)
-                return new Response<string>("The board \"" + boardID + "\" does not exist", true);
-            return board.RemoveTask(Title);
-        }*/
 
         /// <summary>
         /// advance a task from its current column (or state) to the next one.
@@ -233,7 +225,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="columnOrdinal">0 = backlog, 1 = in progress, 2 = done</param>
         /// <param name="taskId">id of the advancing task</param>
         /// <exception cref="Exception">throws exception if no such board exists</exception>
-        public void AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
+        internal void AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
             Board board = GetBoard(email, boardName);
             if (board == null)
@@ -246,7 +238,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">email of the user making the reuqest</param>
         /// <returns>list of all the in progress tasks of the specified user</returns>
-        public List<Task> InProgressTasks(string email)
+        internal List<Task> InProgressTasks(string email)
         {
             HashSet<Board> boardList = boards[email];
             List<Task> tasks = new List<Task>();
@@ -256,11 +248,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return tasks;
         }
 
-        /*        public Task GetTask(string email, string boardID, int taskId)
-                {
-                    return GetBoard(email, boardID).GetTask(taskId);
-                }*/
-
         /// <summary>
         /// gets a specific task
         /// </summary>
@@ -269,7 +256,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="columnOrdinal">column ordinal. 0 = backlog, 1 = in progress, 2 = done</param>
         /// <param name="taskId">id of the task </param>
         /// <returns>the specified task</returns>
-        public Task GetTaskInColumn(string email, string boardName, int columnOrdinal, int taskId)
+        internal Task GetTaskInColumn(string email, string boardName, int columnOrdinal, int taskId)
         {
             Board b = GetBoard(email, boardName);
             if(b == null)
@@ -301,7 +288,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// load all the board related data from the database to the RAM
         /// </summary>
         /// <exception cref="Exception">throws exception if there was an error loading the data</exception>
-        public void LoadData()
+        internal void LoadData()
         {
             HashSet<BoardDTO> dtos = boardMapper.LoadData();
             Dictionary<int, HashSet<Column>> columns = columnMapper.LoadData();
@@ -393,7 +380,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="taskId">id of the task that will be edited</param>
         /// <param name="newTitle">new title of the task</param>
         /// <exception cref="Exception">throws exception if the board or task don't exist</exception>
-        public void UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string newTitle)
+        internal void UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string newTitle)
         {
             if (GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null)
             {
@@ -416,7 +403,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="taskId">id of the task that will be edited</param>
         /// <param name="newDesc">new description of the task</param>
         /// <exception cref="Exception">throws exception if the board or task don't exist</exception>
-        public void UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string newDesc)
+        internal void UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string newDesc)
         {
             if (GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null)
             {
@@ -440,7 +427,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="taskId">id of the task that will be edited</param>
         /// <param name="newDueDate">new description of the task</param>
         /// <exception cref="Exception">throws exception if the board or task don't exist</exception>
-        public void UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime newDueDate)
+        internal void UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime newDueDate)
         {
             if (GetTaskInColumn(email, boardName, columnOrdinal, taskId) == null)
             {

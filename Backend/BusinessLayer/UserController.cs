@@ -28,7 +28,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email"> Email of the user</param>
         /// <returns> Bool by the statment of the proprety </returns>
-        public bool IsLoggedIn(string email)
+        internal bool IsLoggedIn(string email)
         {
             email = email.ToLower();
             if (!users.ContainsKey(email))
@@ -49,7 +49,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email"> Email of the new user</param>
         /// <param name="password"> Password of the new user </param>
         /// <returns> string if the creation failed or not </returns>
-        public void createUser(string email, string password)
+        internal void createUser(string email, string password)
         {
             if (!users.ContainsKey(email))
             {
@@ -70,7 +70,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email"></param>
         /// <returns> User Object </returns>
-        public User GetUser(string email)
+        internal User GetUser(string email)
         {
             if (exists(email))
             {
@@ -88,7 +88,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email"> Email of the candidate user </param>
         /// <returns>Bool statement</returns>
-        public bool exists(string email)
+        internal bool exists(string email)
         {
             email = email.ToLower();
             if (users.ContainsKey(email))
@@ -98,40 +98,12 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         }
 
         /// <summary>
-        /// Delete user by the email of the user
-        /// </summary>
-        /// <param name="email"> Email of the user </param>
-        /// <param name="password"> Password of the user </param>
-        /// <returns></returns>
-        public Response DeleteUser(string email, string password)
-        {
-            if (GetUser(email) != null)
-            {
-                if (GetUser(email).Password == password)
-                {
-                    if (GetUser(email).IsLoggedIn == true)
-                    {
-                        users.Remove(email);
-                        logger.Info("User: " + email + ", deleted successfully");
-                        return new Response(true);
-                    }
-                    logger.Warn("Failed to delete user " + email + ", because the user is not connected");
-                    return new Response("the user " + email + " is not connected, The user can not be deleted", true);
-                }
-                logger.Warn("Failed to delete user " + email + ", because There is no match between email and password");
-                return new Response("There is no match between email and password", true);
-            }
-            logger.Warn("Failed to delete user " + email + ", because a user with that name is not exists");
-            return new Response("The user " + email + " does not exist", true);
-        }
-
-        /// <summary>
         /// login function for a user that signed up
         /// </summary>
         /// <param name="email"> Email of a user  </param>
         /// <param name="password"> Password of the user </param>
         /// <returns></returns>
-        public void login(string email, string password)
+        internal void login(string email, string password)
         {
             if (GetUser(email) != null)
             {
@@ -158,7 +130,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email"> Email of a user  </param>
         /// <returns></returns>
-        public void LogOut(string email)
+        internal void LogOut(string email)
         {
             if (GetUser(email) != null)
             {
@@ -192,7 +164,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="oldPassword"> Old password of the user </param>
         /// <param name="newPassword"> New password for a user </param>
         /// <returns></returns>
-        public void changePassword(string email, string oldPassword, string newPassword)
+        internal void changePassword(string email, string oldPassword, string newPassword)
         {
             if (GetUser(email) != null)
             {
@@ -279,19 +251,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email"> Email of a user </param>
         /// <param name="board"> Board the the user will be the owner </param>
         /// <returns> Bool- if the procedure succeed or not </returns>
-        public bool AddBoard(string email, Board board)
+        internal bool AddBoard(string email, Board board)
         {
             User user = users[email];
             return user.AddBoard(board);
         }
-
-        /*
-        internal void JoinBoard(string email, int boardID)
-        {
-            User user = users[email];
-            user.JoinBoard(email, boardID);
-        }
-        */
 
         /// <summary>
         /// leave board that the user is taking apart, not the owner of them

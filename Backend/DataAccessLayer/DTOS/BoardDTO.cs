@@ -59,7 +59,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
-        public void AddBoard(string email, int id, string name)
+        internal void AddBoard(string email, int id, string name)
         {
             string query = $"INSERT INTO Boards(id, name, nextTaskID, owner) VALUES({id},'{name}',{0},'{email}')";
             GeneralNonQuery(query, "A board with this id already exists");
@@ -99,7 +99,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             taskDTO.AdvanceTask();
         }
 
-        public void nextTaskIdPlusPlus()
+        internal void nextTaskIdPlusPlus()
         {
             string query = $"UPDATE Boards SET nextTaskID = nextTaskID + 1 WHERE id = {id}";
             GeneralNonQuery(query, "Something went wrong");

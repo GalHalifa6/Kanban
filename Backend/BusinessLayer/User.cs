@@ -63,20 +63,20 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// set for the email field 
         /// </summary>
         /// <param name="email"> the new email to set </param>
-        public void setEmail(string email)
+        internal void setEmail(string email)
         {
             logger.Info($"User {this.email} changed the email to {email}");
             this.email = email;
         }
 
         //switch mode of the field
-        public void logIn()
+        internal void logIn()
         {
             this.isLoggedIn = true;
         }
 
         //switch mode of the field
-        public void logOut()
+        internal void logOut()
         {
             
             this.isLoggedIn = false;
@@ -86,7 +86,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// set new password 
         /// </summary>
         /// <param name="password"> new password to be set</param>
-        public void setPassword(string password)
+        internal void setPassword(string password)
         {
             logger.Info($"User {this.email} changed the password");
             this.password = password;
@@ -97,7 +97,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email"> email to be registered </param>
         /// <param name="password"> password of the user </param>
-        public void RegisterUser(string email, string password)
+        internal void RegisterUser(string email, string password)
         {
             dto.RegisterUser(email, password);
         }
@@ -155,13 +155,6 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return false;
         }
 
-        /*
-        internal void JoinBoard(string email, int boardID)
-        {
-            CommonBoards.Add(boardID);
-        }
-        */
-
         /// <summary>
         /// leave board that the user is taking apart, not the owner of them
         /// </summary>
@@ -205,7 +198,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="boardName"> name of the candidate board</param>
         /// <returns> Board </returns>
-        public Board renounceOwnership(string boardName) {
+        internal Board renounceOwnership(string boardName) {
             foreach(Board board in MyBoards)
             {
                 if(board.Name == boardName)
@@ -238,7 +231,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="board"> board that sent from renounceOwnership </param>
         /// <param name="currentUser"> New owner of the board</param>
-        public void takeOwnership(Board board, string currentUser)  {
+        internal void takeOwnership(Board board, string currentUser)  {
             board.ChangeOwner(currentUser, this.email);
             if (!MyBoards.Contains(board))
             {
@@ -253,7 +246,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="boardName"> name of the candidate board </param>
         /// <returns> Bool statment of the procedure </returns>
-        public bool CheckIfCanAddBoard(string boardName)
+        internal bool CheckIfCanAddBoard(string boardName)
         {
             foreach(Board board in MyBoards)
             {

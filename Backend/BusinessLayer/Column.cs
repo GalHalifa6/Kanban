@@ -12,7 +12,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <summary>
         /// The name of the column - 'backlog' / 'in progress' / 'done'
         /// </summary>
-        public string name;
+        private string name;
         public string Name
         {
             get => name;
@@ -20,7 +20,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <summary>
         /// The limit on the maximum tasks available in this column
         /// </summary>
-        public int maxTasks;
+        private int maxTasks;
         public int MaxTasks
         {
             get => maxTasks;
@@ -29,7 +29,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <summary>
         /// List of tasks in this column
         /// </summary>
-        public List<Task> tasks;
+        private List<Task> tasks;
         public List<Task> Tasks
         {
             get => tasks;
@@ -43,7 +43,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <summary>
         /// The dto of the column
         /// </summary>
-        public ColumnDTO dto;
+        private ColumnDTO dto;
         public ColumnDTO DTO
         {
             get => dto;
@@ -225,7 +225,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Set a limit of the column's tasks
         /// </summary>
         /// <param name="maxTasks">The new limit</param>
-        public void SetMax(int maxTasks)
+        internal void SetMax(int maxTasks)
         {
             logger.Info("Column's tasks limit was changed to: " + maxTasks);
             this.maxTasks = maxTasks;
@@ -236,7 +236,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="taskID">The task id</param>
         /// <returns></returns>
-        public Task GetTask(int taskID)
+        internal Task GetTask(int taskID)
         {
             for (int i = 0; i < tasks.Count; i++)
             {
@@ -251,7 +251,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Get a list of tasks in this column
         /// </summary>
         /// <returns></returns>
-        public List<Task> GetTasksList()
+        internal List<Task> GetTasksList()
         {
             return tasks;
         }
