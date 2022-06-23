@@ -199,6 +199,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             try
             {
                 bc.LoadData();
+                Logger.GetLogger().Info("board data loaded successfully");
                 return "{}";
             }
             catch (Exception e)
