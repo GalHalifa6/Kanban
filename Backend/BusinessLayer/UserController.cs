@@ -142,13 +142,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 }
                 else
                 {
-                    logger.Warn("Failed to login the user " + email + ", because there is no match between the email and password");
-                    throw new Exception("Incorrect password");
+                    logger.Warn("Faild to login the user " + email + ", because there is no match between the email and password");
+                    throw new Exception("Email or password is incorrect");
                 }
             }
             else
             {
-                logger.Warn("Failed to delete user " + email + ", because a user with that name is not exists");
+                logger.Warn("Failed to log in, user " + email + " is not exists");
                 throw new Exception("The user " + email + " does not exist");
             }
         }
@@ -228,8 +228,10 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             HashSet<UserDTO> userDTOs = usm.LoadData();
             foreach (UserDTO userDTO in userDTOs)
             {
-
-                users.Add(userDTO.Email ,new User(userDTO.Email, userDTO.Password));
+                if (!users.ContainsKey(userDTO.Email))
+                {
+                    users.Add(userDTO.Email, new User(userDTO.Email, userDTO.Password));
+                }
 
             }
 

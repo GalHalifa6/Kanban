@@ -259,7 +259,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         {
             foreach(Board board in CommonBoards)
             {
-                if(b.Name == board.Name)
+                if(b.Name == board.Name && !b.IsInBoard(email))
                 {
                     logger.Warn($"User {this.email} can not join to {b.Name} ");
                     return false;
@@ -268,7 +268,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
 
             foreach (Board board in MyBoards)
             {
-                if (b.Name == board.Name)
+                if (b.Name == board.Name && !b.IsInBoard(email))
                 {
                     logger.Warn($"User {this.email} can not join to {b.Name} ");
                     return false;
