@@ -172,7 +172,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Column column = board.GetColumn(columnOrdinal);
             if (column == null)
                 throw new Exception("Invalid column");
-            return column.name;
+            return column.Name;
         }
 
         internal void DeleteData()

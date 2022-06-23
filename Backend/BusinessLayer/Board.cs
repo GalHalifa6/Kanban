@@ -162,9 +162,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             Column col = GetColumn(columnNumber);
             if (col == null)
                 throw new Exception("Invalid column");
-            if (col.maxTasks == int.MaxValue)
+            if (col.MaxTasks == int.MaxValue)
                 return -1;
-            return col.maxTasks;
+            return col.MaxTasks;
         }
         /// <summary>
         /// Add a task to this board
@@ -262,15 +262,15 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
                 {
                     throw new Exception("Error in assigning columns to board");
                 }
-                else if (c.name == "backlog")
+                else if (c.Name == "backlog")
                 {
                     backlog = c;
                 }
-                else if (c.name == "in progress")
+                else if (c.Name == "in progress")
                 {
                     inProgress = c;
                 }
-                else if (c.name == "done")
+                else if (c.Name == "done")
                 {
                     done = c;
                 }
@@ -443,7 +443,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("Invalid column ordinal.");
             }
-            if (column.name == "done")
+            if (column.Name == "done")
             {
                 throw new Exception("Cannot edit tasks that are done.");
             }
@@ -466,7 +466,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("Invalid column ordinal.");
             }
-            if (column.name == "done")
+            if (column.Name == "done")
             {
                 throw new Exception("Cannot edit tasks that are done.");
             }
@@ -489,7 +489,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             {
                 throw new Exception("Invalid column ordinal.");
             }
-            if (column.name == "done")
+            if (column.Name == "done")
             {
                 throw new Exception("Cannot edit tasks that are done.");
             }
