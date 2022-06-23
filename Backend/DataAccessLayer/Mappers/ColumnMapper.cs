@@ -8,7 +8,7 @@ using IntroSE.Kanban.Backend.BusinessLayer;
 
 namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 {
-    internal class ColumnMapper
+    public class ColumnMapper
     {
         public TaskMapper taskMapper;
         public TaskMapper TaskMapper
@@ -23,7 +23,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
         /// Loading the specified column and the relevant tasks
         /// </summary>
         /// <returns></returns>
-        internal Dictionary<int, HashSet<Column>> LoadData()
+        
+        public Dictionary<int, HashSet<Column>> LoadData()
         {
             HashSet<TaskDTO> tasks = taskMapper.LoadData();
             string query = $"SELECT * FROM Columns";

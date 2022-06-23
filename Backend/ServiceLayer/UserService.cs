@@ -36,7 +36,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email"> email to be registered </param>
         /// <param name="password"> password of the user </param>
         /// <returns> json of the procedure </returns>
-        internal string Register(string email, string password)
+
+        public string Register(string email, string password)
         {
             if (IsValidEmail(email) == false)
             {
@@ -65,7 +66,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email">Email of the user that is trying to log in</param>
         /// <param name="password">Password of the user trying to log in</param>
         /// <returns> json of the procedure </returns>
-        internal string Login(string email, string password)
+        public string Login(string email, string password)
         {
             if (IsValidEmail(email) == false)
             {
@@ -79,9 +80,9 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             try
             {
-                uc.login(email.ToLower(), password);
                 currentEmail = email;
-                return JsonConvert.SerializeObject(new Response(email), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                uc.login(email, password);
+                return JsonConvert.SerializeObject(new Response(currentEmail), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
 
             }
             catch (Exception e)
@@ -95,7 +96,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email"> Email of the user trying to log out</param>
         /// <returns> json of the procedure </returns>
-        internal string Logout(string email)
+        public string Logout(string email)
         {
             if (IsValidEmail(email) == false)
             {
@@ -116,7 +117,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
 
 
-        internal string InProgressTasks(string email)
+        public string InProgressTasks(string email)
         {
             try
             {
@@ -137,7 +138,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email"> Email of the user </param>
         /// <param name="name"> Name the candidate board to be remove</param>
         /// <returns> Bool statment of the procedure </returns>
-        internal bool RemoveBoard(string email, string name)
+        public bool RemoveBoard(string email, string name)
         {
             return uc.RemoveBoard(email, name);
         }
@@ -151,7 +152,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="newPassword"> New password of the user </param>
         /// <returns> json string </returns>
 
-        internal string ChangePassword(string email, string oldPassword, string newPassword)
+        public string ChangePassword(string email, string oldPassword, string newPassword)
         {
             if (IsValidPassword(oldPassword) == false)
             {
@@ -179,7 +180,12 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
         }
 
-        internal string LoadData()
+        internal bool Exists(string email)
+        {
+            return uc.exists(email);
+        }
+
+        public string LoadData()
         {
             try
             {
@@ -194,7 +200,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
         }
 
-        internal string DeleteData()
+        public string DeleteData()
         {
             try
             {
@@ -212,7 +218,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// return user controller 
         /// </summary>
         /// <returns> user controller </returns>
-        internal UserController GetUc()
+        public UserController GetUc()
         {
             return uc;
         }
@@ -222,7 +228,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email"> Email of the user </param>
         /// <returns> return list of boards- by their id </returns>
-        internal string GetUserBoards(string email)
+        public string GetUserBoards(string email)
         {
             Response response = uc.GetUserBoards(email);
             return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
@@ -233,13 +239,13 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email"> Email of the user </param>
         /// <param name="boardID"> ID of the board that the user should leave </param>
-        internal void LeaveBoard(string email, int boardID)
+        public void LeaveBoard(string email, int boardID)
         {
             uc.LeaveBoard(email, boardID);
         }
 
         /*
-        internal void JoinBoard(string email, int boardID)
+        public void JoinBoard(string email, int boardID)
         {
             uc.JoinBoard(email, boardID);
         }
@@ -250,7 +256,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="pass"> Password to validate</param>
         /// <returns>boolean indicating the validity of the password</returns>
-        internal bool IsValidPassword(string pass)
+        public bool IsValidPassword(string pass)
         {
             if (string.IsNullOrWhiteSpace(pass) || !(pass.Length >= 6 && pass.Length <= 20) || !(pass.Any(char.IsUpper)) || !(pass.Any(char.IsLower)) || !(pass.Any(char.IsNumber)))
             {
@@ -270,7 +276,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="newOwnerEmail"> Email of the new owner- user </param>
         /// <param name="boardName"> name of the board we want to trasfer the ownership</param>
         /// <returns> string- the result of the transfer</returns>
-        internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
+        public string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
             try
             {
@@ -279,7 +285,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             catch(Exception e)
             {
-                return JsonConvert.SerializeObject(e.Message, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return e.Message;
             }
         }
         
@@ -350,7 +356,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="emailaddress">email to be verified</param>
         /// <returns>boolean indicating the validity of the email</returns>
-        internal bool IsValidEmail(string emailaddress)
+        public bool IsValidEmail(string emailaddress)
         {
             EmailAddressAttribute email = new EmailAddressAttribute();
             try
@@ -361,7 +367,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
 
                 if (rx.IsMatch(emailaddress))
                 {
-                    Regex emailAttribute = new Regex(@"^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$");
+                    Regex emailAttribute = new Regex(@"^((([a-z]|[A-Z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$");
                     if (emailAttribute.IsMatch(emailaddress))
                     {
                         return test1(emailaddress) && test2(emailaddress) && test3(emailaddress) && ValidateEmailUsingRegex(emailaddress);
@@ -375,13 +381,13 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
         }
         // test1, test2, test3 -helpers functions to validation of email and password //
-        internal bool test2(string email)
+        public bool test2(string email)
         {
             Regex regex = new Regex(@"^[\w!#$%&'+\-/=?\^_`{|}~]+(\.[\w!#$%&'+\-/=?\^_`{|}~]+)*@" + @"((([\-\w]+\.)+[a-zA-Z]{2,4})|(([0-9]{1,3}\.){3}[0-9]{1,3}))$");
             Match match = regex.Match(email);
             return match.Success;
         }
-        internal bool test3(string email)
+        public bool test3(string email)
         {
             char[] charArray = { 'א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת' };
             foreach (char c in email.ToCharArray())
@@ -394,7 +400,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return true;
         }
 
-        internal bool test1(string emailaddress)
+        public bool test1(string emailaddress)
         {
             try
             {
@@ -412,7 +418,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email"> Email of the user</param>
         /// <returns> Bool by the statment of the proprety </returns>
-        internal bool IsLoggedIn(string email)
+        public bool IsLoggedIn(string email)
         {
             email = email.ToLower();
             return uc.IsLoggedIn(email);

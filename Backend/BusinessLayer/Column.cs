@@ -82,7 +82,9 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="task">The task</param>
         /// <exception cref="Exception"></exception>
-        internal void AddTask(Task task)
+
+
+        public void AddTask(Task task)
         {
             if (tasks.Contains(task))
             {
@@ -114,7 +116,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="description">The task's description</param>
         /// <param name="dueDate">The task's due date</param>
         /// <exception cref="Exception"></exception>
-        internal void AddTask(int boardID, int columnOrdinal, int ID, string title, string description, DateTime dueDate)
+        public void AddTask(int boardID, int columnOrdinal, int ID, string title, string description, DateTime dueDate)
         {
             if (tasks.Count == maxTasks)
             {
@@ -137,7 +139,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <summary>
         /// Add the column to the db
         /// </summary>
-        internal void AddColumnToDB()
+        public void AddColumnToDB()
         {
             dto.AddColumnToDB();
         }
@@ -147,7 +149,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="task">The task we need to remove</param>
         /// <exception cref="Exception"></exception>
-        internal void removeAdvancingTask(Task task)
+        public void removeAdvancingTask(Task task)
         {
             if (!tasks.Contains(task))
             {
@@ -164,7 +166,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="task">The task</param>
         /// <param name="newTitle">The new title</param>
         /// <exception cref="Exception"></exception>
-        internal void UpdateTaskTitle(string email, Task task, string newTitle)
+        public void UpdateTaskTitle(string email, Task task, string newTitle)
         {
             if (!tasks.Contains(task))
             {
@@ -180,7 +182,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="task">The task</param>
         /// <param name="newDescription">The new description</param>
         /// <exception cref="Exception"></exception>
-        internal void UpdateTaskDescription(string email, Task task, string newDescription)
+        public void UpdateTaskDescription(string email, Task task, string newDescription)
         {
             if (!tasks.Contains(task))
             {
@@ -196,7 +198,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="task">The task</param>
         /// <param name="newDueDate">The new due date</param>
         /// <exception cref="Exception"></exception>
-        internal void UpdateTaskDueDate(string email, Task task, DateTime newDueDate)
+        public void UpdateTaskDueDate(string email, Task task, DateTime newDueDate)
         {
             if (!tasks.Contains(task))
             {
@@ -211,7 +213,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="t">The task</param>
         /// <exception cref="Exception"></exception>
-        internal void takeAdvancingTask(Task t)
+        public void takeAdvancingTask(Task t)
         {
             if (tasks.Count == maxTasks)
             {
@@ -225,8 +227,13 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Set a limit of the column's tasks
         /// </summary>
         /// <param name="maxTasks">The new limit</param>
-        internal void SetMax(int maxTasks)
+        public void SetMax(int maxTasks)
         {
+            if (maxTasks < tasks.Count)
+            {
+                logger.Warn("Cannot change a column limitation to a smaller value than the tasks' amount");
+                throw new Exception("Cannot change a column limitation to a smaller value than the tasks' amount");
+            }
             logger.Info("Column's tasks limit was changed to: " + maxTasks);
             this.maxTasks = maxTasks;
             dto.SetMax(maxTasks);
@@ -236,7 +243,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="taskID">The task id</param>
         /// <returns></returns>
-        internal Task GetTask(int taskID)
+        public Task GetTask(int taskID)
         {
             for (int i = 0; i < tasks.Count; i++)
             {
@@ -251,7 +258,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Get a list of tasks in this column
         /// </summary>
         /// <returns></returns>
-        internal List<Task> GetTasksList()
+        public List<Task> GetTasksList()
         {
             return tasks;
         }
@@ -260,7 +267,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The user's email</param>
         /// <returns></returns>
-        internal List<Task> GetAllAssignedTasks(string email)
+        public List<Task> GetAllAssignedTasks(string email)
         {
             List<Task> output = new List<Task>();
             foreach(Task task in tasks)
@@ -276,7 +283,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Unassign all tasks from a user
         /// </summary>
         /// <param name="email">The user's email</param>
-        internal void UnassignTasks(string email)
+        public void UnassignTasks(string email)
         {
             foreach (Task task in tasks)
             {

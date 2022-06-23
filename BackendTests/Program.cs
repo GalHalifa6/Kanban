@@ -8,7 +8,6 @@ class Program
 {
     static void Main(String[] args)
     {
-        Console.WriteLine("Adding task to a user. Should succeed");
         GradingService gradingService = new GradingService();
         BoardServiceTest boardServiceTest = new BoardServiceTest();
         UserServiceTest userServiceTest = new UserServiceTest();

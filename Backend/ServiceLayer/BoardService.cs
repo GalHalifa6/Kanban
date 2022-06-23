@@ -47,7 +47,8 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// Called when a successful registeration occurs. Adds a new (key,value) pair to the user boards dictionary
         /// </summary>
         /// <param name="email">newly registered user</param>
-        internal void Register(string email)
+
+        public void Register(string email)
         {
             bc.Register(email);
         }
@@ -58,7 +59,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email">email of the user to add the board to</param>
         /// <param name="name"> name of the board that is being added</param>
         /// <returns>Response indicating the outcome of the procedure</returns>
-        internal string AddBoard(string email, string name, UserService US)
+        public string AddBoard(string email, string name, UserService US)
         {
 /*            if (name != null && IsEmptyOrWhiteSpace(name))
             {
@@ -86,7 +87,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email">user that made the request</param>
         /// <param name="boardName">board to be removed</param>
         /// <returns>Reponse with the outcome of the procedure</returns>
-        internal string RemoveBoard(string email, string name) {
+        public string RemoveBoard(string email, string name) {
             try
             {
                 bc.RemoveBoard(email, name);
@@ -109,11 +110,11 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="description">Description of the new task</param>
         /// <param name="dueDate">The due date if the new task</param>
         /// <returns>Response with user-email, unless an error occurs.</returns>
-        internal string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
+        public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
-            /*            if (dueDate < DateTime.Now)
-                            return JsonConvert.SerializeObject(new Response("Due date cannot be in the past.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
-            */
+            if (dueDate < DateTime.Now)
+                return JsonConvert.SerializeObject(new Response("Due date cannot be in the past.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
             if (string.IsNullOrWhiteSpace(title) || title.Length > MAX_TASK_TITLE_LENGTH || string.IsNullOrEmpty(title))
             {
                 Response response = new Response("Invalid title. A valid  title must have up to 50 characters and cannot be empty.", true);
@@ -148,7 +149,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
         /// <param name="taskId">The task to be updated identified task Id</param>
         /// <returns>The string "{}", unless an error occurs.</returns>
-        internal string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
+        public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
             try
             {
@@ -162,7 +163,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             //return InvokeMethod(new Action<string, string, int ,int>(bc.AdvanceTask), "{}", email, boardName, columnOrdinal, taskId);
         }
 
-        internal void DeleteData()
+        public void DeleteData()
         {
             bc.DeleteData();
         }
@@ -175,7 +176,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
         /// <param name="limit">The new limit value. A value of -1 indicates no limit.</param>
         /// <returns>Response with the result of the procedure</returns>
-        internal string LimitColumn(string email, string boardName, int columnNumber, int newLimit) {
+        public string LimitColumn(string email, string boardName, int columnNumber, int newLimit) {
             try
             {
                 bc.LimitColumnTasks(email, boardName, columnNumber, newLimit);
@@ -188,7 +189,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             //return InvokeMethod(new Action<string, string, int, int>(bc.LimitColumnTasks), "{}", email, boardName, columnNumber, newLimit);
         }
 
-        internal string LoadData()
+        public string LoadData()
         {
             try
             {
@@ -213,7 +214,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="taskID">The task to be updated identified a task ID</param>        
         /// <param name="emailAssignee">Email of the asignee user</param>
         /// <returns>An empty response, unless an error occurs</returns>
-        internal string AssignTask(string email, string boardName, int columnOrdinal, int taskID, string emailAssignee)
+        public string AssignTask(string email, string boardName, int columnOrdinal, int taskID, string emailAssignee)
         {
             try
             {
@@ -234,7 +235,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="boardName">board in which the column appears</param>
         /// <param name="columnNumber">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
         /// <returns>Json response with the limit of the column, unless an error occurs.</returns>
-        internal string GetColumnLimit(string email, string boardName, int columnNumber)
+        public string GetColumnLimit(string email, string boardName, int columnNumber)
         {
             try
             {
@@ -256,7 +257,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="boardName">board that holds the column</param>
         /// <param name="columnNumber">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
         /// <returns> Json response with the name of the column, unless an error occurs.</returns>
-        internal string GetColumnName(string email, string boardName, int columnNumber)
+        public string GetColumnName(string email, string boardName, int columnNumber)
         {
             try
             {
@@ -271,7 +272,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
         }
 
-        internal string JoinBoard(string email, int boardID, UserService US)
+        public string JoinBoard(string email, int boardID, UserService US)
         {
             try
             {
@@ -280,7 +281,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             }
             catch (Exception e)
             {
-                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return e.Message;
             }
             //return InvokeMethod(new Action<string, int, UserController>(bc.JoinBoard), "{}", email, boardID, US.Uc);
         }
@@ -293,7 +294,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="boardName">The name of the board</param>
         /// <param name="columnOrdinal">The column Id. The first column is identified by 0, the Id increases by 1 for each column</param>
         /// <returns>Response with a list of the column's tasks, unless an error occurs.</returns>
-        internal string GetColumn(string email, string boardName, int columnOrdinal)
+        public string GetColumn(string email, string boardName, int columnOrdinal)
         {
             try
             {
@@ -314,7 +315,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// </summary>
         /// <param name="email">user requesting to view the tasks</param>
         /// <returns>json string of the list of tasks</returns>
-        internal string InProgressTasks(string email)
+        public string InProgressTasks(string email)
         {
             try
             {
@@ -336,7 +337,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="email">The email of the user.</param>
         /// <param name="boardID">The board's ID</param>
         /// <returns>An empty response, unless an error occurs</returns>
-        internal string LeaveBoard(string email, int boardID)
+        public string LeaveBoard(string email, int boardID)
         {
             try
             {
@@ -357,7 +358,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="newOwnerEmail">Email of the new owner</param>
         /// <param name="boardName">The name of the board</param>
         /// <returns>An empty response, unless an error occurs</returns>
-        internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
+        public string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
             try
             {

@@ -16,7 +16,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
         /// load all the board related data to the system from the DB
         /// </summary>
         /// <returns>a set of all the boards in the system</returns>
-        internal HashSet<BoardDTO> LoadData()
+        
+        public HashSet<BoardDTO> LoadData()
         {
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery("SELECT * FROM Boards");
             HashSet<BoardDTO> data = new HashSet<BoardDTO>();

@@ -59,13 +59,14 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
-        internal void AddBoard(string email, int id, string name)
+        
+        public void AddBoard(string email, int id, string name)
         {
             string query = $"INSERT INTO Boards(id, name, nextTaskID, owner) VALUES({id},'{name}',{0},'{email}')";
             GeneralNonQuery(query, "A board with this id already exists");
         }
 
-        internal void ChangeOwner(string newOwner)
+        public void ChangeOwner(string newOwner)
         {
             string boardsUpdate = $"UPDATE Boards SET owner = '{newOwner}' WHERE id = {id}";
             GeneralNonQuery(boardsUpdate, "Something went wrong");
@@ -75,31 +76,31 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             owner = newOwner;
         }
 
-        internal void RemoveBoard()
+        public void RemoveBoard()
         {
             string query = $"PRAGMA foreign_keys = 1; DELETE FROM Boards WHERE id = {id}";
             GeneralNonQuery(query, "Something went wrong");
 
         }
 
-        internal void AddUser(string email)
+        public void AddUser(string email)
         {
             new UsersBoardsDTO().AddUserToBoard(email, id);
         }
 
-        internal void RemoveUser(string email)
+        public void RemoveUser(string email)
         {
             new UsersBoardsDTO().RemoveUserFromBoard(email, id);
         }
 
-        internal void AdvanceTask(ColumnDTO currentColDTO, ColumnDTO nextColDTO, TaskDTO taskDTO)
+        public void AdvanceTask(ColumnDTO currentColDTO, ColumnDTO nextColDTO, TaskDTO taskDTO)
         {
             //nextColDTO.AddTask(taskDTO);
             //currentColDTO.RemoveTask(taskDTO.Id);
             taskDTO.AdvanceTask();
         }
 
-        internal void nextTaskIdPlusPlus()
+        public void nextTaskIdPlusPlus()
         {
             string query = $"UPDATE Boards SET nextTaskID = nextTaskID + 1 WHERE id = {id}";
             GeneralNonQuery(query, "Something went wrong");
