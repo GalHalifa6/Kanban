@@ -63,20 +63,25 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// set for the email field 
         /// </summary>
         /// <param name="email"> the new email to set </param>
-        internal void setEmail(string email)
+        public void setEmail(string email)
         {
             logger.Info($"User {this.email} changed the email to {email}");
             this.email = email;
         }
 
         //switch mode of the field
-        internal void logIn()
+        public void logIn()
         {
+            if (IsLoggedIn)
+            {
+                logger.Warn("User can't login because already logged in");
+                throw new Exception("User is already logged in");
+            }
             this.isLoggedIn = true;
         }
 
         //switch mode of the field
-        internal void logOut()
+        public void logOut()
         {
             
             this.isLoggedIn = false;
@@ -86,7 +91,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// set new password 
         /// </summary>
         /// <param name="password"> new password to be set</param>
-        internal void setPassword(string password)
+        public void setPassword(string password)
         {
             logger.Info($"User {this.email} changed the password");
             this.password = password;
@@ -97,7 +102,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email"> email to be registered </param>
         /// <param name="password"> password of the user </param>
-        internal void RegisterUser(string email, string password)
+        public void RegisterUser(string email, string password)
         {
             dto.RegisterUser(email, password);
         }
@@ -108,7 +113,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email"> Email of a user </param>
         /// <param name="board"> Board the the user will be the owner </param>
         /// <returns> Bool- if the procedure succeed or not </returns>
-        internal bool AddBoard(Board b)
+
+        public bool AddBoard(Board b)
         {
 
             foreach (Board board in CommonBoards)
@@ -140,7 +146,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="email"> Email of the user </param>
         /// <param name="name"> Name the candidate board to be remove</param>
         /// <returns> Bool statment of the procedure </returns>
-        internal bool RemoveBoard(string name)
+        public bool RemoveBoard(string name)
         {
             foreach(Board board in MyBoards)
             {
@@ -160,7 +166,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email"> Email of the user </param>
         /// <param name="boardID"> ID of the board that the user should leave </param>
-        internal void LeaveBoard(int boardID)
+        public void LeaveBoard(int boardID)
         {
             foreach(Board board in CommonBoards)
             {
@@ -178,7 +184,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email"> Email of the user </param>
         /// <returns> return list of boards- by their id </returns>
-        internal Response GetUserBoards()
+        public Response GetUserBoards()
         {
             List<int> boards = new List<int>();
             foreach(Board board in MyBoards)
@@ -198,7 +204,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="boardName"> name of the candidate board</param>
         /// <returns> Board </returns>
-        internal Board renounceOwnership(string boardName) {
+        public Board renounceOwnership(string boardName) {
             foreach(Board board in MyBoards)
             {
                 if(board.Name == boardName)
@@ -212,7 +218,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             return null;
         }
 
-        internal List<Task> InProgressTasks()
+        public List<Task> InProgressTasks()
         {
             List<Task> res = new List<Task>();
             foreach (Board b in MyBoards)
@@ -231,7 +237,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="board"> board that sent from renounceOwnership </param>
         /// <param name="currentUser"> New owner of the board</param>
-        internal void takeOwnership(Board board, string currentUser)  {
+        public void takeOwnership(Board board, string currentUser)  {
             board.ChangeOwner(currentUser, this.email);
             if (!MyBoards.Contains(board))
             {
@@ -246,7 +252,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="boardName"> name of the candidate board </param>
         /// <returns> Bool statment of the procedure </returns>
-        internal bool CheckIfCanAddBoard(string boardName)
+        public bool CheckIfCanAddBoard(string boardName)
         {
             foreach(Board board in MyBoards)
             {
@@ -262,7 +268,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="b"> Board that the user will take apart in</param>
         /// <returns> Bool statement of the procedure </returns>
-        internal bool JoinBoard(Board b)
+        public bool JoinBoard(Board b)
         {
             foreach(Board board in CommonBoards)
             {

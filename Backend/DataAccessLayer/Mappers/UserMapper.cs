@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 {
 
-    internal class UserMapper
+    public class UserMapper
     {
 
 
@@ -21,7 +21,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
         /// load all user related data to the system from the database
         /// </summary>
         /// <returns>set of user DTOs</returns>
-        internal HashSet<UserDTO> LoadData()
+
+        public HashSet<UserDTO> LoadData()
         {
             HashSet<UserDTO> UserData = new HashSet<UserDTO>();
             string query = "SELECT * from Users";
@@ -41,7 +42,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
         /// <summary>
         /// delete all data from the database
         /// </summary>
-        internal void DeleteData()
+        public void DeleteData()
         {
                 DBConnector db = DBConnector.GetInstance();
                 db.ResetDB();              

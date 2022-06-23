@@ -128,7 +128,8 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Update a task's title
         /// </summary>
         /// <param name="newTitle">The new title</param>
-        internal void UpdateTaskTitle(string email, string newTitle)
+        
+        public void UpdateTaskTitle(string email, string newTitle)
         {
             if (assigneeEmail != "" && assigneeEmail != email)
             {
@@ -141,7 +142,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Update a task's description
         /// </summary>
         /// <param name="newDescription">The new description</param>
-        internal void UpdateTaskDescription(string email, string newDescription)
+        public void UpdateTaskDescription(string email, string newDescription)
         {
             if (assigneeEmail != "" && assigneeEmail != email)
             {
@@ -154,7 +155,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// Update a task's due date
         /// </summary>
         /// <param name="newDueDate">The new due date</param>
-        internal void UpdateTaskDueDate(string email, DateTime newDueDate)
+        public void UpdateTaskDueDate(string email, DateTime newDueDate)
         {
             if (assigneeEmail != "" && assigneeEmail != email)
             {
@@ -169,7 +170,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <param name="assigner">The user assigning</param>
         /// <param name="assignee">The user assigned</param>
         /// <exception cref="Exception">The user can't assign this task</exception>
-        internal void AssignTask(string assigner, string assignee)
+        public void AssignTask(string assigner, string assignee)
         {
             if (assigneeEmail != "" && assigneeEmail != assigner)
             {
@@ -185,7 +186,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// </summary>
         /// <param name="email">The user's email</param>
         /// <returns></returns>
-        internal bool IsAssigned(string email)
+        public bool IsAssigned(string email)
         {
             if (email != null && email == assigneeEmail)
             {
@@ -200,7 +201,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <summary>
         /// Unassign this task from its' assignee
         /// </summary>
-        internal void UnassignTask()
+        public void UnassignTask()
         {
             assigneeEmail = "";
             dto.UnassignTask();
@@ -208,7 +209,7 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <summary>
         /// Advance the task to the next column
         /// </summary>
-        internal void AdvanceTask()
+        public void AdvanceTask()
         {
             columnOrdinal = columnOrdinal + 1;
             dto.AdvanceTask();

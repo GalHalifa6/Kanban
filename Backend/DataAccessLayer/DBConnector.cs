@@ -31,12 +31,12 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
-        internal static DBConnector GetInstance()
+        public static DBConnector GetInstance()
         {
             return instance;
         }
 
-        internal void close()
+        public void close()
         {
             conn.Close();
         }
@@ -44,7 +44,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <summary>
         /// used for testing purposes
         /// </summary>
-        internal void ResetDB()
+        public void ResetDB()
         {
             try
             {
@@ -129,7 +129,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         }
 
 
-        internal SQLiteDataReader ExecuteQuery(string nq)
+        public SQLiteDataReader ExecuteQuery(string nq)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             
         }
 
-        internal bool ExecuteNonQuery(string nq){
+        public bool ExecuteNonQuery(string nq){
 
             try
             {
