@@ -89,7 +89,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "userEmail VARCHAR(200)," +
                 "boardID INTEGER," +
                 "PRIMARY KEY (userEmail,boardID)," +
-                "FOREIGN KEY (userEmail) REFERENCES Users(id)," +
+                "FOREIGN KEY (userEmail) REFERENCES Users(email) ON DELETE CASCADE," +
                 "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
                 ")";
 
@@ -100,8 +100,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "name VARCHAR(200)," +
                 "nextTaskID INTEGER," +
                 "owner VARCHAR(200)," +
-                "PRIMARY KEY (id)," +
-                "FOREIGN KEY (owner) REFERENCES Users(id) ON DELETE CASCADE" +
+                "PRIMARY KEY (id)" +
                 ")";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
@@ -123,7 +122,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 "dueDate DATETIME," +
                 "assignee STRING," +
                 "PRIMARY KEY (boardID,id)," +
-                "FOREIGN KEY (boardID) REFERENCES Boards(id) ON DELETE CASCADE" +
+                "FOREIGN KEY (boardID) REFERENCES Boards(id)" +
                 ")";
             cmd.CommandText = query;
             cmd.ExecuteNonQuery();
