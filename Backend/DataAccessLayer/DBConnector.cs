@@ -36,7 +36,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             return instance;
         }
 
-        internal void close()
+        public void close()
         {
             conn.Close();
         }
@@ -129,7 +129,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         }
 
 
-        internal SQLiteDataReader ExecuteQuery(string nq)
+        public SQLiteDataReader ExecuteQuery(string nq)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             
         }
 
-        internal bool ExecuteNonQuery(string nq){
+        public bool ExecuteNonQuery(string nq){
 
             try
             {

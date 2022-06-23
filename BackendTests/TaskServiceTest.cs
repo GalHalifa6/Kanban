@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-internal class TaskServiceTest
+public class TaskServiceTest
 {
 
     public TaskServiceTest() { }

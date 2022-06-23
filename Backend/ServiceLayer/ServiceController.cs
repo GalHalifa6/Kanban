@@ -31,12 +31,17 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             if (email == null)
                 return GenerateBadResponseString("Email cannot be null");
             email = email.ToLower();
+            if (!US.Exists(email))
+            {
+                return GenerateBadResponseString("The email doesn't exist");
+            }
             if (!US.IsLoggedIn(email))
                 return GenerateBadResponseString("You must be logged in to perform this action");
             return null;
 
         }
-        internal string Register(string email, string password)
+
+        public string Register(string email, string password)
         {
             if (email == null)
                 return GenerateBadResponseString("Email cannot be null");
@@ -47,7 +52,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return res;
         }
 
-        internal string Login(string email, string password)
+        public string Login(string email, string password)
         {
             if (email == null)
                 return GenerateBadResponseString("Email cannot be null");
@@ -55,7 +60,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return US.Login(email, password);
         }
 
-        internal string Logout(string email)
+        public string Logout(string email)
         {
             if (email == null)
                 return GenerateBadResponseString("Email cannot be null");
@@ -63,7 +68,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return US.Logout(email);
         }
 
-        internal string LimitColumn(string email, string boardName, int columnOrdinal, int limit)
+        public string LimitColumn(string email, string boardName, int columnOrdinal, int limit)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -71,7 +76,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return BS.LimitColumn(email, boardName, columnOrdinal, limit);
         }
 
-        internal string GetColumnLimit(string email, string boardName, int columnOrdinal)
+        public string GetColumnLimit(string email, string boardName, int columnOrdinal)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -79,7 +84,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return BS.GetColumnLimit(email, boardName, columnOrdinal);
         }
 
-        internal string GetColumnName(string email, string boardName, int columnOrdinal)
+        public string GetColumnName(string email, string boardName, int columnOrdinal)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -87,7 +92,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return BS.GetColumnName(email, boardName, columnOrdinal);
         }
 
-        internal string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
+        public string AddTask(string email, string boardName, string title, string description, DateTime dueDate)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -95,7 +100,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return BS.AddTask(email, boardName, title, description, dueDate);
         }
 
-        internal string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
+        public string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime dueDate)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -103,7 +108,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return TS.UpdateTaskDueDate(email, boardName, columnOrdinal, taskId, dueDate);
         }
 
-        internal string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
+        public string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string title)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -111,7 +116,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return TS.UpdateTaskTitle(email, boardName, columnOrdinal, taskId, title);
         }
 
-        internal string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string description)
+        public string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string description)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -119,7 +124,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return TS.UpdateTaskDescription(email, boardName, columnOrdinal, taskId, description);
         }
 
-        internal string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
+        public string AdvanceTask(string email, string boardName, int columnOrdinal, int taskId)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -127,7 +132,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return BS.AdvanceTask(email, boardName, columnOrdinal, taskId);
         }
 
-        internal string GetColumn(string email, string boardName, int columnOrdinal)
+        public string GetColumn(string email, string boardName, int columnOrdinal)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -135,7 +140,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return BS.GetColumn(email, boardName, columnOrdinal);
         }
 
-        internal string AddBoard(string email, string name)
+        public string AddBoard(string email, string name)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -143,7 +148,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return BS.AddBoard(email, name, US);
         }
 
-        internal string RemoveBoard(string email, string name)
+        public string RemoveBoard(string email, string name)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -152,7 +157,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return BS.RemoveBoard(email, name);
         }
 
-        internal string InProgressTasks(string email)
+        public string InProgressTasks(string email)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -167,7 +172,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         }
 
 
-        internal string GetUserBoards(string email)
+        public string GetUserBoards(string email)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -176,7 +181,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return r;
         }
 
-        internal string JoinBoard(string email, int boardID)
+        public string JoinBoard(string email, int boardID)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -191,7 +196,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         }
 
 
-        internal string LeaveBoard(string email, int boardID)
+        public string LeaveBoard(string email, int boardID)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -204,7 +209,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return r;
         }
 
-        internal string AssignTask(string email, string boardName, int columnOrdinal, int taskID, string emailAssignee)
+        public string AssignTask(string email, string boardName, int columnOrdinal, int taskID, string emailAssignee)
         {
             string res = InitialValidation(ref email);
             if (res != null)
@@ -213,24 +218,28 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             {
                 return GenerateBadResponseString("Assignee email cannot be null");
             }
+            if (!US.Exists(emailAssignee.ToLower()))
+            {
+                return GenerateBadResponseString($"Assignee email {emailAssignee} doesn't exist");
+            }
             emailAssignee = emailAssignee.ToLower();
             return BS.AssignTask(email, boardName, columnOrdinal, taskID, emailAssignee);
         }
 
-        internal string LoadData()
+        public string LoadData()
         {
             BS.LoadData();
             return US.LoadData();
         }
 
-        internal string DeleteData()
+        public string DeleteData()
         {
             BS.DeleteData();
             return US.DeleteData();
         }
 
 
-        internal string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
+        public string TransferOwnership(string currentOwnerEmail, string newOwnerEmail, string boardName)
         {
             string res = InitialValidation(ref currentOwnerEmail);
             if (res != null)

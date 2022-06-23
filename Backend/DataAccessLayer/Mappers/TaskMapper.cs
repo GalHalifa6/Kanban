@@ -8,7 +8,7 @@ using System.Globalization;
 
 namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
 {
-    internal class TaskMapper
+    public class TaskMapper
     {
 
         public TaskMapper() { }
@@ -16,7 +16,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
         /// Loading the tasks and returns a HashSet of the taskDTO's
         /// </summary>
         /// <returns></returns>
-        internal HashSet<TaskDTO> LoadData()
+
+        public HashSet<TaskDTO> LoadData()
         {
             string query = $"SELECT * FROM Tasks";
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery(query);

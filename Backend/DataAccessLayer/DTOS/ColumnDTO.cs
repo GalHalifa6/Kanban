@@ -109,7 +109,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// Remove a task
         /// </summary>
         /// <param name="id">The task id</param>
-        internal void RemoveTask(int id)
+        public void RemoveTask(int id)
         {
             string query = $"DELETE FROM Tasks WHERE id = {id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
@@ -126,7 +126,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// Add a task
         /// </summary>
         /// <param name="taskDTO">The task</param>
-        internal void AddTask(TaskDTO taskDTO)
+        public void AddTask(TaskDTO taskDTO)
         {
             string query = $"INSERT INTO Tasks(boardID, columnOrdinal,id, title, description, dueDate, assignee) VALUES({taskDTO.BoardID},{taskDTO.ColumnOrdinal},{taskDTO.Id},'{taskDTO.Title}','{taskDTO.Description}','{taskDTO.DueDate}', 'null')";
             GeneralNonQuery(query, "A task with this id already exists");
@@ -135,7 +135,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// Set a limitation on the tasks number in this column
         /// </summary>
         /// <param name="newLimit"></param>
-        internal void SetMax(int newLimit)
+        public void SetMax(int newLimit)
         {
             string query = $"UPDATE Columns SET maxTasks = '{newLimit}' WHERE columnOrdinal = {ordinal} AND boardID = {boardID}";
             maxTasks = newLimit;
@@ -144,7 +144,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <summary>
         /// Adds the column to the db
         /// </summary>
-        internal void AddColumnToDB()
+        public void AddColumnToDB()
         {
             string query = $"INSERT INTO Columns(boardID,columnOrdinal,maxTasks) VALUES({boardID},{ordinal},{maxTasks})";
             GeneralNonQuery(query, "Something went wrong");

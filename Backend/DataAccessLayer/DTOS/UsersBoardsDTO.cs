@@ -5,7 +5,7 @@ using System.Data.SQLite;
 
 namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
-    internal class UsersBoardsDTO
+    public class UsersBoardsDTO
     {
         public UsersBoardsDTO()
         {
@@ -19,19 +19,20 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
                 throw new Exception(badMsg);
             }
         }
-        internal void AddUserToBoard(string email, int id)
+
+        public void AddUserToBoard(string email, int id)
         {
             string query = $"INSERT INTO UsersBoards(boardID, userEmail) VALUES({id},'{email}')";
             GeneralNonQuery(query, "Something went wrong");
         }
 
-        internal void RemoveUserFromBoard(string email, int id)
+        public void RemoveUserFromBoard(string email, int id)
         {
             string query = $"DELETE FROM UsersBoards WHERE boardID = {id} AND userEmail = '{email}'";
             GeneralNonQuery(query, "Something went wrong");
         }
 
-        internal Dictionary<int, HashSet<string>> LoadData()
+        public Dictionary<int, HashSet<string>> LoadData()
         {
             string query = "SELECT * FROM UsersBoards";
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery(query);

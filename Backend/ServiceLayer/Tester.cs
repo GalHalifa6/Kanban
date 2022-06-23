@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.ServiceLayer
 {
-    internal class Tester
+    
+    class Tester
     {
         static void Main(String[] args)
         {

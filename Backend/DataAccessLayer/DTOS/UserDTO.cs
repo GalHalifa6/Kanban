@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace IntroSE.Kanban.Backend.DataAccessLayer
 {
-    internal class UserDTO
+    public class UserDTO
     {
         private string email;
         public string Email
@@ -43,7 +43,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="email"> Email of the user </param>
         /// <param name="password"> Password of the user </param>
         /// <returns></returns>
-        internal void RegisterUser(string email, string password)
+        
+        public void RegisterUser(string email, string password)
         {
             string query = $"INSERT INTO Users(email, password) VALUES('{email}', '{password}')";
             GeneralNonQuery(query, "A user with this email already exists");

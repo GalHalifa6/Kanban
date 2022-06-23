@@ -114,7 +114,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// Update a task's title
         /// </summary>
         /// <param name="newTitle">The new title</param>
-        internal void UpdateTaskTitle(string newTitle)
+        
+        public void UpdateTaskTitle(string newTitle)
         {
             string query = $"UPDATE Tasks SET title = '{newTitle}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
@@ -124,7 +125,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// Update a task's description
         /// </summary>
         /// <param name="newDesc">The new description</param>
-        internal void UpdateTaskDescription(string newDesc)
+        public void UpdateTaskDescription(string newDesc)
         {
             string query = $"UPDATE Tasks SET description = '{newDesc}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
@@ -135,7 +136,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// Update a task's due date
         /// </summary>
         /// <param name="newDueDate">The new due date</param>
-        internal void UpdateTaskDueDate(DateTime newDueDate)
+        public void UpdateTaskDueDate(DateTime newDueDate)
         {
             string query = $"UPDATE Tasks SET dueDate = '{newDueDate}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
@@ -144,7 +145,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <summary>
         /// Advanced the task to the next column
         /// </summary>
-        internal void AdvanceTask()
+        public void AdvanceTask()
         {
             columnOrdinal = columnOrdinal + 1;
             string query = $"UPDATE Tasks SET columnOrdinal = {columnOrdinal} WHERE boardID = {boardID} " +
@@ -156,7 +157,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// </summary>
         /// <param name="assigner">The assigner</param>
         /// <param name="assignee">The assigned user</param>
-        internal void AssignTask(string assigner, string assignee)
+        public void AssignTask(string assigner, string assignee)
         {
             string query = $"UPDATE Tasks SET assignee = '{assignee}' WHERE id = {Id} AND boardId = {boardID}";
             GeneralNonQuery(query, "Something went wrong");
@@ -165,7 +166,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <summary>
         /// Unassign task from its' user
         /// </summary>
-        internal void UnassignTask()
+        public void UnassignTask()
         {
             assigneeEmail = "";
             string query = $"UPDATE Tasks SET assignee = '' WHERE id = {Id} AND boardId = {boardID}";
