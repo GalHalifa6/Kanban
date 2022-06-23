@@ -31,7 +31,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             GeneralNonQuery(query, "Something went wrong");
         }
 
-        public Dictionary<int, HashSet<string>> LoadData()
+        internal Dictionary<int, HashSet<string>> LoadData()
         {
             string query = "SELECT * FROM UsersBoards";
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery(query);

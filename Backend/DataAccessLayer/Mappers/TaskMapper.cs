@@ -16,7 +16,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
         /// Loading the tasks and returns a HashSet of the taskDTO's
         /// </summary>
         /// <returns></returns>
-        public HashSet<TaskDTO> LoadData()
+        internal HashSet<TaskDTO> LoadData()
         {
             string query = $"SELECT * FROM Tasks";
             SQLiteDataReader res = DBConnector.GetInstance().ExecuteQuery(query);

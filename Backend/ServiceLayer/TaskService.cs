@@ -41,7 +41,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="taskId">the task's id</param>
         /// <param name="newTitle">the new title</param>
         /// <returns>Json response with the result of the procedure</returns>
-        public string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string newTitle)
+        internal string UpdateTaskTitle(string email, string boardName, int columnOrdinal, int taskId, string newTitle)
         {
             if (email == null || boardName == null)
             {
@@ -91,7 +91,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="taskId">the task's id</param>
         /// <param name="newDesc">the new description</param>
         /// <returns>Json response with the result of the procedure</returns>
-        public string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string newDesc)
+        internal string UpdateTaskDescription(string email, string boardName, int columnOrdinal, int taskId, string newDesc)
         {
             if (email == null)
             {
@@ -144,7 +144,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         /// <param name="taskId">the task's id</param>
         /// <param name="newDueDate">the new due date</param>
         /// <returns>Json response with the result of the procedure</returns>
-        public string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime newDueDate)
+        internal string UpdateTaskDueDate(string email, string boardName, int columnOrdinal, int taskId, DateTime newDueDate)
         {
             /*if (newDueDate < DateTime.Now)
                 return JsonConvert.SerializeObject(new Response("Due date cannot be in the past.", true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });

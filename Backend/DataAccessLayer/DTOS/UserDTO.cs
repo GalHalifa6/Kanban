@@ -43,7 +43,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <param name="email"> Email of the user </param>
         /// <param name="password"> Password of the user </param>
         /// <returns></returns>
-        public void RegisterUser(string email, string password)
+        internal void RegisterUser(string email, string password)
         {
             string query = $"INSERT INTO Users(email, password) VALUES('{email}', '{password}')";
             GeneralNonQuery(query, "A user with this email already exists");
