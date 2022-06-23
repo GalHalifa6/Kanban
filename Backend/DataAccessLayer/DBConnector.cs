@@ -31,7 +31,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
             }
         }
 
-        internal static DBConnector GetInstance()
+        public static DBConnector GetInstance()
         {
             return instance;
         }
@@ -44,7 +44,7 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
         /// <summary>
         /// used for testing purposes
         /// </summary>
-        internal void ResetDB()
+        public void ResetDB()
         {
             try
             {
