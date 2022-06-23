@@ -180,6 +180,11 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
             }
         }
 
+        internal List<Task> InProgressTasks(string email)
+        {
+            return users[email].InProgressTasks();
+        }
+
         /// <summary>
         /// change Password for a user
         /// </summary>

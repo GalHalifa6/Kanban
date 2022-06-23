@@ -144,6 +144,21 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
         }
 
+        internal string InProgressTasks(string email)
+        {
+            try
+            {
+                List<BusinessLayer.Task> output = uc.InProgressTasks(email);
+                Response response = new Response(output);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+            catch (Exception e)
+            {
+                Response response = new Response(e.Message, true);
+                return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            }
+        }
+
         /// <summary>
         /// remove board- by name from the user's MyBoards list
         /// </summary>
