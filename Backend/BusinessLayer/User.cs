@@ -186,14 +186,14 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
         /// <returns> return list of boards- by their id </returns>
         public Response GetUserBoards()
         {
-            List<int> boards = new List<int>();
+            List<string> boards = new List<string>();
             foreach(Board board in MyBoards)
             {
-                boards.Add(board.Id);
+                boards.Add(board.Name);
             }
             foreach (Board board in CommonBoards)
             {
-                boards.Add(board.Id);
+                boards.Add(board.Name);
             }
             Response r = new Response(boards);
             return r;
