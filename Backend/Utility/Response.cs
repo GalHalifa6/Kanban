@@ -12,21 +12,28 @@ namespace IntroSE.Kanban.Backend.BusinessLayer
     public class Response
     {
         public string ErrorMessage { get; } 
-        public object ReturnValue { get; }  
+        public object ReturnValue { get; }
+
 
         public Response(object val)
         {
             ReturnValue = val;
         }
+
         public Response(string msg, bool err)
         {
             if(err)
                 ErrorMessage = msg;
-        }     
+        }
+
+        public Response() { }
+
 
         public bool ErrorOccured()
         {
             return ErrorMessage != null;
         }
+
+        
     }
 }

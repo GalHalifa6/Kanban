@@ -71,23 +71,23 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
             if (IsValidEmail(email) == false)
             {
                 Response r = new Response("Invalid email", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented);
             }
             if (IsValidPassword(password) == false)
             {
                 Response r = new Response("Invalid password", true);
-                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonConvert.SerializeObject(r, Newtonsoft.Json.Formatting.Indented);
             }
             try
             {
                 currentEmail = email;
                 uc.login(email, password);
-                return JsonConvert.SerializeObject(new Response(currentEmail), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonConvert.SerializeObject(new Response(currentEmail), Newtonsoft.Json.Formatting.Indented);
 
             }
             catch (Exception e)
             {
-                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+                return JsonConvert.SerializeObject(new Response(e.Message, true), Newtonsoft.Json.Formatting.Indented);
             }           
         }
 
@@ -231,7 +231,7 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         public string GetUserBoards(string email)
         {
             Response response = uc.GetUserBoards(email);
-            return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+            return JsonConvert.SerializeObject(response, Newtonsoft.Json.Formatting.Indented);
         }
 
         /// <summary>
