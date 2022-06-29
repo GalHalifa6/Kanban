@@ -22,7 +22,7 @@ namespace Frontend.Model
             List<string> boardNames = BackendController.Instance.GetUserBoards(email);
             foreach (string boardName in boardNames)
             {
-                boards.Add(new BoardModel(boardName));
+                boards.Add(new BoardModel(email, boardName));
             }
         }
     }

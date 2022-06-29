@@ -3,17 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Frontend.View"
+        xmlns:local="clr-namespace:Frontend.View" xmlns:viewmodel="clr-namespace:Frontend.ViewModel" d:DataContext="{d:DesignInstance Type=viewmodel:UserBoardsViewModel}"
         mc:Ignorable="d"
         Title="BoardView" Height="450" Width="800" Loaded="Window_Loaded">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="598*"/>
-            <ColumnDefinition Width="25*"/>
+            <ColumnDefinition Width="621*"/>
+            <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="35*"/>
             <ColumnDefinition Width="142*"/>
         </Grid.ColumnDefinitions>
-        <ListBox x:Name="UserBoards" ItemsSource="{Binding Path = user.Boards }" SelectionChanged="ListBox_SelectionChanged" Margin="10,21,34,127" Grid.ColumnSpan="3"/>
+        <ListBox x:Name="UserBoards" ItemsSource="{Binding Path = Boards }" SelectionChanged="ListBox_SelectionChanged" Margin="93,84,221,64" BorderBrush="Black" FontSize="20"/>
+        <TextBox x:Name="My_Boards" HorizontalAlignment="Left" Margin="93,27,0,0" TextWrapping="Wrap" Text="My Boards" VerticalAlignment="Top" Width="225" FontSize="30" BorderBrush="{x:Null}"/>
+        <Button x:Name="Logout_Button" Content="Logout" HorizontalAlignment="Left" Margin="93,375,0,0" VerticalAlignment="Top" Width="76" Height="28" FontSize="15" Click="Logout_Button_Click"/>
 
     </Grid>
 </Window>

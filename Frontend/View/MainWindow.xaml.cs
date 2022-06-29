@@ -41,7 +41,7 @@ namespace Frontend
 
         private void Login_Click(object sender, RoutedEventArgs e)
         {
-            UserModel user = viewModel.Login(LoginEmail.Text, LoginPassword.Text);
+            UserModel user = viewModel.Login(LoginEmail.Text, LoginPassword.Password);
             if (user != null)
             {
                 UserBoardsView userBoardsView = new UserBoardsView(user);

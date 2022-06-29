@@ -24,19 +24,19 @@ namespace Frontend.View
         UserBoardsViewModel ubvm;
         public UserBoardsView(UserModel user)
         {
-            this.DataContext = new UserBoardsViewModel(user);
-            this.ubvm = (UserBoardsViewModel)DataContext;
+            this.ubvm = new UserBoardsViewModel(user);
+            DataContext = ubvm;
             InitializeComponent();
         }
 
 
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            string boardName = UserBoards.SelectedItem as string;
-            BoardModel bm = UserBoardsViewModel.GetBoard(boardName);
-            if (bm != null)
+            string boardName = UserBoards.SelectedItem.ToString();
+            BoardViewModel bvm = ubvm.GetBoardViewModel(boardName);
+            if (bvm != null)
             {
-                BoardView boardView = new BoardView(bm);
+                BoardView boardView = new BoardView(ubvm.User ,bvm);
                 boardView.Show();
                 this.Close();
             }
@@ -45,6 +45,21 @@ namespace Frontend.View
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Logout_Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ubvm.Logout();
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Show();
+                this.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

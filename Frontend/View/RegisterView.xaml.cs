@@ -24,8 +24,8 @@ namespace Frontend.View
         MainViewModel viewModel;
         public RegisterView()
         {
-            this.DataContext = new MainViewModel();
-            this.viewModel = (MainViewModel) DataContext;
+            this.viewModel = new MainViewModel();
+            DataContext = viewModel;
             InitializeComponent();
         }
 

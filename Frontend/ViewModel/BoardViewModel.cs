@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
 
-namespace Frontend.View
+namespace Frontend.ViewModel
 {
-    internal class BoardView : Window
+    public class BoardViewModel
     {
         private BoardModel bm;
+        public BoardModel Bm { get => bm; }
 
-        public BoardView(BoardModel bm)
+        public BoardViewModel(BoardModel bm)
         {
             this.bm = bm;
         }

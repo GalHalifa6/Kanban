@@ -63,6 +63,7 @@ namespace Frontend.ViewModel
 
         internal UserModel Login(string email, string password)
         {
+            Message = "";
             try
             {
                 return Controller.Login(email, password);
