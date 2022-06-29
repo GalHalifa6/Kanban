@@ -12,17 +12,31 @@ namespace Frontend.ViewModel
         private ServiceController service;
         private BackendController()
         {
+            /*1. One user (email: “mail@mail.com”, password: “Password1”).
+2. One board (for this user), named "board1", that has three tasks, one in each column.
+3. One board (for this user), named "board2", with no tasks.
+*/
+
             service = new ServiceController();
+            service.Register("mail@mail.com", "Password1");
+            service.AddBoard("mail@mail.com", "board1");
+            service.AddTask("mail@mail.com", "board1", "task1", "wow what a great kanban project", new DateTime(2025, 01, 01));
+            service.AddTask("mail@mail.com", "board1", "task2", "dont you agree?", new DateTime(2025, 01, 01));
+            service.AddTask("mail@mail.com", "board1", "task3", "i think it deserves 100", new DateTime(2025, 01, 01));
+            service.AdvanceTask("mail@mail.com", "board1", 0, 2);
+            service.AdvanceTask("mail@mail.com", "board1", 1, 2);
+            service.AdvanceTask("mail@mail.com", "board1", 0, 1);
+
+
+            service.AddBoard("mail@mail.com", "board2");
+            service.Logout("mail@mail.com");
+
         }
-        private static BackendController instance = null;
+        private static BackendController instance = new BackendController();
         public static BackendController Instance  
         {
                 get 
                 {
-                    if (instance == null)
-                    {
-                        instance = new BackendController();
-                    }
                     return instance;
                 }
         }
@@ -49,9 +63,6 @@ namespace Frontend.ViewModel
             {
                 throw new Exception(res.ErrorMessage);
             }
-            //DELETE!!!!!!!!!
-            service.AddBoard(email, "B1");
-            service.AddTask(email, "B1", "T1", "T1 DESC", new DateTime(2030, 01, 01));
             return new UserModel(email);
         }
 

@@ -28,7 +28,14 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer.Mappers
                 string name = res.GetString(res.GetOrdinal("name"));
                 int nextTaskID = res.GetInt32(res.GetOrdinal("nextTaskID"));
                 string owner = res.GetString(res.GetOrdinal("owner"));
-                data.Add(new BoardDTO(id, name, owner, nextTaskID, users[id]));
+                if (!users.ContainsKey(id))
+                {
+                    data.Add(new BoardDTO(id, name, owner, nextTaskID, new HashSet<string>()));
+                }
+                else
+                {
+                    data.Add(new BoardDTO(id, name, owner, nextTaskID, users[id]));
+                }
 
             }
 
