@@ -14,8 +14,8 @@
             <ColumnDefinition Width="142*"/>
         </Grid.ColumnDefinitions>
         <ListBox x:Name="UserBoards" ItemsSource="{Binding Path = Boards }" SelectionChanged="ListBox_SelectionChanged" Margin="93,84,221,64" BorderBrush="Black" FontSize="20"/>
-        <TextBox x:Name="My_Boards" HorizontalAlignment="Left" Margin="93,27,0,0" TextWrapping="Wrap" Text="My Boards" VerticalAlignment="Top" Width="225" FontSize="30" BorderBrush="{x:Null}"/>
         <Button x:Name="Logout_Button" Content="Logout" HorizontalAlignment="Left" Margin="93,375,0,0" VerticalAlignment="Top" Width="76" Height="28" FontSize="15" Click="Logout_Button_Click"/>
+        <Label x:Name="MyBoards" Content="My Boards" HorizontalAlignment="Left" Margin="93,29,0,0" VerticalAlignment="Top" Width="170" FontSize="30"/>
 
     </Grid>
 </Window>

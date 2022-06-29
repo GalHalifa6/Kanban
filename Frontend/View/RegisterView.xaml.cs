@@ -39,5 +39,12 @@ namespace Frontend.View
                 this.Close();
             }
         }
+
+        private void BackToLogin(object sender, RoutedEventArgs e)
+        {
+            MainWindow view = new MainWindow();
+            view.Show();
+            this.Close();
+        }
     }
 }

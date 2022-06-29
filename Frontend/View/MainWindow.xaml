@@ -21,9 +21,9 @@
         <PasswordBox x:Name="LoginPassword" HorizontalAlignment="Left" Margin="308,146,0,0" VerticalAlignment="Top" Width="177" Grid.Row="1" Grid.ColumnSpan="2" Height="22"/>
         <Label Content="Email" HorizontalAlignment="Left" Margin="262,113,0,0" VerticalAlignment="Top" Grid.Row="1" Width="59" Height="36"/>
         <Label x:Name="Password" Content="Password" HorizontalAlignment="Left" Margin="242,141,0,0" VerticalAlignment="Top" Height="32" Width="99" Grid.Row="1"/>
-        <TextBox x:Name="Kanban" HorizontalAlignment="Left" Margin="308,22,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Kanban" VerticalAlignment="Top" Width="166" Foreground="#FF007E62" Height="56" FontSize="40" Grid.ColumnSpan="2" BorderBrush="{x:Null}"/>
-        <TextBox HorizontalAlignment="Left" Margin="245,286,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Don't have an account? register here!" VerticalAlignment="Top" Width="206" Grid.ColumnSpan="2" BorderBrush="{x:Null}"/>
         <Label Content="{Binding Path=Message, Mode=OneWay}" Foreground="Red" HorizontalAlignment="Left" Height="31" Margin="226,205,0,0" Width="328" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FlowDirection="RightToLeft" Grid.ColumnSpan="2" Grid.Row="1"/>
+        <Label x:Name="Kanban" Content="Kanban" HorizontalAlignment="Left" Margin="319,24,0,0" Grid.Row="1" VerticalAlignment="Top" FontSize="40" Foreground="#FF1B8235" Grid.ColumnSpan="2"/>
+        <Label x:Name="label" Content="Don't have an account? register here!" HorizontalAlignment="Left" Margin="248,282,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.ColumnSpan="2"/>
 
     </Grid>
 </Window>
