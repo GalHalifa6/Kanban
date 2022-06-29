@@ -102,7 +102,8 @@ namespace IntroSE.Kanban.Backend.DataAccessLayer
 
         public void nextTaskIdPlusPlus()
         {
-            string query = $"UPDATE Boards SET nextTaskID = nextTaskID + 1 WHERE id = {id}";
+            nextTaskID++;
+            string query = $"UPDATE Boards SET nextTaskID = {nextTaskID} WHERE id = {id}";
             GeneralNonQuery(query, "Something went wrong");
         }
     }

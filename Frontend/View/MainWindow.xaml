@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Frontend"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Margin="0,0,10,0">
+    <Grid Margin="10,0,10,8" RenderTransformOrigin="0.315,0.48">
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="29*"/>
@@ -15,12 +15,15 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <Button x:Name="Register" Content="Register" HorizontalAlignment="Left" Margin="48,156,0,0" VerticalAlignment="Top" Click="Register_Click" Grid.Row="1"/>
-        <Button x:Name="Login" Content="Login" HorizontalAlignment="Left" Margin="112,102,0,0" VerticalAlignment="Top" Click="Login_Click" Grid.Row="1"/>
-        <TextBox x:Name="LoginEmail" HorizontalAlignment="Left" Margin="85,50,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"  Grid.Row="1"/>
-        <TextBox x:Name="LoginPassword" HorizontalAlignment="Left" Margin="85,73,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120" Grid.Row="1"/>
-        <Label Content="Email" HorizontalAlignment="Left" Margin="42,42,0,0" VerticalAlignment="Top" Grid.Row="1"/>
-        <Label x:Name="Password" Content="Password" HorizontalAlignment="Left" Margin="15,68,0,0" VerticalAlignment="Top" Height="24" Width="65" Grid.Row="1"/>
+        <Button x:Name="Register" Content="Register" HorizontalAlignment="Left" Margin="71,282,0,0" VerticalAlignment="Top" Click="Register_Click" Grid.Row="1" Width="67" Height="27" Grid.Column="1"/>
+        <Button x:Name="Login" Content="Login" HorizontalAlignment="Left" Margin="364,174,0,0" VerticalAlignment="Top" Click="Login_Click" Grid.Row="1" Width="52" Height="26" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="LoginEmail" HorizontalAlignment="Left" Margin="308,113,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="177"  Grid.Row="1" Grid.ColumnSpan="2" Height="25"/>
+        <PasswordBox x:Name="LoginPassword" HorizontalAlignment="Left" Margin="308,146,0,0" VerticalAlignment="Top" Width="177" Grid.Row="1" Grid.ColumnSpan="2" Height="22"/>
+        <Label Content="Email" HorizontalAlignment="Left" Margin="262,113,0,0" VerticalAlignment="Top" Grid.Row="1" Width="59" Height="36"/>
+        <Label x:Name="Password" Content="Password" HorizontalAlignment="Left" Margin="242,141,0,0" VerticalAlignment="Top" Height="32" Width="99" Grid.Row="1"/>
+        <TextBox x:Name="Kanban" HorizontalAlignment="Left" Margin="308,22,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Kanban" VerticalAlignment="Top" Width="166" Foreground="#FF007E62" Height="56" FontSize="40" Grid.ColumnSpan="2" BorderBrush="{x:Null}"/>
+        <TextBox HorizontalAlignment="Left" Margin="245,286,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Don't have an account? register here!" VerticalAlignment="Top" Width="206" Grid.ColumnSpan="2" BorderBrush="{x:Null}"/>
+        <Label Content="{Binding Path=Message, Mode=OneWay}" Foreground="Red" HorizontalAlignment="Left" Height="31" Margin="226,205,0,0" Width="328" VerticalAlignment="Top" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FlowDirection="RightToLeft" Grid.ColumnSpan="2" Grid.Row="1"/>
 
     </Grid>
 </Window>
