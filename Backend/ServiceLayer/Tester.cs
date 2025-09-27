@@ -13,7 +13,15 @@ namespace IntroSE.Kanban.Backend.ServiceLayer
         static void Main(String[] args)
         {
             DBConnector db = DBConnector.GetInstance();
-            
+            GradingService gradingService = new GradingService();
+
+            db.ResetDB();
+            Console.WriteLine(gradingService.Register("gal@gmail.com", "Aa123456"));
+            Console.WriteLine(gradingService.Login("gal@gmail.com", "Aa123456"));
+            Console.WriteLine(gradingService.AddBoard("gal@gmail.com", "B1"));
+
+
+
 
         }
     }
