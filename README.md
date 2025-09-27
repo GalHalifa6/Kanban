@@ -1,2 +1,1 @@
-318856994_316262914_322527375
-Group number 31
+Kanban Project – A simple and intuitive task management tool built with a Kanban board structure. It allows users to create, organize, and track tasks across different stages, providing a clear workflow visualization and improving productivity through an easy-to-use interface.
